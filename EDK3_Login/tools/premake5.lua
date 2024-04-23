@@ -71,8 +71,10 @@ function GenerateProject(project_name, project_group)
     files {
       path.join(PROJ_DIR, "./include/*.h"),
       path.join(PROJ_DIR, "./include/dev/*.h"),
+      path.join(PROJ_DIR, "./include/math_library/*.h"),
       path.join(PROJ_DIR, "./src/*.cc"),
       path.join(PROJ_DIR, "./src/dev/*.cc"),
+      path.join(PROJ_DIR, "./src/math_library/*.cc"),
       path.join(PROJ_DIR, "./deps/EDK/include/EDK3/*.h"),
       path.join(PROJ_DIR, "./deps/EDK/include/EDK3/dev/*.h"),
       path.join(PROJ_DIR, "./deps/EDK/include/ESAT/*.h"),
