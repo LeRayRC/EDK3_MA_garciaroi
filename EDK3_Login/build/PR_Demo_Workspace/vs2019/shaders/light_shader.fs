@@ -1,6 +1,7 @@
 #version 330
 
 struct Light{
+    int enabled;
     int type;
     vec3 pos;
     vec3 dir;
@@ -29,16 +30,18 @@ vec3 final_color = vec3(0.0, 0.0, 0.0);
 
 
 vec3 DirectionalLight(Light conf){
-  float directionalIncidence = max(dot(normal, conf.dir), 0.0);
+  vec3 normal_norm = normalize(normal);
+  float directionalIncidence = max(dot(normal_norm, conf.dir), 0.0);
   //Specular
   vec3 viewDirection = normalize(conf.camera_pos - position);
-  vec3 reflectDirection = reflect(-conf.dir, normal);
+  vec3 reflectDirection = reflect(-conf.dir, normal_norm);
 
   float specularValue = pow(max(dot(viewDirection, reflectDirection), 0.0), conf.shininess);
 
   vec3 diffuse = directionalIncidence * conf.diff_color;
   vec3 specular = conf.strength * specularValue * conf.spec_color;
   return diffuse + specular;
+  //return diffuse;
 }
 
 vec3 PointLight(Light conf){
@@ -95,7 +98,7 @@ vec3 PointLight(Light conf){
 void main(){
     final_color += u_ambient;
     for(int i=0; i<kMaxLights;i++){
-        if( i < u_number_lights){
+        if( u_lights[i].enabled != 0){
             switch(u_lights[i].type){
                 case 0: {
                     final_color += DirectionalLight(u_lights[i]);
@@ -113,8 +116,5 @@ void main(){
             }
         }
     }
-    //final_color += normal;
-    //FragColor = vec4(final_color, 1.0) * texture(u_texture,uv );
-
     FragColor = vec4(final_color, 1.0);
 }

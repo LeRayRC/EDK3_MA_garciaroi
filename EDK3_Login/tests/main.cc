@@ -115,8 +115,8 @@ void InitScene() {
 
     EDK3::ref_ptr<EDK3::SurfaceCustom> surface_custom;
     surface_custom.alloc();
-    surface_custom->init(points, kNTorusPoints, 40, 2.0f,2.0f);
-    //surface_custom->init(tree_points, kNTreePoints, 40, 10.0f, 3.0f);
+    //surface_custom->init(points, kNTorusPoints, 40, 2.0f,2.0f);
+    surface_custom->init(tree_points, kNTreePoints, 40, 10.0f, 3.0f);
     //EDK3::ref_ptr<EDK3::TerrainCustom> custom_terrain;
     //EDK3::CreateCube(&cube_geo,1.0f, true, true);
     //custom_terrain.alloc();
@@ -144,9 +144,9 @@ void InitScene() {
     manager->mat_basic_settings->set_color(color);
 
     manager->mat_light_settings.alloc();
-    for (int i = 0; i < 1; i++) {
-        manager->mat_light_settings->light_confs_[i].enabled_ = true;
-    }
+    //for (int i = 0; i < 1; i++) {
+    //    manager->mat_light_settings->light_confs_[i].enabled_ = true;
+    //}
     manager->mat_light_settings->set_texture(texture.get());
 
 

@@ -45,11 +45,11 @@ class MaterialCustom : public EDK3::Material {
     Vec3 dir_ = Vec3(0.0f, 0.0f, 0.0f);
     Vec3 diff_color_ = Vec3(0.0f, 0.0f, 0.0f);
     Vec3 spec_color_ = Vec3(0.0f, 0.0f, 0.0f);
-    float linear_att_ = 0.0f;
-    float quadratic_att_ = 0.0f;
-    float constant_att_ = 0.0f;
-    float shininess_ = 0.0f;
-    float strength_ = 0.0f;
+    float linear_att_ = 0.0014f;
+    float quadratic_att_ = 0.00007f;
+    float constant_att_ = 1.0f;
+    float shininess_ = 90.0f;
+    float strength_ = 0.5f;
     Vec3 camera_pos_ = Vec3(0.0f, 0.0f, 0.0f);
     bool enabled_ = false;
   };
@@ -62,6 +62,20 @@ class MaterialCustom : public EDK3::Material {
 
       LightSettings() {
         memset(light_confs_, 0, sizeof(light_confs_));
+        for (int i = 0; i < 8; i++) {
+            light_confs_[i].type_ = 0;
+            light_confs_[i].pos_ = Vec3(0.0f, 0.0f, 0.0f);
+            light_confs_[i].dir_ = Vec3(0.0f, 0.0f, 0.0f);
+            light_confs_[i].diff_color_ = Vec3(0.0f, 0.0f, 0.0f);
+            light_confs_[i].spec_color_ = Vec3(0.0f, 0.0f, 0.0f);
+            light_confs_[i].linear_att_ = 0.0014f;
+            light_confs_[i].quadratic_att_ = 0.00007f;
+            light_confs_[i].constant_att_ = 1.0f;
+            light_confs_[i].shininess_ = 90.0f;
+            light_confs_[i].strength_ = 0.5f;
+            light_confs_[i].camera_pos_ = Vec3(0.0f, 0.0f, 0.0f);
+            light_confs_[i].enabled_ = false;
+        }
       }
       void set_texture(EDK3::ref_ptr<EDK3::Texture> t) { texture_ = t; }
       EDK3::ref_ptr<EDK3::Texture> texture() const { return texture_; }

@@ -190,6 +190,7 @@ void LightsWindow() {
 
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> selected_light_settings = manager->mat_light_settings.get();
     char name[10];
+    ImGui::DragFloat3("Ambient Color", &EDK3::MaterialCustom::LightSettings::ambient_color_.x, 0.01f, 0.0f, 1.0f);
     for (int i = 0; i < 8; i++) {
         bool deletable = true;
         ImGui::PushID(i);
@@ -231,9 +232,17 @@ void LightsWindow() {
             if (&selected_light_settings->light_confs_[i] != 0) {
                 ImGui::DragFloat3("Position", &selected_light_settings->light_confs_[i].pos_.x, 0.1f, -100.0f, 100.0f);
             }
-            ImGui::DragFloat3("Direction", &selected_light_settings->light_confs_[i].dir_.x, 0.1f, -100.0f, 100.0f);
+            
+            ImGui::DragFloat3("Direction", &selected_light_settings->light_confs_[i].dir_.x, 0.1f, -1.0f, 1.0f);
             ImGui::DragFloat3("Diffuse Color", &selected_light_settings->light_confs_[i].diff_color_.x, 0.01f, 0.0f, 1.0f);
-
+            ImGui::Separator();
+            ImGui::DragFloat3("Specular Color", &selected_light_settings->light_confs_[i].spec_color_.x, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat3("Camera pos", &selected_light_settings->light_confs_[i].camera_pos_.x, 0.1f, -100.0f, 100.0f);
+            ImGui::InputFloat("Linear att", &selected_light_settings->light_confs_[i].linear_att_);
+            ImGui::InputFloat("Quadratic att", &selected_light_settings->light_confs_[i].quadratic_att_);
+            ImGui::InputFloat("Constant att", &selected_light_settings->light_confs_[i].constant_att_);
+            ImGui::InputFloat("Shininess", &selected_light_settings->light_confs_[i].shininess_);
+            ImGui::InputFloat("Strength", &selected_light_settings->light_confs_[i].strength_);
             ImGui::TreePop();
 
         }
