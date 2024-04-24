@@ -33,12 +33,6 @@
 
 Vec3 EDK3::MaterialCustom::LightSettings::ambient_color_ = Vec3(1.0f, 0.0f, 0.0f);
 
-//Unnamed struct and it's unique instance:
-struct {
-    
-} GameState;
-
-
 const int kWindowWidth = 1280;
 const int kWindowHeight = 768;
 const int kNTorusPoints = 10;
@@ -144,29 +138,23 @@ void InitScene() {
     }
 
     //Initializing the material and its settings:
-    EDK3::ref_ptr<EDK3::MaterialCustom> mat_basic;
-    mat_basic.alloc();
     //mat_basic->init(error_log, "./shaders/basicVertex.vs", "./shaders/basicFragment.fs");
-    mat_basic->init(error_log, "./shaders/basicVertex.vs", "./shaders/light_shader.fs");
-    EDK3::ref_ptr<EDK3::MaterialCustom::MaterialCustomSettings> mat_basic_settings;
-    mat_basic_settings.alloc();
+    manager->mat_basic->init(error_log, "./shaders/basicVertex.vs", "./shaders/light_shader.fs");
     float color[] = { 0.0f, 1.0f, 0.0f, 1.0f };
-    mat_basic_settings->set_color(color);
+    manager->mat_basic_settings->set_color(color);
 
-
-    EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings;
-    mat_light_settings.alloc();
-    for (int i = 0; i < 4; i++) {
-        //mat_light_settings->light_confs_[i].pos_ = Vec2(1.0f, 1.0f, 1.0f);
+    manager->mat_light_settings.alloc();
+    for (int i = 0; i < 1; i++) {
+        manager->mat_light_settings->light_confs_[i].enabled_ = true;
     }
-    mat_light_settings->set_texture(texture.get());
+    manager->mat_light_settings->set_texture(texture.get());
 
 
     EDK3::ref_ptr<EDK3::Drawable> drawable;
     drawable.alloc();
     drawable->set_geometry(surface_custom.get());
-    drawable->set_material(mat_basic.get());
-    drawable->set_material_settings(mat_light_settings.get());
+    drawable->set_material(manager->mat_basic.get());
+    drawable->set_material_settings(manager->mat_light_settings.get());
     //drawable->set_material_settings(mat_light_settings.get());
     drawable->set_position(0.0f, 0.0f, 0.0f);
     //drawable->set_HPR(360.0f * rand() / RAND_MAX, 360.0f * rand() / RAND_MAX, 360.0f * rand() / RAND_MAX);

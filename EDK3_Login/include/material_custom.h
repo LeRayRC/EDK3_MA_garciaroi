@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __MATERIAL_BASIC_H__
-#define __MATERIAL_BASIC_H__ 1
+#ifndef __MATERIAL_CUSTOM_H__
+#define __MATERIAL_CUSTOM_H__ 1
 
 #include "ESAT/math.h"
 #include "EDK3/ref_ptr.h"
@@ -41,16 +41,16 @@ class MaterialCustom : public EDK3::Material {
 
   struct LightConf{
     int type_ = 0;
-    Vec3 pos_;
-    Vec3 dir_;
-    Vec3 diff_color_;
-    Vec3 spec_color_;
+    Vec3 pos_ = Vec3(0.0f, 0.0f, 0.0f);
+    Vec3 dir_ = Vec3(0.0f, 0.0f, 0.0f);
+    Vec3 diff_color_ = Vec3(0.0f, 0.0f, 0.0f);
+    Vec3 spec_color_ = Vec3(0.0f, 0.0f, 0.0f);
     float linear_att_ = 0.0f;
     float quadratic_att_ = 0.0f;
     float constant_att_ = 0.0f;
     float shininess_ = 0.0f;
     float strength_ = 0.0f;
-    Vec3 camera_pos_;
+    Vec3 camera_pos_ = Vec3(0.0f, 0.0f, 0.0f);
     bool enabled_ = false;
   };
   

@@ -2,6 +2,7 @@
 #define _INTERFACE_H_
 
 #include "../math_library/vector_2.h"
+#include "../math_library/vector_3.h"
 #include "ESAT_extra/imgui.h"
 /**
  * @struct BooleanWindowFlags
@@ -32,6 +33,14 @@ struct ImGuiWindow{
   ImGuiWindowFlags window_flags;
   bool popen;
 };
+
+//enum LightType {
+//	Directional,
+//	Point,
+//	Spot,
+//};
+//
+//const char* GetLightTypeName(LightType type);
 
 /**
  * @brief Initialize default ImGui window flags.

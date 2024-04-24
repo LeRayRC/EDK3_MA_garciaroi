@@ -1,13 +1,25 @@
 #include "interface.h"
 
 #include "demo_manager.h"
-//#include "game.h"
-//#include "gsprite.h"
-//#include "imgui_stdlib.h"
-//#include "path.h"
-//#include "portable-file-dialogs.h"
-//#include "interpolate.h"
+#include "material_custom.h"
 
+
+//const char* GetLightTypeName(LightType type) {
+//    switch (type)
+//    {
+//    case Directional:
+//        return "Directional";
+//        break;
+//    case Point:
+//        return "Point";
+//        break;
+//    case Spot:
+//        return "Spot";
+//        break;
+//    default:
+//        break;
+//    }
+//}
 
 void SetFlags(ImGuiWindow *window) {
   window->window_flags = 0;
@@ -168,12 +180,68 @@ void WindowsController() {
 }
 
 void LightsWindow() {
+    static const char light_types[60] = { "Directional\0Point\0Spot\0" };
     DemoManager* manager = DemoManager::getInstance();
     manager->settings_window.flags.no_resize = false;
     SetFlags(&manager->lights_window);
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
     ImGui::Begin("Lights Config", &manager->lights_window.popen, manager->lights_window.window_flags);
     WindowMenu(&manager->lights_window);
+
+    EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> selected_light_settings = manager->mat_light_settings.get();
+    char name[10];
+    for (int i = 0; i < 8; i++) {
+        bool deletable = true;
+        ImGui::PushID(i);
+        sprintf(name, "Light %d\0", i + 1);
+        if (ImGui::TreeNode(name)) {
+            ImGui::Checkbox("Enabled", &selected_light_settings->light_confs_[i].enabled_);
+            if (selected_light_settings->light_confs_[i].enabled_) {
+                ImGui::Text("Enabled");
+                
+                //ImGui::DragFloat3(selected_light_settings->)
+            }
+            //if (game->animation_configs_[i].is_moving) {
+            //    ImGui::InputFloat2("Move from", &game->animation_configs_[i].move_from.x);
+            //    ImGui::InputFloat2("Move To", &game->animation_configs_[i].move_to.x);
+            //    ImGui::DragFloat("Move duration", &game->animation_configs_[i].move_duration, 0.1f, 0.0f, game->kMaxAnimationDuration);
+            //    ImGui::NewLine();
+            //}
+
+            /*
+            ImGui::Checkbox("Is Rotating", &game->animation_configs_[i].is_rotating);
+            if (game->animation_configs_[i].is_rotating) {
+                ImGui::InputFloat("rotate from", &game->animation_configs_[i].rotate_from);
+                ImGui::InputFloat("rotate to", &game->animation_configs_[i].rotate_to);
+                ImGui::DragFloat("rotate duration", &game->animation_configs_[i].rotate_duration, 0.1f, 0.0f, game->kMaxAnimationDuration);
+                ImGui::NewLine();
+            }
+
+            ImGui::Checkbox("Is Scaling", &game->animation_configs_[i].is_scaling);
+            if (game->animation_configs_[i].is_scaling) {
+                ImGui::InputFloat2("scale from", &game->animation_configs_[i].scale_from.x);
+                ImGui::InputFloat2("scale to", &game->animation_configs_[i].scale_to.x);
+                ImGui::DragFloat("scale duration", &game->animation_configs_[i].scale_duration, 0.1f, 0.0f, game->kMaxAnimationDuration);
+            }
+
+            */
+            
+            ImGui::Combo("Type", &selected_light_settings->light_confs_[i].type_,
+                light_types, 3);
+            if (&selected_light_settings->light_confs_[i] != 0) {
+                ImGui::DragFloat3("Position", &selected_light_settings->light_confs_[i].pos_.x, 0.1f, -100.0f, 100.0f);
+            }
+            ImGui::DragFloat3("Direction", &selected_light_settings->light_confs_[i].dir_.x, 0.1f, -100.0f, 100.0f);
+            ImGui::DragFloat3("Diffuse Color", &selected_light_settings->light_confs_[i].diff_color_.x, 0.01f, 0.0f, 1.0f);
+
+            ImGui::TreePop();
+
+        }
+        ImGui::PopID();
+    }
+
+
+
 
     ImGui::End();
 }
@@ -192,7 +260,6 @@ void PerformanceWindow(double dt) {
     ImGui::End();
 
 }
-
 
 void CameraWindow() {
     DemoManager* manager = DemoManager::getInstance();
