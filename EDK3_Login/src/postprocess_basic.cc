@@ -25,10 +25,11 @@ namespace EDK3 {
     "layout(location = 1) in vec3 a_normal;"
     "layout(location = 2) in vec2 a_uv;"
     "out vec2 uv;"
-
+    "out vec2 coord;"
     "void main() {"
     "    gl_Position = u_vp_matrix * u_m_matrix * vec4(a_position, 1.0);"
     "    uv = a_uv;"
+    "    coord = gl_Position.xy;"
     "}";
 
 //#define GLSL(x) "#version 330\n"#x
@@ -36,20 +37,40 @@ namespace EDK3 {
 //  //The shader itself.
 //);
 
-static const char kFragmentShader[] =
-"#version 330\n"
-"uniform sampler2D u_texture;\n"
-"uniform int u_use_texture;\n"
-"uniform vec4 u_color;\n"
-"out vec4 fragColor;\n"
-"in vec2 uv;\n"
-"void main() {\n"
-"   if(0 == u_use_texture){"
-"    fragColor = u_color;\n"
-"   }else{\n"
-"    fragColor = u_color * texture(u_texture,uv);\n"
-"   }\n"
-"}\n";
+//static const char kFragmentShader[] =
+//"#version 330\n"
+//"uniform sampler2D u_texture;\n"
+//"uniform int u_use_texture;\n"
+//"uniform vec4 u_color;\n"
+//"out vec4 fragColor;\n"
+//"in vec2 uv;\n"
+//"void main() {\n"
+//"   if(0 == u_use_texture){"
+//"    fragColor = u_color;\n"
+//"   }else{\n"
+//"    fragColor = u_color * texture(u_texture,uv);\n"
+//"   }\n"
+//"}\n";
+
+
+
+  static const char kFragmentShader[] =
+      "#version 330\n"
+      "uniform sampler2D u_texture;\n"
+      "uniform int u_use_texture;\n"
+      "uniform vec4 u_color;\n"
+      "out vec4 fragColor;\n"
+      "in vec2 uv;\n"
+      "void main() {\n"
+      "    float pixel_size = 0.01; \n"
+      "    vec2 pixel_coord;\n"
+      "    vec2 pixelated_uv = floor(uv / pixel_size) * pixel_size;\n"
+      "    fragColor = texture(u_texture,pixelated_uv);\n"
+      "   }\n";
+
+
+
+
 
 
 PostprocessBasic::PostprocessBasic() { }

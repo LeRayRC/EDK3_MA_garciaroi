@@ -16,6 +16,7 @@
 #include "EDK3/camera.h"
 #include "EDK3/drawable.h"
 #include "EDK3/matdiffusetexture.h"
+#include "EDK3/rendertarget.h"
 #include "EDK3/texture.h"
 #include "EDK3/dev/gpumanager.h"
 
@@ -46,41 +47,6 @@ void InitScene() {
     EDK3::Node* root = manager->root.get();
 
     Vec2 tree_points[kNTreePoints + 1];
-
-    //tree_points[0] = Vec2(0.00f, 1.00f);
-    //tree_points[1] = Vec2(0.30f, 1.00f);
-    //tree_points[2] = Vec2(0.23f, 0.59f);
-    //tree_points[3] = Vec2(0.45f, 0.56f);
-    //tree_points[4] = Vec2(0.71f, 0.55f);
-    //tree_points[5] = Vec2(0.80f, 0.47f);
-    //tree_points[6] = Vec2(0.92f, 0.40f);
-    //tree_points[7] = Vec2(1.00f, 0.33f);
-    //tree_points[8] = Vec2(0.89f, 0.24f);
-    //tree_points[9] = Vec2(0.77f, 0.21f);
-    //tree_points[10] = Vec2(0.67f, 0.11f);
-    //tree_points[11] = Vec2(0.50f, 0.09f);
-    //tree_points[12] = Vec2(0.26f, 0.01f);
-    //tree_points[13] = Vec2(0.09f, 0.00f);
-    //
-    //tree_points[0] = Vec2(0.00, 0.00);
-    //tree_points[1] = Vec2(0.26, 0.00);
-    //tree_points[2] = Vec2(0.19, 0.40);
-    //tree_points[3] = Vec2(0.44, 0.43);
-    //tree_points[4] = Vec2(0.74, 0.47);
-    //tree_points[5] = Vec2(0.55, 0.57);
-    //tree_points[6] = Vec2(0.39, 0.61);
-    //tree_points[7] = Vec2(0.69, 0.61);
-    //tree_points[8] = Vec2(0.90, 0.61);
-    //tree_points[9] = Vec2(1.00, 0.68);
-    //tree_points[10] = Vec2(0.95, 0.75);
-    //tree_points[11] = Vec2(0.77, 0.78);
-    //tree_points[12] = Vec2(0.85, 0.88);
-    //tree_points[13] = Vec2(0.79, 0.94);
-    //tree_points[14] = Vec2(0.58, 0.96);
-    //tree_points[15] = Vec2(0.42, 0.90);
-    //tree_points[16] = Vec2(0.23, 0.98);
-    //tree_points[17] = Vec2(0.02, 1.00);
-
 
     tree_points[0] = Vec2(0.00f, 0.01f);
     tree_points[1] = Vec2(0.30f, 0.00f);
@@ -119,14 +85,6 @@ void InitScene() {
     //surface_custom->init(points, kNTorusPoints, 40, 2.0f,2.0f);
     surface_custom->init(tree_points, kNTreePoints, 40, 6.0f, 4.0f);
     //EDK3::CreateCube(&cube_geo,1.0f, true, true);
-    //custom_terrain.alloc();
-    //custom_terrain->init(256, 256, // cols , rows
-    //  2.0f, // height multiplier
-    //  1.0f, // quad size
-    //  0.05f, // smothness
-    //  40.0f, // heightmap multiplier
-    //  "./textures/island_heightmap.png",   // heightmap path
-    //  true); // use heightmap
 
     InitTerrain();
 
@@ -145,6 +103,21 @@ void InitScene() {
     //manager->mat_basic_settings->set_color(color);
 
     manager->mat_light_settings.alloc();
+
+    manager->render_target.alloc()->init((float)kWindowWidth,
+                                         (float)kWindowHeight, 1);
+    manager->mat_postprocess.alloc();
+    manager->mat_postprocess_settings.alloc();
+
+    manager->mat_postprocess->init();
+    float green[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
+    manager->mat_postprocess->set_use_texture(true);
+    //Aqui le asociamos la textura del render target y se la asociamos al material de postproceso
+    manager->mat_postprocess_settings->set_texture(manager->render_target->color_texture(0));
+    manager->mat_postprocess_settings->set_color(green);
+
+
+
     
     
     for (int i = 0; i < 2; i++) {
@@ -211,10 +184,20 @@ void RenderFn() {
     //For every frame... determine what's visible:
     manager->camera->doCull(manager->root.get());
 
+    if (manager->enable_postprocess) {
+        manager->render_target->begin();
+    }
     //Rendering the scene:
     EDK3::dev::GPUManager::CheckGLError("begin Render-->");
     manager->camera->doRender();
     EDK3::dev::GPUManager::CheckGLError("end Render-->");
+    if (manager->enable_postprocess) {
+        manager->render_target->end();
+        manager->mat_postprocess->drawFullScreenQuad(manager->mat_postprocess_settings.get());
+    }
+
+
+
 }
 
 

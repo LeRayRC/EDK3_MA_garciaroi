@@ -94,4 +94,5 @@ void LightsWindow();
 void PerformanceWindow(double dt);
 void CameraWindow();
 void HierachyWindow();
+void PostProcessWindow();
 #endif

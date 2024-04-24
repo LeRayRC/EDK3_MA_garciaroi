@@ -123,7 +123,6 @@ void WindowMenu(ImGuiWindow *window) {
 
 void WindowsController() {
   DemoManager* manager = DemoManager::getInstance();
-  //Game *game = Game::getInstance();
   if (manager->settings_window.popen) {
     WindowSettings();
   }
@@ -139,28 +138,15 @@ void WindowsController() {
   if (manager->hierachy_window.popen) {
       HierachyWindow();
   }
-  /*
-  if (game->animationconfigs_window.popen) {
-    AnimationConfigsManagerWindow();
+  if (manager->postprocess_window.popen) {
+      PostProcessWindow();
   }
-  if (game->newpath_window.popen) {
-    NewPathWindow();
-  }
-  if (game->newanimationconfig_window.popen) {
-    NewAnimationConfigWindow();
-  }
-  if (game->newtexture_window.popen) {
-    NewTextureWindow();
-  }
-  if (game->newsprite_window.popen) {
-    NewSpriteWindow();
-  }*/
 }
 
 void LightsWindow() {
     static const char light_types[60] = { "Directional\0Point\0Spot\0" };
     DemoManager* manager = DemoManager::getInstance();
-    manager->settings_window.flags.no_resize = false;
+    manager->lights_window.flags.no_resize = false;
     SetFlags(&manager->lights_window);
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
     ImGui::Begin("Lights Config", &manager->lights_window.popen, manager->lights_window.window_flags);
@@ -177,61 +163,29 @@ void LightsWindow() {
             ImGui::Checkbox("Enabled", &selected_light_settings->light_confs_[i].enabled_);
             if (selected_light_settings->light_confs_[i].enabled_) {
                 ImGui::Text("Enabled");
-                
-                //ImGui::DragFloat3(selected_light_settings->)
             }
-            //if (game->animation_configs_[i].is_moving) {
-            //    ImGui::InputFloat2("Move from", &game->animation_configs_[i].move_from.x);
-            //    ImGui::InputFloat2("Move To", &game->animation_configs_[i].move_to.x);
-            //    ImGui::DragFloat("Move duration", &game->animation_configs_[i].move_duration, 0.1f, 0.0f, game->kMaxAnimationDuration);
-            //    ImGui::NewLine();
-            //}
+                ImGui::Combo("Type", &selected_light_settings->light_confs_[i].type_,
+                    light_types, 3);
+                if (&selected_light_settings->light_confs_[i] != 0) {
+                    ImGui::DragFloat3("Position", &selected_light_settings->light_confs_[i].pos_.x, 0.1f, -100.0f, 100.0f);
+                }
 
-            /*
-            ImGui::Checkbox("Is Rotating", &game->animation_configs_[i].is_rotating);
-            if (game->animation_configs_[i].is_rotating) {
-                ImGui::InputFloat("rotate from", &game->animation_configs_[i].rotate_from);
-                ImGui::InputFloat("rotate to", &game->animation_configs_[i].rotate_to);
-                ImGui::DragFloat("rotate duration", &game->animation_configs_[i].rotate_duration, 0.1f, 0.0f, game->kMaxAnimationDuration);
-                ImGui::NewLine();
+                ImGui::DragFloat3("Direction", &selected_light_settings->light_confs_[i].dir_.x, 0.1f, -1.0f, 1.0f);
+                ImGui::DragFloat3("Diffuse Color", &selected_light_settings->light_confs_[i].diff_color_.x, 0.01f, 0.0f, 1.0f);
+                ImGui::Separator();
+                ImGui::DragFloat3("Specular Color", &selected_light_settings->light_confs_[i].spec_color_.x, 0.01f, 0.0f, 1.0f);
+                ImGui::DragFloat3("Camera pos", &selected_light_settings->light_confs_[i].camera_pos_.x, 0.1f, -100.0f, 100.0f);
+                ImGui::InputFloat("Linear att", &selected_light_settings->light_confs_[i].linear_att_);
+                ImGui::InputFloat("Quadratic att", &selected_light_settings->light_confs_[i].quadratic_att_);
+                ImGui::InputFloat("Constant att", &selected_light_settings->light_confs_[i].constant_att_);
+                ImGui::InputFloat("Shininess", &selected_light_settings->light_confs_[i].shininess_);
+                ImGui::InputFloat("Strength", &selected_light_settings->light_confs_[i].strength_);
+                ImGui::TreePop();
             }
-
-            ImGui::Checkbox("Is Scaling", &game->animation_configs_[i].is_scaling);
-            if (game->animation_configs_[i].is_scaling) {
-                ImGui::InputFloat2("scale from", &game->animation_configs_[i].scale_from.x);
-                ImGui::InputFloat2("scale to", &game->animation_configs_[i].scale_to.x);
-                ImGui::DragFloat("scale duration", &game->animation_configs_[i].scale_duration, 0.1f, 0.0f, game->kMaxAnimationDuration);
-            }
-
-            */
-            
-            ImGui::Combo("Type", &selected_light_settings->light_confs_[i].type_,
-                light_types, 3);
-            if (&selected_light_settings->light_confs_[i] != 0) {
-                ImGui::DragFloat3("Position", &selected_light_settings->light_confs_[i].pos_.x, 0.1f, -100.0f, 100.0f);
-            }
-            
-            ImGui::DragFloat3("Direction", &selected_light_settings->light_confs_[i].dir_.x, 0.1f, -1.0f, 1.0f);
-            ImGui::DragFloat3("Diffuse Color", &selected_light_settings->light_confs_[i].diff_color_.x, 0.01f, 0.0f, 1.0f);
-            ImGui::Separator();
-            ImGui::DragFloat3("Specular Color", &selected_light_settings->light_confs_[i].spec_color_.x, 0.01f, 0.0f, 1.0f);
-            ImGui::DragFloat3("Camera pos", &selected_light_settings->light_confs_[i].camera_pos_.x, 0.1f, -100.0f, 100.0f);
-            ImGui::InputFloat("Linear att", &selected_light_settings->light_confs_[i].linear_att_);
-            ImGui::InputFloat("Quadratic att", &selected_light_settings->light_confs_[i].quadratic_att_);
-            ImGui::InputFloat("Constant att", &selected_light_settings->light_confs_[i].constant_att_);
-            ImGui::InputFloat("Shininess", &selected_light_settings->light_confs_[i].shininess_);
-            ImGui::InputFloat("Strength", &selected_light_settings->light_confs_[i].strength_);
-            ImGui::TreePop();
-
+            ImGui::PopID();
         }
-        ImGui::PopID();
+        ImGui::End();
     }
-
-
-
-
-    ImGui::End();
-}
 
 void HierachyWindow() {
     DemoManager* manager = DemoManager::getInstance();
@@ -283,6 +237,20 @@ void CameraWindow() {
     ImGui::Text("Speed: %f", manager->camera->speed());
     ImGui::Text("Sensitivity: %f", manager->camera->sensitivity());
     ImGui::End();
+}
+
+void PostProcessWindow() {
+    DemoManager* manager = DemoManager::getInstance();
+    manager->postprocess_window.flags.no_resize = false;
+    SetFlags(&manager->postprocess_window);
+    ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
+    ImGui::Begin("Postprocess Window", &manager->postprocess_window.popen, manager->postprocess_window.window_flags);
+    WindowMenu(&manager->postprocess_window);
+
+    ImGui::Checkbox("Enable Postprocess", &manager->enable_postprocess);
+
+    ImGui::End();
+
 }
 
 /*

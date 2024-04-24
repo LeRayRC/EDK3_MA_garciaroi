@@ -16,6 +16,7 @@ DemoManager::DemoManager() {}
 void DemoManager::init() {
   DemoManager *manager = DemoManager::getInstance();
 
+  manager->enable_postprocess = false;
   manager->root.alloc();
 
   manager->mat_basic.alloc();
@@ -28,6 +29,8 @@ void DemoManager::init() {
   InitDefaultWindowFlags(&manager->lights_window);
   InitDefaultWindowFlags(&manager->performance_window);
   InitDefaultWindowFlags(&manager->hierachy_window);
+  InitDefaultWindowFlags(&manager->camera_window);
+  InitDefaultWindowFlags(&manager->postprocess_window);
 
   srand((unsigned int)time(NULL));
 }

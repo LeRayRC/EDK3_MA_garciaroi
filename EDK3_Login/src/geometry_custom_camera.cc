@@ -90,20 +90,30 @@ namespace EDK3 {
       if (ESAT::IsKeyPressed('W')) {
         new_position = current_position + view_dir_ * speed_;
         set_position(&new_position.x);
+        position_ = position();
+        current_position = Vec3(position_[0], position_[1], position_[2]);
       }
+
+
       if (ESAT::IsKeyPressed('S')) {
-          new_position = current_position - (view_dir_ * speed_);
+        new_position = current_position - (view_dir_ * speed_);
         set_position(&new_position.x);
+        position_ = position();
+        current_position = Vec3(position_[0], position_[1], position_[2]);
       }
       if (ESAT::IsKeyPressed('A')) {
         Vec3 right = Vec3::CrossProduct(view_dir_,Vec3(0.0f,1.0f,0.0f));
-        new_position = current_position - (right * speed_);
+        new_position = current_position - (right.Normalized() * speed_);
         set_position(&new_position.x);
+        position_ = position();
+        current_position = Vec3(position_[0], position_[1], position_[2]);
       }
       if (ESAT::IsKeyPressed('D')) {
         Vec3 right = Vec3::CrossProduct(view_dir_, Vec3(0.0f, 1.0f, 0.0f));
-        new_position = current_position + (right * speed_);
+        new_position = current_position + (right.Normalized() * speed_);
         set_position(&new_position.x);
+        position_ = position();
+        current_position = Vec3(position_[0], position_[1], position_[2]);
       }
 
       if (ESAT::IsKeyPressed('Q')) {
