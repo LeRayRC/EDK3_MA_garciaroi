@@ -16,6 +16,7 @@ DemoManager::DemoManager() {}
 void DemoManager::init() {
   DemoManager *manager = DemoManager::getInstance();
 
+  manager->root.alloc();
 
   manager->mat_basic.alloc();
   manager->mat_light_settings.alloc();
@@ -26,6 +27,7 @@ void DemoManager::init() {
   InitDefaultWindowFlags(&manager->settings_window);
   InitDefaultWindowFlags(&manager->lights_window);
   InitDefaultWindowFlags(&manager->performance_window);
+  InitDefaultWindowFlags(&manager->hierachy_window);
 
   srand((unsigned int)time(NULL));
 }

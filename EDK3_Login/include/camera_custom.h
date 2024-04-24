@@ -12,6 +12,8 @@
 
 #include "EDK3/camera.h"
 #include "ESAT/math.h"
+#include "math_library/vector_2.h"
+#include "math_library/vector_3.h"
 
 
 namespace EDK3 {
@@ -34,22 +36,24 @@ class CameraCustom : public EDK3::Camera {
   const bool enabled() const;
   const float speed() const;
   const float sensitivity() const;
-  ESAT::Vec3 direction() const;
-  ESAT::Vec2 window_size() const;
+  Vec3 direction() const;
+  Vec2 window_size() const;
   //TODO something in the future:
   //virtual void doCull(const Node* root_node) override;
   //virtual void doRender() const override; 
 
+  Vec2 accum_mouse_offset_;
  protected:
   virtual ~CameraCustom(); 
 
   //TODO anything with these vars, these vars can be changed:
-  ESAT::Vec2 window_size_;
+  Vec2 window_size_;
+  Vec2 current_mouse_position_;
+  Vec2 last_mouse_position_;
   bool enabled_;
   float speed_;
   float sensitivity_;
-  ESAT::Vec2 accum_mouse_offset_;
-  ESAT::Vec3 view_dir_;
+  Vec3 view_dir_;
   double last_wheel_value_;
   float speed_modifier_;
 

@@ -67,55 +67,31 @@ void WindowSettings() {
         ImGui::Checkbox("No Move", &manager->performance_window.flags.no_move);
         ImGui::EndMenu();
       } 
+
+      if (ImGui::BeginMenu("Camera")) {
+          ImGui::Checkbox("Opened", &manager->camera_window.popen);
+          ImGui::Checkbox("No Titlebar", &manager->camera_window.flags.no_titlebar);
+          ImGui::Checkbox("No Resize", &manager->camera_window.flags.no_resize);
+          ImGui::Checkbox("No Move", &manager->camera_window.flags.no_move);
+          ImGui::EndMenu();
+      }
+
+      if (ImGui::BeginMenu("Hierachy")) {
+          ImGui::Checkbox("Opened", &manager->hierachy_window.popen);
+          ImGui::Checkbox("No Titlebar", &manager->hierachy_window.flags.no_titlebar);
+          ImGui::Checkbox("No Resize", &manager->hierachy_window.flags.no_resize);
+          ImGui::Checkbox("No Move", &manager->hierachy_window.flags.no_move);
+          ImGui::EndMenu();
+      }
       ImGui::EndMenu();
     }
+    if (ImGui::BeginMenu("Demo")) {
+        if (ImGui::Button("Load Demo")) {
+            printf("Loading Demo\n");
+        }
+    ImGui::EndMenu();
+    }
     
-    //if (ImGui::BeginMenu("Entities")) {
-    //  if (ImGui::Button("New Path")) {
-    //    game->newpath_window.popen = true;
-    //  }
-    //  if (ImGui::Button("New Sprite")) {
-    //    game->newsprite_window.popen = true;
-    //  }
-    //  if (ImGui::Button("New Texture")) {
-    //    game->newtexture_window.popen = true;
-    //  }
-    //  ImGui::EndMenu();
-    //}
-    //if (ImGui::BeginMenu("Animations")) {
-    //  if (ImGui::Button("New Animation Config")) {
-    //    game->newanimationconfig_window.popen = true;
-    //  }
-    //  ImGui::EndMenu();
-    //}
-    //if (ImGui::BeginMenu("Save")) {
-    //  if (ImGui::Button("Save all")) {
-    //    for (int i = 0; i < game->animation_configs_.size(); i++) {
-    //      game->db_.saveAnimation(game->animation_configs_[i], game->animation_configs_db_[i]);
-    //    }
-    //    Game::getInstance()->animation_configs_.clear();
-    //    Game::getInstance()->animation_configs_db_.clear();
-    //
-    //    if (game->db_.runQuery("SELECT * from animations;", game->db_.processAnimations, 0) != SQLITE_OK) {
-    //      printf("%s\n", game->db_.err_msg);
-    //    }
-    //  }
-    //  ImGui::EndMenu();
-    //}
-
-    //if (ImGui::BeginMenu("Demo")) {
-    //  if (ImGui::Button("Run Demo 1")) {
-    //    game->demo_et_.runDemo();
-    //    game->demo_running_ = true;
-    //    game->entities_window.popen = false;
-    //    game->animationconfigs_window.popen = false;
-    //    game->newpath_window.popen = false;
-    //    game->newanimationconfig_window.popen = false;
-    //    game->newtexture_window.popen = false;
-    //    game->newsprite_window.popen = false;
-    //  }
-    //  ImGui::EndMenu();
-    //}
     ImGui::EndMainMenuBar();
   }
   // ImGui::End();
@@ -160,7 +136,9 @@ void WindowsController() {
   if (manager->camera_window.popen) {
       CameraWindow();
   }
-
+  if (manager->hierachy_window.popen) {
+      HierachyWindow();
+  }
   /*
   if (game->animationconfigs_window.popen) {
     AnimationConfigsManagerWindow();
@@ -255,6 +233,19 @@ void LightsWindow() {
     ImGui::End();
 }
 
+void HierachyWindow() {
+    DemoManager* manager = DemoManager::getInstance();
+    manager->hierachy_window.flags.no_resize = false;
+    SetFlags(&manager->hierachy_window);
+    ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
+    ImGui::Begin("Hierachy Window", &manager->hierachy_window.popen, manager->hierachy_window.window_flags);
+    WindowMenu(&manager->hierachy_window);
+
+
+
+    ImGui::End();
+}
+
 
 void PerformanceWindow(double dt) {
     DemoManager* manager = DemoManager::getInstance();
@@ -279,7 +270,7 @@ void CameraWindow() {
     WindowMenu(&manager->camera_window);
 
     const float* camera_position = manager->camera->position();
-    ESAT::Vec3 camera_direction = manager->camera->direction();
+    Vec3 camera_direction = manager->camera->direction();
     ImGui::Text("Position: ");
     ImGui::SameLine();
     ImGui::Text("x: %f, y: %f, z: %f", camera_position[0], camera_position[1], camera_position[2]);
@@ -287,6 +278,7 @@ void CameraWindow() {
     ImGui::Text("Direction: ");
     ImGui::SameLine();
     ImGui::Text("x: %f, y: %f, z: %f", camera_direction.x, camera_direction.y, camera_direction.z);
+    ImGui::Text("Accum mouse offset: %f %f", manager->camera->accum_mouse_offset_.x , manager->camera->accum_mouse_offset_.y);
     ImGui::Separator();
     ImGui::Text("Speed: %f", manager->camera->speed());
     ImGui::Text("Sensitivity: %f", manager->camera->sensitivity());

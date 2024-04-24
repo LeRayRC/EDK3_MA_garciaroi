@@ -17,6 +17,7 @@
 
 #include "camera_custom.h"
 #include "material_custom.h"
+#include "geometry_custom_terrain.h"
 
 /**
  * @brief Class the represents the singleton that manages the game
@@ -27,17 +28,19 @@ class DemoManager{
   private:
     static DemoManager* instance;
   public:
+
     EDK3::ref_ptr<EDK3::CameraCustom> camera;
     EDK3::ref_ptr<EDK3::Node> root;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_basic;
     EDK3::ref_ptr<EDK3::MaterialCustom::MaterialCustomSettings> mat_basic_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings;
-
+    EDK3::ref_ptr<EDK3::TerrainCustom> terrain_custom;
     float dt;
     ImGuiWindow settings_window;
     ImGuiWindow lights_window;
     ImGuiWindow performance_window;
     ImGuiWindow camera_window;
+    ImGuiWindow hierachy_window;
 
   //Methods
   private:

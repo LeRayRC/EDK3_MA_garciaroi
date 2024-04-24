@@ -14,6 +14,7 @@
 #include "Perlin/SimplexNoise.h"
 #include "ESAT/input.h"
 #include "math_helpers.h"
+#include "math_library/vector_2.h"
 
 
 //#define STB_IMAGE_IMPLEMENTATION
@@ -26,13 +27,7 @@ namespace EDK3 {
   CameraCustom::CameraCustom(){}
   CameraCustom::~CameraCustom(){}
   
-  /*
-    mesh_elements_pointer[j + i * (num_revs_ + 1)].pos = {
-                    cosf(0) * cosf(i * alpha - 1.57f) ,
-                    sinf(alpha * i - 1.57f) ,
-                    sinf(0) * cosf(i * alpha - 1.57f) 
-    };
-  */
+
   void CameraCustom::initViewTarget(const float window_width,
     const float window_height) {
     window_size_ = { window_width, window_height };
@@ -41,7 +36,7 @@ namespace EDK3 {
     set_view_direction(&view_dir_.x);
   }
 
-  ESAT::Vec2 CameraCustom::window_size() const{
+  Vec2 CameraCustom::window_size() const{
     return window_size_;
   }
 
@@ -64,7 +59,7 @@ namespace EDK3 {
       return sensitivity_;
   }
 
-  ESAT::Vec3 CameraCustom::direction() const {
+  Vec3 CameraCustom::direction() const {
       return view_dir_;
   }
 
@@ -72,7 +67,7 @@ namespace EDK3 {
       const float window_height){
     float alpha;
     float omega;
-
+    
     
     if(ESAT::MouseWheelY() > last_wheel_value_){
       speed_ += speed_modifier_;
@@ -82,52 +77,63 @@ namespace EDK3 {
     speed_ = speed_ < 0.0 ? 0.0 : speed_;
     last_wheel_value_ = ESAT::MouseWheelY();
 
+    if (ESAT::MouseButtonDown(1)) {
+        last_mouse_position_ = {(float)ESAT::MousePositionX(), (float)ESAT::MousePositionY()};
+        current_mouse_position_ = last_mouse_position_;
+    }
 
     if (ESAT::MouseButtonPressed(1)) {
+      current_mouse_position_ = {(float)ESAT::MousePositionX(), (float)ESAT::MousePositionY()};
       const float* position_ = position();
-      ESAT::Vec3 new_position;
+      Vec3 current_position = Vec3(position_[0], position_[1], position_[2]);
+      Vec3 new_position;
       if (ESAT::IsKeyPressed('W')) {
-        new_position = {position_[0] + view_dir_.x * speed_,
-                      position_[1] + view_dir_.y * speed_,
-                      position_[2] + view_dir_.z * speed_ };
+        new_position = current_position + view_dir_ * speed_;
         set_position(&new_position.x);
       }
       if (ESAT::IsKeyPressed('S')) {
-        new_position = {position_[0] - view_dir_.x * speed_,
-                      position_[1] - view_dir_.y * speed_,
-                      position_[2] - view_dir_.z * speed_ };
+          new_position = current_position - (view_dir_ * speed_);
         set_position(&new_position.x);
       }
       if (ESAT::IsKeyPressed('A')) {
-        ESAT::Vec3 right = Vec3CrossProduct(view_dir_,{0.0f,1.0f,0.0f});
-        new_position = {position_[0] - right.x * speed_,
-                        position_[1] - right.y * speed_,
-                        position_[2] - right.z * speed_};
+        Vec3 right = Vec3::CrossProduct(view_dir_,Vec3(0.0f,1.0f,0.0f));
+        new_position = current_position - (right * speed_);
         set_position(&new_position.x);
       }
       if (ESAT::IsKeyPressed('D')) {
-        ESAT::Vec3 right = Vec3CrossProduct(view_dir_,{0.0f,1.0f,0.0f});
-        new_position = {position_[0] + right.x * speed_,
-                        position_[1] + right.y * speed_,
-                        position_[2] + right.z * speed_};
+        Vec3 right = Vec3::CrossProduct(view_dir_, Vec3(0.0f, 1.0f, 0.0f));
+        new_position = current_position + (right * speed_);
         set_position(&new_position.x);
       }
 
+      if (ESAT::IsKeyPressed('Q')) {
+          new_position = current_position + (Vec3(0.0, 1.0f, 0.0f) * speed_);
+          set_position(&new_position.x);
+      }
 
+      if (ESAT::IsKeyPressed('E')) {
+          new_position = current_position + (Vec3(0.0,-1.0f,0.0f) * speed_);
+          set_position(&new_position.x);
+      }
 
+      Vec2 dm = (current_mouse_position_ - last_mouse_position_);
+      accum_mouse_offset_ += dm;
 
+      last_mouse_position_ = current_mouse_position_;
 
-      alpha = ((window_size_.y-(float)ESAT::MousePositionY()) / window_height) * 3.14f;
-      omega = ((float)ESAT::MousePositionX() / window_width) * 6.28f;
+      alpha = ((window_size_.y-accum_mouse_offset_.y) / window_height) * 3.14f;
+      omega = (accum_mouse_offset_.x / window_width) * 6.28f;
 
-      ESAT::Vec3 camera_pos = {
+      if (alpha > 3.14f) alpha = 3.14f;
+      if (alpha < 0.0f) alpha = 0.0f;
+
+      Vec3 camera_pos = {
         cosf(omega) * cosf(alpha - 1.57) * sensitivity_,
         sinf(alpha - 1.57f) ,
         sinf(omega) * cosf(alpha - 1.57f) * sensitivity_
       };
 
-      view_dir_ = Vec3Normalize(camera_pos);
-
+      view_dir_ = camera_pos.Normalized();
       set_view_direction(&view_dir_.x);
     }
   }

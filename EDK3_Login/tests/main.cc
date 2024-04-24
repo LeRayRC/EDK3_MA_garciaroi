@@ -30,8 +30,9 @@
 #include "math_library/vector_2.h"
 #include "demo_manager.h"
 #include "interface.h"
+#include "scene.h"
 
-Vec3 EDK3::MaterialCustom::LightSettings::ambient_color_ = Vec3(1.0f, 0.0f, 0.0f);
+Vec3 EDK3::MaterialCustom::LightSettings::ambient_color_ = Vec3(0.0f, 0.0f, 0.0f);
 
 const int kWindowWidth = 1280;
 const int kWindowHeight = 768;
@@ -42,7 +43,7 @@ void InitScene() {
     DemoManager* manager = DemoManager::getInstance();
     EDK3::scoped_array<char> error_log;
     //Allocating root node:
-    EDK3::Node* root = manager->root.alloc();
+    EDK3::Node* root = manager->root.get();
 
     Vec2 tree_points[kNTreePoints + 1];
 
@@ -116,8 +117,7 @@ void InitScene() {
     EDK3::ref_ptr<EDK3::SurfaceCustom> surface_custom;
     surface_custom.alloc();
     //surface_custom->init(points, kNTorusPoints, 40, 2.0f,2.0f);
-    surface_custom->init(tree_points, kNTreePoints, 40, 10.0f, 3.0f);
-    //EDK3::ref_ptr<EDK3::TerrainCustom> custom_terrain;
+    surface_custom->init(tree_points, kNTreePoints, 40, 6.0f, 4.0f);
     //EDK3::CreateCube(&cube_geo,1.0f, true, true);
     //custom_terrain.alloc();
     //custom_terrain->init(256, 256, // cols , rows
@@ -128,6 +128,7 @@ void InitScene() {
     //  "./textures/island_heightmap.png",   // heightmap path
     //  true); // use heightmap
 
+    InitTerrain();
 
   //Loading texture:
     EDK3::ref_ptr<EDK3::Texture> texture;
@@ -138,35 +139,49 @@ void InitScene() {
     }
 
     //Initializing the material and its settings:
-    //mat_basic->init(error_log, "./shaders/basicVertex.vs", "./shaders/basicFragment.fs");
+    //manager->mat_basic->init(error_log, "./shaders/basicVertex.vs", "./shaders/basicFragment.fs");
     manager->mat_basic->init(error_log, "./shaders/basicVertex.vs", "./shaders/light_shader.fs");
-    float color[] = { 0.0f, 1.0f, 0.0f, 1.0f };
-    manager->mat_basic_settings->set_color(color);
+    //float color[] = { 0.0f, 1.0f, 0.0f, 1.0f };
+    //manager->mat_basic_settings->set_color(color);
 
     manager->mat_light_settings.alloc();
-    //for (int i = 0; i < 1; i++) {
-    //    manager->mat_light_settings->light_confs_[i].enabled_ = true;
-    //}
+    
+    
+    for (int i = 0; i < 2; i++) {
+        manager->mat_light_settings->light_confs_[i].enabled_ = true;
+    }
+
+    manager->mat_light_settings->light_confs_[0].type_ = 0;
+    manager->mat_light_settings->light_confs_[0].dir_ = Vec3(0.0f, 0.6f, 0.9f);
+    manager->mat_light_settings->light_confs_[0].diff_color_ = Vec3(0.24f, 0.37f, 0.32f);
+
+    manager->mat_light_settings->light_confs_[1].type_ = 1;
+    manager->mat_light_settings->light_confs_[1].pos_ = Vec3(17.0f, -63.0f, -24.0f);
+    manager->mat_light_settings->light_confs_[1].dir_ = Vec3(0.0f, 0.0f, 0.0f);
+    manager->mat_light_settings->light_confs_[1].diff_color_ = Vec3(1.0f, 1.0f, 0.0f);
+    manager->mat_light_settings->light_confs_[1].linear_att_ = 0.0027f;
+    manager->mat_light_settings->light_confs_[1].quadratic_att_ = 0.0028f;
+    manager->mat_light_settings->light_confs_[1].shininess_ = 45.0f;
+
     manager->mat_light_settings->set_texture(texture.get());
 
 
-    EDK3::ref_ptr<EDK3::Drawable> drawable;
-    drawable.alloc();
-    drawable->set_geometry(surface_custom.get());
-    drawable->set_material(manager->mat_basic.get());
-    drawable->set_material_settings(manager->mat_light_settings.get());
-    //drawable->set_material_settings(mat_light_settings.get());
-    drawable->set_position(0.0f, 0.0f, 0.0f);
-    //drawable->set_HPR(360.0f * rand() / RAND_MAX, 360.0f * rand() / RAND_MAX, 360.0f * rand() / RAND_MAX);
-    drawable->set_HPR(0.0f, 0.0f, 0.0f);
-    root->addChild(drawable.get());
+    SetupDrawable(manager->terrain_custom.get(),
+                  manager->mat_basic.get(),
+                  manager->mat_light_settings.get(),
+                  Vec3(0.0f, -100.0f, 0.0f));
 
+
+    SetupDrawable(surface_custom.get(),
+                  manager->mat_basic.get(),
+                  manager->mat_light_settings.get(),
+                  Vec3(0.97f, -90.0f, -5.0f));
 
     //Allocating and initializing the camera:
     manager->camera.alloc();
     float pos[] = { 0.0, 5.0f, 20.0f };
     //float pos[] = { 100.0, 20.0f, 10.0f };
-    float view[] = { 0.0f, 0.0f, 0.0f };
+    float view[] = { 0.0f, 0.0f, 1.0f };
     manager->camera->set_position(pos);
     manager->camera->initViewTarget(kWindowWidth, kWindowHeight);
     manager->camera->setSensitibity(1.0f);
@@ -186,8 +201,8 @@ void UpdateFn() {
     manager->camera->update(0.0, manager->camera->window_size().x,
         manager->camera->window_size().y);
     EDK3::Node* root = manager->root.get();
-    EDK3::Node* drawable = root->child(0);
-    drawable->set_rotation_y(ESAT::Time() * 0.05f);
+    //EDK3::Node* drawable = root->child(0);
+    //drawable->set_rotation_y(ESAT::Time() * 0.05f);
 
 }
 
