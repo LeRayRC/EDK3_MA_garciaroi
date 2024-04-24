@@ -88,6 +88,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
       program_->set_uniform_value(used_texture_loc, Type::T_INT_1, &use_texture);
       return true;
     }
+
     const LightSettings* light_set = dynamic_cast<const LightSettings*>(mat);
     if(light_set){
       program_->use();
@@ -98,6 +99,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
       for(int i=0; i < 8; i++){
         if(light_set->light_confs_[i].enabled_){
           lights_counter++;
+          
 
           //Position
           sprintf(name, "u_lights[%d].pos\0", i);
@@ -201,17 +203,6 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
         }
       }
       
-      
-      //Number lights
-      sprintf(name, "u_number_lights\0");
-      loc = program_->get_uniform_position("u_number_lights\0");
-      if (loc != -1) {
-          program_->set_uniform_value(loc, EDK3::Type::T_INT, &lights_counter);
-      }
-      else {
-          printf("Error uniform %s\n", name);
-      }
-
       //Ambient color
       sprintf(name, "u_ambient\0");
       loc = program_->get_uniform_position(name);
@@ -221,6 +212,18 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
       else {
           printf("Error uniform %s\n", name);
       }
+
+      //Number lights
+      sprintf(name, "u_number_lights\0");
+      loc = program_->get_uniform_position(name);
+      if (loc != -1) {
+          program_->set_uniform_value(loc, EDK3::Type::T_INT, &lights_counter);
+      }
+      else {
+          printf("Error uniform %s\n", name);
+      }
+
+      
 
       //int slot = 0;
       //light_set->texture()->bind(slot);
