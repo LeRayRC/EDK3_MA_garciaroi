@@ -26,6 +26,9 @@
 #include "material_custom.h"
 #include "geometry_custom_terrain.h"
 #include "geometry_custom_surface.h"
+#include "geometry_custom_sphere.h"
+#include "geometry_custom_cube.h"
+#include "geometry_custom_quad.h"
 #include "camera_custom.h"
 #include "math_library/vector_3.h"
 #include "math_library/vector_2.h"
@@ -80,9 +83,25 @@ void InitScene() {
         }
     }
 
+    EDK3::ref_ptr<EDK3::QuadCustom> custom_quad;
+    custom_quad.alloc();
+    custom_quad->init(20.0f);
+
+    EDK3::ref_ptr<EDK3::SphereCustom> custom_sphere;
+    custom_sphere.alloc();
+    custom_sphere->init(8.0f);
+
+    EDK3::ref_ptr<EDK3::CubeCustom> custom_cube;
+    custom_cube.alloc();
+    custom_cube->init24v(8.0f);
+
+
     EDK3::ref_ptr<EDK3::SurfaceCustom> surface_custom;
     surface_custom.alloc();
-    //surface_custom->init(points, kNTorusPoints, 40, 2.0f,2.0f);
+
+    EDK3::ref_ptr<EDK3::SurfaceCustom> surface_custom_torus;
+    surface_custom_torus.alloc();
+    surface_custom_torus->init(points, kNTorusPoints, 40, 2.0f,2.0f);
     surface_custom->init(tree_points, kNTreePoints, 40, 6.0f, 4.0f);
     //EDK3::CreateCube(&cube_geo,1.0f, true, true);
 
@@ -150,6 +169,26 @@ void InitScene() {
                   manager->mat_light_settings.get(),
                   Vec3(0.97f, -90.0f, -5.0f));
 
+    SetupDrawable(custom_sphere.get(),
+                  manager->mat_basic.get(),
+                  manager->mat_light_settings.get(),
+                  Vec3(-12.0f, -42.0f, 100.0f));
+
+    SetupDrawable(custom_cube.get(),
+                  manager->mat_basic.get(),
+                  manager->mat_light_settings.get(),
+                  Vec3(-95.0f, -40.0f, -88.0f));
+
+    SetupDrawable(surface_custom_torus.get(),
+      manager->mat_basic.get(),
+      manager->mat_light_settings.get(),
+      Vec3(26.0f, -30.0f, -28.0f));
+
+    SetupDrawable(custom_quad.get(),
+        manager->mat_basic.get(),
+        manager->mat_light_settings.get(),
+        Vec3(80.0f, -15.0f, 0.0f));
+
     //Allocating and initializing the camera:
     manager->camera.alloc();
     float pos[] = { 0.0, 5.0f, 20.0f };
@@ -158,7 +197,7 @@ void InitScene() {
     manager->camera->set_position(pos);
     manager->camera->initViewTarget(kWindowWidth, kWindowHeight);
     manager->camera->setSensitibity(1.0f);
-    manager->camera->setSpeed(0.05f);
+    manager->camera->setSpeed(0.25f);
     manager->camera->setSpeedModifier(0.01f);
     manager->camera->set_position(pos);
     manager->camera->set_view_target(view);

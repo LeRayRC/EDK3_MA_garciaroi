@@ -116,12 +116,12 @@ namespace EDK3 {
         current_position = Vec3(position_[0], position_[1], position_[2]);
       }
 
-      if (ESAT::IsKeyPressed('Q')) {
+      if (ESAT::IsKeyPressed('E')) {
           new_position = current_position + (Vec3(0.0, 1.0f, 0.0f) * speed_);
           set_position(&new_position.x);
       }
 
-      if (ESAT::IsKeyPressed('E')) {
+      if (ESAT::IsKeyPressed('Q')) {
           new_position = current_position + (Vec3(0.0,-1.0f,0.0f) * speed_);
           set_position(&new_position.x);
       }
