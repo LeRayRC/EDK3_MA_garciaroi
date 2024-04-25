@@ -138,8 +138,8 @@ void WindowsController() {
   if (manager->hierachy_window.popen) {
       HierachyWindow();
   }
-  if (manager->postprocess_window.popen) {
-      PostProcessWindow();
+  if (manager->control_window.popen) {
+      ControlWindow();
   }
 }
 
@@ -239,18 +239,18 @@ void CameraWindow() {
     ImGui::End();
 }
 
-void PostProcessWindow() {
+void ControlWindow() {
     DemoManager* manager = DemoManager::getInstance();
-    manager->postprocess_window.flags.no_resize = false;
-    SetFlags(&manager->postprocess_window);
+    manager->control_window.flags.no_resize = false;
+    SetFlags(&manager->control_window);
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
-    ImGui::Begin("Postprocess Window", &manager->postprocess_window.popen, manager->postprocess_window.window_flags);
-    WindowMenu(&manager->postprocess_window);
+    ImGui::Begin("Control Window", &manager->control_window.popen, manager->control_window.window_flags);
+    WindowMenu(&manager->control_window);
 
     ImGui::Checkbox("Enable Postprocess", &manager->enable_postprocess);
+    ImGui::Checkbox("Show normals", &manager->show_normals);
 
     ImGui::End();
-
 }
 
 /*

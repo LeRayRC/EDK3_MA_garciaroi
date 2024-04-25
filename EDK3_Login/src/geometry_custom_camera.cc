@@ -63,6 +63,23 @@ namespace EDK3 {
       return view_dir_;
   }
 
+  void CameraCustom::setDirectionWithAccum(const float window_width,const float window_height) {
+    float alpha = ((window_size_.y - accum_mouse_offset_.y) / window_height) * 3.14f;
+    float omega = (accum_mouse_offset_.x / window_width) * 6.28f;
+
+    if (alpha > 3.14f) alpha = 3.14f;
+    if (alpha < 0.0f) alpha = 0.0f;
+
+    Vec3 camera_pos = {
+      cosf(omega) * cosf(alpha - 1.57) * sensitivity_,
+      sinf(alpha - 1.57f) ,
+      sinf(omega) * cosf(alpha - 1.57f) * sensitivity_
+    };
+
+    view_dir_ = camera_pos.Normalized();
+    set_view_direction(&view_dir_.x);
+  }
+
   void CameraCustom::update(const double dt, const float window_width,
       const float window_height){
     float alpha;

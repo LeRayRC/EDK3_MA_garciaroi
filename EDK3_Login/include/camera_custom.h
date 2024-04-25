@@ -32,6 +32,7 @@ class CameraCustom : public EDK3::Camera {
   void setSpeed(const float speed);
   void setSensitibity(const float sensitivity);
   void setSpeedModifier(const float speed_modifier);
+  void setDirectionWithAccum(const float window_width, const float window_height);
 
   const bool enabled() const;
   const float speed() const;

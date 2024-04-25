@@ -41,6 +41,7 @@ void InitTerrain(){
       1.0f, // quad size
       0.05f, // smothness
       40.0f, // heightmap multiplier
+      //"./textures/australia.png",   // heightmap path
       "./textures/island_heightmap.png",   // heightmap path
       true); // use heightmap
 
@@ -51,7 +52,7 @@ void SetupDrawable(EDK3::Geometry *geo,
                    EDK3::MaterialCustom *mat, 
                    EDK3::MaterialSettings *mat_settings,
                    Vec3& pos){
-    DemoManager* manager = DemoManager::getInstance();          
+    DemoManager* manager = DemoManager::getInstance();
     EDK3::ref_ptr<EDK3::Drawable> drawable;
     drawable.alloc();
     drawable->set_geometry(geo);
@@ -60,4 +61,15 @@ void SetupDrawable(EDK3::Geometry *geo,
     drawable->set_position(pos.x, pos.y, pos.z);
     drawable->set_HPR(0.0f, 0.0f, 0.0f);
     manager->root->addChild(drawable.get());
+}
+
+void UpdateDrawable(EDK3::Drawable* drawable,
+  EDK3::MaterialCustom* mat,
+  EDK3::MaterialSettings* mat_settings,
+  Vec3& pos) {
+  DemoManager* manager = DemoManager::getInstance();
+  drawable->set_material(mat);
+  drawable->set_material_settings(mat_settings);
+  drawable->set_position(pos.x, pos.y, pos.z);
+  drawable->set_HPR(0.0f, 0.0f, 0.0f);
 }

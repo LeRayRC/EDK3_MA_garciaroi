@@ -83,6 +83,8 @@ void InitScene() {
         }
     }
 
+    //Init Geometries
+
     EDK3::ref_ptr<EDK3::QuadCustom> custom_quad;
     custom_quad.alloc();
     custom_quad->init(20.0f);
@@ -95,7 +97,6 @@ void InitScene() {
     custom_cube.alloc();
     custom_cube->init24v(8.0f);
 
-
     EDK3::ref_ptr<EDK3::SurfaceCustom> surface_custom;
     surface_custom.alloc();
 
@@ -103,7 +104,6 @@ void InitScene() {
     surface_custom_torus.alloc();
     surface_custom_torus->init(points, kNTorusPoints, 40, 2.0f,2.0f);
     surface_custom->init(tree_points, kNTreePoints, 40, 6.0f, 4.0f);
-    //EDK3::CreateCube(&cube_geo,1.0f, true, true);
 
     InitTerrain();
 
@@ -116,10 +116,8 @@ void InitScene() {
     }
 
     //Initializing the material and its settings:
-    //manager->mat_basic->init(error_log, "./shaders/basicVertex.vs", "./shaders/basicFragment.fs");
     manager->mat_basic->init(error_log, "./shaders/basicVertex.vs", "./shaders/light_shader.fs");
-    //float color[] = { 0.0f, 1.0f, 0.0f, 1.0f };
-    //manager->mat_basic_settings->set_color(color);
+    manager->mat_normals->init(error_log, "./shaders/basicVertex.vs", "./shaders/basicFragment.fs");
 
     manager->mat_light_settings.alloc();
 
@@ -157,50 +155,57 @@ void InitScene() {
 
     manager->mat_light_settings->set_texture(texture.get());
 
+    EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
+    if (manager->show_normals) {
+      mat_selected = manager->mat_normals;
+    }else {
+      mat_selected = manager->mat_basic;
+    }
 
     SetupDrawable(manager->terrain_custom.get(),
-                  manager->mat_basic.get(),
+                  mat_selected.get(),
                   manager->mat_light_settings.get(),
                   Vec3(0.0f, -100.0f, 0.0f));
 
 
     SetupDrawable(surface_custom.get(),
-                  manager->mat_basic.get(),
+                  mat_selected.get(),
                   manager->mat_light_settings.get(),
                   Vec3(0.97f, -90.0f, -5.0f));
 
     SetupDrawable(custom_sphere.get(),
-                  manager->mat_basic.get(),
+                  mat_selected.get(),
                   manager->mat_light_settings.get(),
                   Vec3(-12.0f, -42.0f, 100.0f));
 
     SetupDrawable(custom_cube.get(),
-                  manager->mat_basic.get(),
+                  mat_selected.get(),
                   manager->mat_light_settings.get(),
                   Vec3(-95.0f, -40.0f, -88.0f));
 
     SetupDrawable(surface_custom_torus.get(),
-      manager->mat_basic.get(),
-      manager->mat_light_settings.get(),
-      Vec3(26.0f, -30.0f, -28.0f));
+                  mat_selected.get(),
+                  manager->mat_light_settings.get(),
+                  Vec3(26.0f, -30.0f, -28.0f));
 
     SetupDrawable(custom_quad.get(),
-        manager->mat_basic.get(),
-        manager->mat_light_settings.get(),
-        Vec3(80.0f, -15.0f, 0.0f));
+                  mat_selected.get(),
+                  manager->mat_light_settings.get(),
+                  Vec3(80.0f, -15.0f, 0.0f));
 
     //Allocating and initializing the camera:
     manager->camera.alloc();
-    float pos[] = { 0.0, 5.0f, 20.0f };
-    //float pos[] = { 100.0, 20.0f, 10.0f };
-    float view[] = { 0.0f, 0.0f, 1.0f };
+
+    float pos[] = { -1.0, 25.0f, -130.0f };
     manager->camera->set_position(pos);
     manager->camera->initViewTarget(kWindowWidth, kWindowHeight);
     manager->camera->setSensitibity(1.0f);
     manager->camera->setSpeed(0.25f);
     manager->camera->setSpeedModifier(0.01f);
     manager->camera->set_position(pos);
-    manager->camera->set_view_target(view);
+    manager->camera->accum_mouse_offset_ = { 1600.0f,586.0f };
+    manager->camera->setDirectionWithAccum(manager->camera->window_size().x,
+      manager->camera->window_size().y);
     manager->camera->setupPerspective(70.0f, 8.0f / 6.0f, 1.0f, 1500.0f);
 
 
@@ -213,6 +218,23 @@ void UpdateFn() {
     manager->camera->update(0.0, manager->camera->window_size().x,
         manager->camera->window_size().y);
     EDK3::Node* root = manager->root.get();
+
+    EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
+    if (manager->show_normals) {
+      mat_selected = manager->mat_normals;
+    }
+    else {
+      mat_selected = manager->mat_basic;
+    }
+    for (int i = 0; i < root->num_children(); i++) {
+      EDK3::Drawable* drawable = dynamic_cast<EDK3::Drawable*>(root->child(i));
+      //root->child(i)->
+      const float* drawable_position = drawable->position();
+      Vec3 position = { drawable_position[0],drawable_position[1],drawable_position[2] };
+      UpdateDrawable(drawable, mat_selected.get(), manager->mat_light_settings.get(),position );
+    }
+
+
     //EDK3::Node* drawable = root->child(0);
     //drawable->set_rotation_y(ESAT::Time() * 0.05f);
 
@@ -234,9 +256,6 @@ void RenderFn() {
         manager->render_target->end();
         manager->mat_postprocess->drawFullScreenQuad(manager->mat_postprocess_settings.get());
     }
-
-
-
 }
 
 

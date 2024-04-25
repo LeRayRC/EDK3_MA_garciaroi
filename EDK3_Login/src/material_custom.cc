@@ -106,7 +106,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_INT_1, &enabled);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
 
@@ -117,7 +117,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_INT_1, &light_set->light_confs_[i].type_);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
 
@@ -127,7 +127,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
           if(loc != -1){
             program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_3, &light_set->light_confs_[i].pos_.x);
           }else{
-            printf("Error uniform %s\n", name);
+            //printf("Error uniform %s\n", name);
           }
           //Direction
           sprintf(name, "u_lights[%d].dir\0",i);
@@ -136,7 +136,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_3, &light_set->light_confs_[i].dir_.x);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
           //Diffuse color
@@ -146,7 +146,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_3, &light_set->light_confs_[i].diff_color_.x);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
           
@@ -158,7 +158,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_3, &light_set->light_confs_[i].spec_color_.x);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
           
           //Linear attenuation
@@ -168,7 +168,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_1, &light_set->light_confs_[i].linear_att_);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
           //Quadratic attenuation
@@ -178,7 +178,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_1, &light_set->light_confs_[i].quadratic_att_);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
           //Constant attenuation
@@ -188,7 +188,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_1, &light_set->light_confs_[i].constant_att_);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
           //Shininess attenuation
@@ -198,7 +198,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_1, &light_set->light_confs_[i].shininess_);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
           //Strength 
@@ -208,7 +208,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_1, &light_set->light_confs_[i].strength_);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
           //Camera position
@@ -218,7 +218,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_3, &light_set->light_confs_[i].camera_pos_.x);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
           
           EDK3::dev::GPUManager::CheckGLError("Light uniforms");
@@ -232,7 +232,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
                 program_->set_uniform_value(loc, EDK3::Type::T_INT_1, &enabled);
             }
             else {
-                printf("Error uniform %s\n", name);
+                //printf("Error uniform %s\n", name);
             }
         }
       }
@@ -244,7 +244,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
           program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_3, &light_set->ambient_color_.x);
       }
       else {
-          printf("Error uniform %s\n", name);
+          //printf("Error uniform %s\n", name);
       }
 
       //Number lights

@@ -34,7 +34,7 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::CameraCustom> camera;
     EDK3::ref_ptr<EDK3::Node> root;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_basic;
-    EDK3::ref_ptr<EDK3::MaterialCustom::MaterialCustomSettings> mat_basic_settings;
+    EDK3::ref_ptr<EDK3::MaterialCustom> mat_normals;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings;
     EDK3::ref_ptr<EDK3::TerrainCustom> terrain_custom;
     EDK3::ref_ptr<EDK3::RenderTarget> render_target;
@@ -43,12 +43,15 @@ class DemoManager{
 
     float dt;
     bool enable_postprocess;
+
+    bool show_normals;
+
     ImGuiWindow settings_window;
     ImGuiWindow lights_window;
     ImGuiWindow performance_window;
     ImGuiWindow camera_window;
     ImGuiWindow hierachy_window;
-    ImGuiWindow postprocess_window;
+    ImGuiWindow control_window;
 
   //Methods
   private:
