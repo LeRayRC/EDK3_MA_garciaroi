@@ -45,11 +45,14 @@ class MaterialCustom : public EDK3::Material {
     Vec3 dir_ = Vec3(0.0f, 0.0f, 0.0f);
     Vec3 diff_color_ = Vec3(0.0f, 0.0f, 0.0f);
     Vec3 spec_color_ = Vec3(0.0f, 0.0f, 0.0f);
+    Vec3 spot_dir_ = Vec3(0.0f, 0.0f, 0.0f);
     float linear_att_ = 0.0014f;
     float quadratic_att_ = 0.00007f;
     float constant_att_ = 1.0f;
     float shininess_ = 90.0f;
     float strength_ = 0.5f;
+    float cutoff_ = cosf(3.1416f * 10.0f / 180.0f);
+    float outer_cutoff_ = cosf(3.1416f * 30.0f / 180.0f);
     Vec3 camera_pos_ = Vec3(0.0f, 0.0f, 0.0f);
     bool enabled_ = false;
   };
@@ -68,11 +71,14 @@ class MaterialCustom : public EDK3::Material {
             light_confs_[i].dir_ = Vec3(0.0f, 0.0f, 0.0f);
             light_confs_[i].diff_color_ = Vec3(0.0f, 0.0f, 0.0f);
             light_confs_[i].spec_color_ = Vec3(0.0f, 0.0f, 0.0f);
+            light_confs_[i].spot_dir_ = Vec3(0.0f, 0.0f, 0.0f);
             light_confs_[i].linear_att_ = 0.0014f;
             light_confs_[i].quadratic_att_ = 0.00007f;
             light_confs_[i].constant_att_ = 1.0f;
             light_confs_[i].shininess_ = 90.0f;
             light_confs_[i].strength_ = 0.5f;
+            light_confs_[i].cutoff_ = cosf(3.1416f * 10.0f / 180.0f);
+            light_confs_[i].outer_cutoff_ = cosf(3.1416f * 30.0f / 180.0f);
             light_confs_[i].camera_pos_ = Vec3(0.0f, 0.0f, 0.0f);
             light_confs_[i].enabled_ = false;
         }

@@ -85,6 +85,30 @@ void InitScene() {
 
     //Init Geometries
 
+    EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> geos;
+    EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> geos_boat;
+
+    //load geometry
+    EDK3::LoadObj(
+        "./obj/house.obj",
+        &geos,
+        nullptr
+    );
+    
+    //load geometry
+    EDK3::LoadObj(
+        "./obj/paper_boat.obj",
+        &geos_boat,
+        nullptr
+    );
+
+    //EDK3::ref_ptr<EDK3::Drawable> obj_drawable;
+    //obj_drawable.alloc();
+
+    //EDK3::ref_ptr<EDK3::Drawable> trex_drawable;
+    //trex_drawable.alloc();
+
+    
     EDK3::ref_ptr<EDK3::QuadCustom> custom_quad;
     custom_quad.alloc();
     custom_quad->init(20.0f);
@@ -137,7 +161,7 @@ void InitScene() {
 
     
     
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 3; i++) {
         manager->mat_light_settings->light_confs_[i].enabled_ = true;
     }
 
@@ -152,6 +176,17 @@ void InitScene() {
     manager->mat_light_settings->light_confs_[1].linear_att_ = 0.0027f;
     manager->mat_light_settings->light_confs_[1].quadratic_att_ = 0.0028f;
     manager->mat_light_settings->light_confs_[1].shininess_ = 45.0f;
+
+    manager->mat_light_settings->light_confs_[2].type_ = 2;
+    manager->mat_light_settings->light_confs_[2].pos_ = Vec3(33.0f, -55.0f, -23.0f);
+    manager->mat_light_settings->light_confs_[2].spot_dir_ = Vec3(-0.57f, -1.0f, 0.53f);
+    manager->mat_light_settings->light_confs_[2].diff_color_ = Vec3(1.0f, 0.0f, 0.0f);
+    manager->mat_light_settings->light_confs_[2].linear_att_ = 0.014f;
+    manager->mat_light_settings->light_confs_[2].quadratic_att_ = 0.0007f;
+    manager->mat_light_settings->light_confs_[2].shininess_ = 90.0f;
+    manager->mat_light_settings->light_confs_[2].cutoff_ = 0.960f;
+    manager->mat_light_settings->light_confs_[2].cutoff_ = 0.946f;
+
 
     manager->mat_light_settings->set_texture(texture.get());
 
@@ -193,6 +228,18 @@ void InitScene() {
                   manager->mat_light_settings.get(),
                   Vec3(80.0f, -15.0f, 0.0f));
 
+    SetupDrawable(geos[4].get(),
+                  mat_selected.get(),
+                  manager->mat_light_settings.get(),
+                  Vec3(18.0f, -85.0f, -9.0f),
+                  Vec3(0.5f, 0.5f,0.5f));
+
+    SetupDrawable(geos_boat[0].get(),
+                  mat_selected.get(),
+                  manager->mat_light_settings.get(),
+                  Vec3(40.0f, -98.0f, 100.0f),
+                  Vec3(3.0f, 3.0f, 3.0f));
+
     //Allocating and initializing the camera:
     manager->camera.alloc();
 
@@ -205,7 +252,7 @@ void InitScene() {
     manager->camera->set_position(pos);
     manager->camera->accum_mouse_offset_ = { 1600.0f,586.0f };
     manager->camera->setDirectionWithAccum(manager->camera->window_size().x,
-      manager->camera->window_size().y);
+    manager->camera->window_size().y);
     manager->camera->setupPerspective(70.0f, 8.0f / 6.0f, 1.0f, 1500.0f);
 
 
@@ -215,7 +262,7 @@ void InitScene() {
 void UpdateFn() {
     DemoManager* manager = DemoManager::getInstance();
     manager->camera->set_clear_color(0.94f, 1.0f, 0.94f, 1.0f);
-    manager->camera->update(0.0, manager->camera->window_size().x,
+    manager->camera->update(manager->dt, manager->camera->window_size().x,
         manager->camera->window_size().y);
     EDK3::Node* root = manager->root.get();
 
@@ -235,9 +282,8 @@ void UpdateFn() {
     }
 
 
-    //EDK3::Node* drawable = root->child(0);
-    //drawable->set_rotation_y(ESAT::Time() * 0.05f);
-
+    EDK3::Node* drawable = root->child(6);
+    drawable->set_rotation_y(180.0f);
 }
 
 void RenderFn() {

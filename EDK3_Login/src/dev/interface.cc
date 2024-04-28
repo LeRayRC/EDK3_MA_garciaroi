@@ -170,7 +170,12 @@ void LightsWindow() {
                     ImGui::DragFloat3("Position", &selected_light_settings->light_confs_[i].pos_.x, 0.1f, -100.0f, 100.0f);
                 }
 
-                ImGui::DragFloat3("Direction", &selected_light_settings->light_confs_[i].dir_.x, 0.1f, -1.0f, 1.0f);
+                if (selected_light_settings->light_confs_[i].type_ == 0) {
+                    ImGui::DragFloat3("Direction", &selected_light_settings->light_confs_[i].dir_.x, 0.1f, -1.0f, 1.0f);
+                }
+                if (selected_light_settings->light_confs_[i].type_ == 2) {
+                    ImGui::DragFloat3("Spot Direction", &selected_light_settings->light_confs_[i].spot_dir_.x, 0.01f, -1.0f, 1.0f);
+                }
                 ImGui::DragFloat3("Diffuse Color", &selected_light_settings->light_confs_[i].diff_color_.x, 0.01f, 0.0f, 1.0f);
                 ImGui::Separator();
                 ImGui::DragFloat3("Specular Color", &selected_light_settings->light_confs_[i].spec_color_.x, 0.01f, 0.0f, 1.0f);
@@ -180,6 +185,10 @@ void LightsWindow() {
                 ImGui::InputFloat("Constant att", &selected_light_settings->light_confs_[i].constant_att_);
                 ImGui::InputFloat("Shininess", &selected_light_settings->light_confs_[i].shininess_);
                 ImGui::InputFloat("Strength", &selected_light_settings->light_confs_[i].strength_);
+                if (selected_light_settings->light_confs_[i].type_ == 2) {
+                    ImGui::DragFloat("Cutoff", &selected_light_settings->light_confs_[i].cutoff_,0.01f,-1.0f,1.0f);
+                    ImGui::DragFloat("Outer Cutoff", &selected_light_settings->light_confs_[i].outer_cutoff_, 0.01f, -1.0f, 1.0f);
+                }
                 ImGui::TreePop();
             }
             ImGui::PopID();

@@ -51,15 +51,16 @@ void InitTerrain(){
 void SetupDrawable(EDK3::Geometry *geo, 
                    EDK3::MaterialCustom *mat, 
                    EDK3::MaterialSettings *mat_settings,
-                   Vec3& pos){
+                   Vec3& pos, Vec3& scale, Vec3& rot) {
     DemoManager* manager = DemoManager::getInstance();
     EDK3::ref_ptr<EDK3::Drawable> drawable;
     drawable.alloc();
     drawable->set_geometry(geo);
     drawable->set_material(mat);
     drawable->set_material_settings(mat_settings);
+    drawable->set_rotation_xyz(rot.x, rot.y, rot.z);
     drawable->set_position(pos.x, pos.y, pos.z);
-    drawable->set_HPR(0.0f, 0.0f, 0.0f);
+    drawable->set_scale(scale.x, scale.y, scale.z);
     manager->root->addChild(drawable.get());
 }
 

@@ -220,7 +220,37 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
           else {
               //printf("Error uniform %s\n", name);
           }
-          
+
+          //Spot Direction
+          sprintf(name, "u_lights[%d].spot_dir\0", i);
+          loc = program_->get_uniform_position(name);
+          if (loc != -1) {
+              program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_3, &light_set->light_confs_[i].spot_dir_.x);
+          }
+          else {
+              //printf("Error uniform %s\n", name);
+          }
+
+          //cutoff 
+          sprintf(name, "u_lights[%d].cutoff\0", i);
+          loc = program_->get_uniform_position(name);
+          if (loc != -1) {
+              program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_1, &light_set->light_confs_[i].cutoff_);
+          }
+          else {
+              //printf("Error uniform %s\n", name);
+          }
+
+          //Outer cutoff 
+          sprintf(name, "u_lights[%d].outer_cutoff\0", i);
+          loc = program_->get_uniform_position(name);
+          if (loc != -1) {
+              program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_1, &light_set->light_confs_[i].outer_cutoff_);
+          }
+          else {
+              //printf("Error uniform %s\n", name);
+          }
+
           EDK3::dev::GPUManager::CheckGLError("Light uniforms");
         }
         else {
@@ -246,18 +276,6 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
       else {
           //printf("Error uniform %s\n", name);
       }
-
-      //Number lights
-      /*sprintf(name, "u_number_lights\0");
-      loc = program_->get_uniform_position(name);
-      if (loc != -1) {
-          program_->set_uniform_value(loc, EDK3::Type::T_INT, &lights_counter);
-      }
-      else {
-          printf("Error uniform %s\n", name);
-      }*/
-
-      
 
       //int slot = 0;
       //light_set->texture()->bind(slot);
