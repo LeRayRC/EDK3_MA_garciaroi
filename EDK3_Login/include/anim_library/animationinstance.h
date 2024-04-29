@@ -8,7 +8,7 @@
 #define _ANIMATION_INSTANCE_H_ 1
 
 #include "entity.h"
-#include "math_lib/vector_2.h"
+#include "../math_library/vector_2.h"
 #include "interpolate.h"
 
 struct AnimationConfig{
