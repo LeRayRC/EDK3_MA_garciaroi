@@ -9,6 +9,7 @@
 
 #include "entity.h"
 #include "../math_library/vector_2.h"
+#include "../math_library/vector_3.h"
 #include "interpolate.h"
 
 struct AnimationConfig{
@@ -20,16 +21,16 @@ struct AnimationConfig{
   bool is_rotating;
   bool is_scaling;
   // Move
-  Vec2 move_from;
-  Vec2 move_to;
+  Vec3 move_from;
+  Vec3 move_to;
   float move_duration;
   // Rotation --> radians
-  float rotate_from;
-  float rotate_to;
+  Vec3 rotate_from;
+  Vec3 rotate_to;
   float rotate_duration;
   // Scale
-  Vec2 scale_from;
-  Vec2 scale_to;
+  Vec3 scale_from;
+  Vec3 scale_to;
   float scale_duration;
 
   InterpolationType type_;

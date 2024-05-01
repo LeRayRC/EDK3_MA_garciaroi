@@ -1,5 +1,5 @@
 
-#include "color.h"
+#include "anim_library/color.h"
 
 Color ::Color() {
   red_ = 0;

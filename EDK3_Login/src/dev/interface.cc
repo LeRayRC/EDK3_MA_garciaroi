@@ -258,7 +258,10 @@ void ControlWindow() {
 
     ImGui::Checkbox("Enable Postprocess", &manager->enable_postprocess);
     ImGui::Checkbox("Show normals", &manager->show_normals);
-
+    if (ImGui::Button("Activate boat animation")) {
+        manager->entity_boat_.playAnimation(manager->anim_config_boat_);
+    }
+                
     ImGui::End();
 }
 

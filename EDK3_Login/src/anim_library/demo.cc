@@ -1,4 +1,4 @@
-#include "demo.h"
+/*#include "demo.h"
 
 #include "game.h"
 #include "gsprite.h"
@@ -583,4 +583,4 @@ void DemoET::clearDemo(){
   stars_background_entity_.clear();
 }
 
-
+*/

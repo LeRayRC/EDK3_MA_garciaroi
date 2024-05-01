@@ -1,4 +1,4 @@
-#include "transform.h"
+#include "anim_library/transform.h"
 
 #include <stdio.h>
 
@@ -50,7 +50,7 @@ void Transform::set_origin(Vec3 origin) {
 void Transform::print() {
 
   printf("pos: {%f, %f} \n", position_.x, position_.y);
-  printf("rot: {%f}  \n", rotation_);
+  printf("rot: {%f}  \n", rotation_.x);
   printf("scale: {%f, %f} \n", scale_.x, scale_.y);
 }
 

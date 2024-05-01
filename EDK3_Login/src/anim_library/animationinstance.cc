@@ -1,8 +1,9 @@
 
-#include "animationinstance.h"
+#include "anim_library/animationinstance.h"
 
-#include "game.h"
-#include "math_lib/vector_2.h"
+//#include "game.h"
+#include "demo_manager.h"
+#include "math_library/vector_3.h"
 
 AnimationInstance::AnimationInstance() {}
 
@@ -115,10 +116,11 @@ float AnimationInstance::get_duration(int status) {
 AnimationInstance::~AnimationInstance() {}
 
 void AnimationInstance::update() {
-  Vec2 new_position;
-  Vec2 new_scale;
-  float new_rotation;
-  Game *game = Game::getInstance();
+  Vec3 new_position;
+  Vec3 new_scale;
+  Vec3 new_rotation;
+  
+  DemoManager* manager = DemoManager::getInstance();
 
   if (config_.current_delay >= config_.total_delay){  
     if (revert_) {
@@ -128,7 +130,7 @@ void AnimationInstance::update() {
         // decrease elapsed time
         if (position_status_.elapsed_time_)
         {
-          position_status_.elapsed_time_ -= game->dt;
+          position_status_.elapsed_time_ -= manager->dt;
         }
         
         
@@ -140,13 +142,13 @@ void AnimationInstance::update() {
           position_status_.percent_ = position_status_.elapsed_time_ / config_.move_duration;
           new_position.x = Interpolate::Easing(config_.type_,position_status_.percent_, config_.move_from.x,config_.move_to.x);
           new_position.y = Interpolate::Easing(config_.type_,position_status_.percent_, config_.move_from.y,config_.move_to.y);
-          // new_position = Vec2::Lerp(config_.move_from, config_.move_to, position_status_.percent_);
+          new_position.z = Interpolate::Easing(config_.type_, position_status_.percent_, config_.move_from.z, config_.move_to.z);
         } else {
           position_status_.percent_ = 0.0f;
           // new_position = config_.move_from;
         }
         // Interpolate and set new position
-        entity_->transform_.set_position(new_position);
+        entity_->drawable_->set_position(&new_position.x);
 
         // Check if the animation has ended
         if (position_status_.percent_ <= 0.0f) {
@@ -156,7 +158,7 @@ void AnimationInstance::update() {
       // Update rotation if animation is rotating and not ended
       if (config_.is_rotating && !rotation_status_.ended_) {
         // increase elapsed time
-        rotation_status_.elapsed_time_ -= game->dt;
+        rotation_status_.elapsed_time_ -= manager->dt;
         if (rotation_status_.elapsed_time_ <= 0.0f) {
           rotation_status_.elapsed_time_ = 0.0f;
         }
@@ -164,15 +166,17 @@ void AnimationInstance::update() {
         // calculate percentage between [0,1]
         if (config_.rotate_duration != 0.0f) {
           rotation_status_.percent_ = rotation_status_.elapsed_time_ / config_.rotate_duration;
-          new_rotation = Interpolate::Easing(config_.type_,rotation_status_.percent_, config_.rotate_from, config_.rotate_to);
+          new_rotation.x = Interpolate::Easing(config_.type_,rotation_status_.percent_, config_.rotate_from.x, config_.rotate_to.x);
+          new_rotation.y = Interpolate::Easing(config_.type_, rotation_status_.percent_, config_.rotate_from.y, config_.rotate_to.y);
+          new_rotation.z = Interpolate::Easing(config_.type_, rotation_status_.percent_, config_.rotate_from.z, config_.rotate_to.z);
           // new_rotation = config_.rotate_from + (config_.rotate_from - config_.rotate_to) * rotation_status_.percent_;
         } else {
           rotation_status_.percent_ = 0.0f;
           new_rotation = config_.rotate_from;
         }
         // Interpolate and set new rotation
-
-        entity_->transform_.set_rotation(new_rotation);
+        entity_->drawable_->set_rotation_xyz(&new_rotation.x);
+        //entity_->transform_.set_rotation(new_rotation);
 
         // Check if the animation has ended
         if (rotation_status_.percent_ <= 0.0f) {
@@ -182,7 +186,7 @@ void AnimationInstance::update() {
       // Update scale if animation is scaling and not ended
       if (config_.is_scaling && !scale_status_.ended_) {
         // increase elapsed time
-        scale_status_.elapsed_time_ -= game->dt;
+        scale_status_.elapsed_time_ -= manager->dt;
         if (scale_status_.elapsed_time_ <= 0.0f) {
           scale_status_.elapsed_time_ = 0.0f;
         }
@@ -191,6 +195,7 @@ void AnimationInstance::update() {
           scale_status_.percent_ = scale_status_.elapsed_time_ / config_.scale_duration;
           new_scale.x = Interpolate::Easing(config_.type_,scale_status_.percent_, config_.scale_from.x,config_.scale_to.x);
           new_scale.y = Interpolate::Easing(config_.type_,scale_status_.percent_, config_.scale_from.y,config_.scale_to.y);
+          new_scale.z = Interpolate::Easing(config_.type_, scale_status_.percent_, config_.scale_from.z, config_.scale_to.z);
           // new_scale = Vec2::Lerp(config_.scale_from, config_.scale_to, scale_status_.percent_);
         } else {
           scale_status_.percent_ = 0.0f;
@@ -199,7 +204,7 @@ void AnimationInstance::update() {
         // calculate percentage between [0,1]
 
         // Interpolate and set new scale
-        entity_->transform_.set_scale(new_scale);
+        entity_->drawable_->set_scale(&new_scale.x);
 
         // Check if the animation has ended
         if (scale_status_.percent_ <= 0.0f) {
@@ -210,7 +215,7 @@ void AnimationInstance::update() {
       // Update position if animation is moving and not ended
       if (config_.is_moving && !position_status_.ended_) {
         // increase elapsed time
-        position_status_.elapsed_time_ += game->dt;
+        position_status_.elapsed_time_ += manager->dt;
         if (position_status_.elapsed_time_ >= config_.move_duration) {
           position_status_.elapsed_time_ = config_.move_duration;
         }
@@ -219,12 +224,13 @@ void AnimationInstance::update() {
           position_status_.percent_ = position_status_.elapsed_time_ / config_.move_duration;
           new_position.x = Interpolate::Easing(config_.type_,position_status_.percent_, config_.move_from.x,config_.move_to.x);
           new_position.y = Interpolate::Easing(config_.type_,position_status_.percent_, config_.move_from.y,config_.move_to.y);
+          new_position.z = Interpolate::Easing(config_.type_, position_status_.percent_, config_.move_from.z, config_.move_to.z);
         } else {
           position_status_.percent_ = 1.0f;
           new_position = config_.move_to;
         }
         // Interpolate and set new position
-        entity_->transform_.set_position(new_position);
+        entity_->drawable_->set_position(&new_position.x);
 
         // Check if the animation has ended
         if (position_status_.percent_ >= 1.0f) {
@@ -233,22 +239,24 @@ void AnimationInstance::update() {
       }
       // Update rotation if animation is rotating and not ended
       if (config_.is_rotating && !rotation_status_.ended_) {
-        float new_rotation;
+        Vec3 new_rotation;
         // increase elapsed time
-        rotation_status_.elapsed_time_ += game->dt;
+        rotation_status_.elapsed_time_ += manager->dt;
         if (rotation_status_.elapsed_time_ >= config_.rotate_duration) {
           rotation_status_.elapsed_time_ = config_.rotate_duration;
         }
         // calculate percentage between [0,1]
         if (config_.rotate_duration != 0.0f) {
           rotation_status_.percent_ = rotation_status_.elapsed_time_ / config_.rotate_duration;
-          new_rotation = Interpolate::Easing(config_.type_,rotation_status_.percent_, config_.rotate_from, config_.rotate_to);
+          new_rotation.x = Interpolate::Easing(config_.type_,rotation_status_.percent_, config_.rotate_from.x, config_.rotate_to.x);
+          new_rotation.y = Interpolate::Easing(config_.type_, rotation_status_.percent_, config_.rotate_from.y, config_.rotate_to.y);
+          new_rotation.z = Interpolate::Easing(config_.type_, rotation_status_.percent_, config_.rotate_from.z, config_.rotate_to.z);
         } else {
           rotation_status_.percent_ = 1.0f;
           new_rotation = config_.rotate_to;
         }
         // Interpolate and set new rotation
-        entity_->transform_.set_rotation(new_rotation);
+        entity_->drawable_->set_rotation_xyz(&new_rotation.x);
 
         // Check if the animation has ended
         if (rotation_status_.percent_ >= 1.0f) {
@@ -265,7 +273,7 @@ void AnimationInstance::update() {
         }
         
         // increase elapsed time
-        scale_status_.elapsed_time_ += game->dt;
+        scale_status_.elapsed_time_ += manager->dt;
         if (scale_status_.elapsed_time_ >= config_.scale_duration) {
           scale_status_.elapsed_time_ = config_.scale_duration;
         }
@@ -274,13 +282,14 @@ void AnimationInstance::update() {
           scale_status_.percent_ = scale_status_.elapsed_time_ / config_.scale_duration;
           new_scale.x = Interpolate::Easing(config_.type_,scale_status_.percent_, config_.scale_from.x,config_.scale_to.x);
           new_scale.y = Interpolate::Easing(config_.type_,scale_status_.percent_, config_.scale_from.y,config_.scale_to.y);
+          new_scale.z = Interpolate::Easing(config_.type_, scale_status_.percent_, config_.scale_from.z, config_.scale_to.z);
         } else {
           scale_status_.percent_ = 1.0f;
           new_scale = config_.scale_to;
         }
 
         // Interpolate and set new scale
-        entity_->transform_.set_scale(new_scale);
+        entity_->drawable_->set_scale(&new_scale.x);
 
         // Check if the animation has ended
         // if (scale_status_.percent_ >= 1.0f) {
@@ -292,7 +301,7 @@ void AnimationInstance::update() {
     }
   }
   else{
-    config_.current_delay += game->dt;
+    config_.current_delay += manager->dt;
   }
 }
 

@@ -7,8 +7,9 @@
 #define _ENTITY_H_ 1
 
 #include <stdlib.h>
-#include "transform.h"
 #include <string>
+#include "EDK3/drawable.h"
+#include "material_custom.h"
 
 class AnimationInstance;
 struct AnimationConfig;
@@ -25,13 +26,11 @@ enum EntityType{
 class Entity{
   // Attributes
   public:
-    static const int kNameLength = 32;
-    EntityType type_;
     int id_;
     int tag_;
     bool enabled_;
     bool play_animation_;
-    Transform2D transform_;
+    EDK3::ref_ptr<EDK3::Drawable> drawable_;
     AnimationInstance* anim_instance_;
     static int next_entity_id;
 
@@ -135,8 +134,12 @@ class Entity{
     */
     void stopAnimation();
 
-    virtual void draw() const = 0;
     virtual void update();
+
+    void SetupDrawable(EDK3::Geometry* geo,
+        EDK3::MaterialCustom* mat,
+        EDK3::MaterialSettings* mat_settings,
+        Vec3& pos, Vec3& scale = Vec3( 1.0f, 1.0f, 1.0f ), Vec3& rot = Vec3(0.0f, 0.0f ,0.0f));
 };
 
 

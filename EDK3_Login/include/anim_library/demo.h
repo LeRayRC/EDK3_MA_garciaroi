@@ -4,18 +4,23 @@
  * @brief 
  * 
  */
+ 
+
+
 #ifndef _DEMO_H_
 #define _DEMO_H_
 
 #include "entity.h"
-#include "gtexture.h"
 #include <vector>
 #include "animationinstance.h"
+
 
 /**
  * @brief Class that represent the ET Demo and all its components
  * 
  */
+
+
 class DemoET{
   private:
     float elapsed_time_;
@@ -50,14 +55,14 @@ class DemoET{
     AnimationConfig confuse_anim_config_;
     // AnimationConfig _anim_config_;
 
-    Texture *bike_texture_;
-    Texture* letters_texture_;
-    Texture* falcon_texture_;
-    Texture* enterprise_texture_;
-    Texture* xenomorph_texture_;
-    Texture* unicorn_texture_;
-    Texture* et_texture_;
-    Texture* confuse_texture_;
+    //Texture *bike_texture_;
+    //Texture* letters_texture_;
+    //Texture* falcon_texture_;
+    //Texture* enterprise_texture_;
+    //Texture* xenomorph_texture_;
+    //Texture* unicorn_texture_;
+    //Texture* et_texture_;
+    //Texture* confuse_texture_;
 
     bool textures_loaded_;
     bool bike_has_reverted_;
@@ -152,3 +157,4 @@ class DemoET{
 };
 
 #endif
+

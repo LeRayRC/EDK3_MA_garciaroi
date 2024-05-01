@@ -43,6 +43,9 @@
     <Filter Include="include">
       <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\anim_library">
+      <UniqueIdentifier>{D167A5F2-BDF6-2EBC-6615-43B752833F62}</UniqueIdentifier>
+    </Filter>
     <Filter Include="include\dev">
       <UniqueIdentifier>{B7C8C031-237E-3927-AC72-33FE1827302B}</UniqueIdentifier>
     </Filter>
@@ -51,6 +54,9 @@
     </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\anim_library">
+      <UniqueIdentifier>{F52D3CA9-E126-5BFB-0A59-4080F6B03A07}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\dev">
       <UniqueIdentifier>{5BF62FA9-C7D5-AE44-D0ED-391B3C4C15A6}</UniqueIdentifier>
@@ -171,6 +177,27 @@
     <ClInclude Include="..\..\..\deps\STB\include\stbi_image.h">
       <Filter>deps\STB\include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\anim_library\animationinstance.h">
+      <Filter>include\anim_library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\anim_library\color.h">
+      <Filter>include\anim_library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\anim_library\demo.h">
+      <Filter>include\anim_library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\anim_library\entity.h">
+      <Filter>include\anim_library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\anim_library\interpolate.h">
+      <Filter>include\anim_library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\anim_library\math_utils.h">
+      <Filter>include\anim_library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\anim_library\transform.h">
+      <Filter>include\anim_library</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\camera_custom.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -232,6 +259,24 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\deps\Perlin\src\SimplexNoise.cpp">
       <Filter>deps\Perlin\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\anim_library\animationinstance.cc">
+      <Filter>src\anim_library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\anim_library\color.cc">
+      <Filter>src\anim_library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\anim_library\demo.cc">
+      <Filter>src\anim_library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\anim_library\entity.cc">
+      <Filter>src\anim_library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\anim_library\interpolate.cc">
+      <Filter>src\anim_library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\anim_library\transform.cc">
+      <Filter>src\anim_library</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\dev\demo_manager.cc">
       <Filter>src\dev</Filter>

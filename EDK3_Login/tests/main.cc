@@ -35,6 +35,7 @@
 #include "demo_manager.h"
 #include "interface.h"
 #include "scene.h"
+#include "anim_library/entity.h"
 
 Vec3 EDK3::MaterialCustom::LightSettings::ambient_color_ = Vec3(0.0f, 0.0f, 0.0f);
 
@@ -82,6 +83,9 @@ void InitScene() {
                 sinf(alpha * i - 1.57f));
         }
     }
+
+    //Entity basic_entity = Entity();
+
 
     //Init Geometries
 
@@ -157,9 +161,6 @@ void InitScene() {
     manager->mat_postprocess_settings->set_texture(manager->render_target->color_texture(0));
     manager->mat_postprocess_settings->set_color(green);
 
-
-
-    
     
     for (int i = 0; i < 3; i++) {
         manager->mat_light_settings->light_confs_[i].enabled_ = true;
@@ -240,6 +241,13 @@ void InitScene() {
                   Vec3(40.0f, -98.0f, 100.0f),
                   Vec3(3.0f, 3.0f, 3.0f));
 
+    manager->entity_boat_.SetupDrawable(
+        geos_boat[0].get(),
+        mat_selected.get(),
+        manager->mat_light_settings.get(),
+        Vec3(00.0f, 0.0f, 0.0f),
+        Vec3(3.0f, 3.0f, 3.0f));
+
     //Allocating and initializing the camera:
     manager->camera.alloc();
 
@@ -284,6 +292,8 @@ void UpdateFn() {
 
     EDK3::Node* drawable = root->child(6);
     drawable->set_rotation_y(180.0f);
+
+    manager->entity_boat_.update();
 }
 
 void RenderFn() {
