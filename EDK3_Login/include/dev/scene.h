@@ -9,7 +9,7 @@
 
 void InitDemoGeometries();
 
-void InitTerrain();
+//void InitTerrain();
 
 void SetupDrawable(EDK3::Geometry* geo,
                    EDK3::MaterialCustom *mat, 
@@ -22,4 +22,8 @@ void UpdateDrawable(EDK3::Drawable* geo,
   EDK3::MaterialCustom* mat,
   EDK3::MaterialSettings* mat_settings,
   Vec3& pos);
+
+void InitSceneGeometries();
+void InitSceneMaterials();
+
 #endif
