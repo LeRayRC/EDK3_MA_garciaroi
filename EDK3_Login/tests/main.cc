@@ -92,7 +92,7 @@ void InitScene() {
                   manager->mat_selected.get(),
                   manager->mat_light_settings.get(),
                   Vec3(80.0f, -15.0f, 0.0f));
-
+    /*
     SetupDrawable(manager->house_geometry[4].get(),
                   manager->mat_selected.get(),
                   manager->mat_light_settings.get(),
@@ -111,6 +111,12 @@ void InitScene() {
         manager->mat_light_settings.get(),
         Vec3(00.0f, 0.0f, 0.0f),
         Vec3(3.0f, 3.0f, 3.0f));
+    */
+
+    Entity* test_entity = new Entity();
+    test_entity->init();
+    manager->entities_.push_back(test_entity);
+    manager->entities_[0]->attachDrawable(DrawableAttached_Terrain);
 
     //Allocating and initializing the camera:
     manager->camera.alloc();
@@ -155,10 +161,10 @@ void UpdateFn() {
     }
 
 
-    EDK3::Node* drawable = root->child(6);
-    drawable->set_rotation_y(180.0f);
+    //EDK3::Node* drawable = root->child(6);
+    //drawable->set_rotation_y(180.0f);
 
-    manager->entity_boat_->update();
+    //manager->entity_boat_->update();
 }
 
 void RenderFn() {

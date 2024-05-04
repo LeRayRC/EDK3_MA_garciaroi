@@ -44,7 +44,7 @@ void DemoManager::init() {
   anim_config_boat_.rotate_to = Vec3(0.0, 180.0f, 0.0f);
   anim_config_boat_.type_ = InterpolationType_Linear;
 
-  entities_.push_back(entity_boat_);
+  //entities_.push_back(entity_boat_);
 
   InitDefaultWindowFlags(&manager->settings_window);
   InitDefaultWindowFlags(&manager->lights_window);

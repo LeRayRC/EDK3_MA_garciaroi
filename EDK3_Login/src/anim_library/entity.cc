@@ -19,6 +19,7 @@ Entity::Entity() {
   animation_config_selected = 0;
   anim_instance_ = nullptr;
   play_animation_ = true;
+  attached_ = false;
   drawable_.alloc();
   drawable_->set_name(name_);
 }
@@ -32,6 +33,7 @@ Entity::Entity(bool enabled, char *name) {
   animation_config_selected = 0;
   anim_instance_ = nullptr;
   play_animation_ = true;
+  attached_ = false;
   drawable_.alloc();
   drawable_->set_name(name_);
 }
@@ -43,6 +45,7 @@ Entity::Entity(const Entity &other) {
   animation_config_selected = other.animation_config_selected;
   anim_instance_ = nullptr;
   id_ = Entity::next_entity_id;
+  attached_ = other.attached_;
   Entity::next_entity_id++;
   drawable_ = other.drawable_;
   drawable_->set_name(other.name_);
@@ -50,7 +53,6 @@ Entity::Entity(const Entity &other) {
 
 
 Entity::~Entity() {
-    drawable_.release();
 }
 
 bool Entity::enable(bool enable) {
@@ -100,8 +102,8 @@ void Entity::stopAnimation() {
 
 void Entity::init() {
     drawable_->set_rotation_xyz(0.0f, 0.0f, 0.0f);
-    drawable_->set_position(0.0f, -200.0f, 0.0f);
-    drawable_->set_scale(10.0f, 10.0f, 10.0f);
+    drawable_->set_position(0.0f, 100.0f, 0.0f);
+    drawable_->set_scale(1.0f, 1.0f, 1.0f);
 }
 
 void Entity::setupDrawable(EDK3::Geometry* geo,
