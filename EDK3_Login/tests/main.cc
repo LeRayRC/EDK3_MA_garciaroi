@@ -105,7 +105,7 @@ void InitScene() {
                   Vec3(40.0f, -98.0f, 100.0f),
                   Vec3(3.0f, 3.0f, 3.0f));
 
-    manager->entity_boat_.SetupDrawable(
+    manager->entity_boat_->setupDrawable(
         manager->boat_geometry[0].get(),
         manager->mat_selected.get(),
         manager->mat_light_settings.get(),
@@ -151,13 +151,14 @@ void UpdateFn() {
       const float* drawable_position = drawable->position();
       Vec3 position = { drawable_position[0],drawable_position[1],drawable_position[2] };
       UpdateDrawable(drawable, mat_selected.get(), manager->mat_light_settings.get(),position );
+
     }
 
 
     EDK3::Node* drawable = root->child(6);
     drawable->set_rotation_y(180.0f);
 
-    manager->entity_boat_.update();
+    manager->entity_boat_->update();
 }
 
 void RenderFn() {

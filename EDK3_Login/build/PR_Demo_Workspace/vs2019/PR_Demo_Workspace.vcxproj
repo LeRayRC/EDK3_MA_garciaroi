@@ -216,6 +216,7 @@
     <ClInclude Include="..\..\..\include\dev\interface.h" />
     <ClInclude Include="..\..\..\include\dev\scene.h" />
     <ClInclude Include="..\..\..\include\geometry_custom_cube.h" />
+    <ClInclude Include="..\..\..\include\geometry_custom_obj.h" />
     <ClInclude Include="..\..\..\include\geometry_custom_quad.h" />
     <ClInclude Include="..\..\..\include\geometry_custom_sphere.h" />
     <ClInclude Include="..\..\..\include\geometry_custom_surface.h" />
@@ -244,6 +245,7 @@
     <ClCompile Include="..\..\..\src\dev\scene.cc" />
     <ClCompile Include="..\..\..\src\geometry_custom_camera.cc" />
     <ClCompile Include="..\..\..\src\geometry_custom_cube.cc" />
+    <ClCompile Include="..\..\..\src\geometry_custom_obj.cc" />
     <ClCompile Include="..\..\..\src\geometry_custom_quad.cc" />
     <ClCompile Include="..\..\..\src\geometry_custom_sphere.cc" />
     <ClCompile Include="..\..\..\src\geometry_custom_surface.cc" />

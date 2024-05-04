@@ -19,6 +19,17 @@ enum EntityType{
     EntityType_Sprite,
 };
 
+enum DrawableAttached {
+    DrawableAttached_Cube,
+    DrawableAttached_Quad,
+    DrawableAttached_Sphere,
+    DrawableAttached_Terrain,
+    DrawableAttached_Donut,
+    DrawableAttached_Tree,
+    DrawableAttached_House,
+    DrawableAttached_Boat,
+};
+
 /**
  * @brief Class that represents an Entity and its attributes and methods
  * 
@@ -27,17 +38,18 @@ class Entity{
   // Attributes
   public:
     int id_;
-    int tag_;
+    bool attached_;
     bool enabled_;
     bool play_animation_;
+    int drawableAttached_;
     EDK3::ref_ptr<EDK3::Drawable> drawable_;
     AnimationInstance* anim_instance_;
     static int next_entity_id;
 
     int animation_config_selected;
 
-    std::string name_;
-    std::string temp_name_;
+    char name_[16];
+    char temp_name_[16];
 
   // Methods
   public:
@@ -63,7 +75,7 @@ class Entity{
      * @param enabled The initial enabled status of the entity.
      * @param name The name assigned to the entity.
      */
-    Entity(int tag, bool enabled, std::string name);
+    Entity(bool enabled, char* name);
     
     /**
      * @brief Copy constructor for the Entity class.
@@ -93,16 +105,6 @@ class Entity{
     bool enable(bool enable);
 
     /**
-     * @brief Sets the tag value for the entity.
-     *
-     * This function sets the tag value for the entity to the specified new tag.
-     *
-     * @param new_tag The new tag value to be assigned to the entity.
-     * @return The updated tag value of the entity.
-     */
-    int set_tag(int new_tag);
-
-    /**
      * @brief Sets the name for the entity.
      *
      * This function sets the name for the entity to the specified new name.
@@ -110,7 +112,7 @@ class Entity{
      * @param new_name The new name to be assigned to the entity.
      * @return The updated name of the entity.
      */
-    std::string set_name(std::string new_name);
+    std::string set_name(char* new_name);
     
     int set_play_animation(bool value);
 
@@ -136,10 +138,13 @@ class Entity{
 
     virtual void update();
 
-    void SetupDrawable(EDK3::Geometry* geo,
+    void setupDrawable(EDK3::Geometry* geo,
         EDK3::MaterialCustom* mat,
         EDK3::MaterialSettings* mat_settings,
         Vec3& pos, Vec3& scale = Vec3( 1.0f, 1.0f, 1.0f ), Vec3& rot = Vec3(0.0f, 0.0f ,0.0f));
+
+    void attachDrawable(DrawableAttached drawableAttached);
+    void init();
 };
 
 

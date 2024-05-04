@@ -11,55 +11,52 @@
 int Entity::next_entity_id = 0;
 
 Entity::Entity() {
-  tag_ = 0;
   enabled_ = true;
-  name_ = "EntityObj";
-  temp_name_ = name_;
+  snprintf(name_, 16, "\0");
+  snprintf(temp_name_, 16, "\0");
   id_ = Entity::next_entity_id;
   Entity::next_entity_id++;
   animation_config_selected = 0;
   anim_instance_ = nullptr;
   play_animation_ = true;
   drawable_.alloc();
+  drawable_->set_name(name_);
 }
 
-Entity::Entity(int tag, bool enabled, std::string name) {
-  tag_ = tag;
+Entity::Entity(bool enabled, char *name) {
   enabled_ = enabled;
   id_ = Entity::next_entity_id;
   Entity::next_entity_id++;
-  name_ = name;
-  temp_name_ = name;
+  snprintf(name_, 16, "%s\0", name);
+  snprintf(temp_name_, 16, "%s\0", name);
   animation_config_selected = 0;
   anim_instance_ = nullptr;
   play_animation_ = true;
   drawable_.alloc();
+  drawable_->set_name(name_);
 }
 
 Entity::Entity(const Entity &other) {
-  tag_ = other.tag_;
   enabled_ = other.enabled_;
-  name_ = other.name_;
-  temp_name_ = other.name_;
+  snprintf(name_, 16, "%s\0", other.name_);
+  snprintf(temp_name_, 16, "%s\0", other.name_);
   animation_config_selected = other.animation_config_selected;
   anim_instance_ = nullptr;
   id_ = Entity::next_entity_id;
   Entity::next_entity_id++;
   drawable_ = other.drawable_;
+  drawable_->set_name(other.name_);
 }
 
-Entity::~Entity() {}
+
+Entity::~Entity() {
+    drawable_.release();
+}
 
 bool Entity::enable(bool enable) {
   enabled_ = enable;
 
   return enabled_;
-}
-
-int Entity::set_tag(int new_tag) {
-  tag_ = new_tag;
-
-  return tag_;
 }
 
 int Entity::set_play_animation(bool value) {
@@ -68,8 +65,8 @@ int Entity::set_play_animation(bool value) {
   return play_animation_;
 }
 
-std::string Entity::set_name(std::string new_name) {
-  name_ = new_name;
+std::string Entity::set_name(char* new_name) {
+  strcpy(name_, new_name);
   return name_;
 }
 
@@ -101,7 +98,13 @@ void Entity::stopAnimation() {
   }
 }
 
-void Entity::SetupDrawable(EDK3::Geometry* geo,
+void Entity::init() {
+    drawable_->set_rotation_xyz(0.0f, 0.0f, 0.0f);
+    drawable_->set_position(0.0f, -200.0f, 0.0f);
+    drawable_->set_scale(10.0f, 10.0f, 10.0f);
+}
+
+void Entity::setupDrawable(EDK3::Geometry* geo,
     EDK3::MaterialCustom* mat,
     EDK3::MaterialSettings* mat_settings,
     Vec3& pos, Vec3& scale, Vec3& rot) {
@@ -113,4 +116,41 @@ void Entity::SetupDrawable(EDK3::Geometry* geo,
         drawable_->set_position(pos.x, pos.y, pos.z);
         drawable_->set_scale(scale.x, scale.y, scale.z);
         manager->root->addChild(drawable_.get());
+}
+
+void Entity::attachDrawable(DrawableAttached drawableAttached) {
+    DemoManager* manager = DemoManager::getInstance();
+    switch (drawableAttached)
+    {
+    case DrawableAttached_Cube:
+        drawable_->set_geometry(manager->custom_cube.get());
+        break;
+    case DrawableAttached_Quad:
+        drawable_->set_geometry(manager->custom_quad.get());
+        break;
+    case DrawableAttached_Sphere:
+        drawable_->set_geometry(manager->custom_sphere.get());
+        break;
+    case DrawableAttached_Terrain:
+        drawable_->set_geometry(manager->terrain_custom.get());
+        break;
+    case DrawableAttached_Donut:
+        drawable_->set_geometry(manager->custom_torus.get());
+        break;
+    case DrawableAttached_Tree:
+        drawable_->set_geometry(manager->custom_tree.get());
+        break;
+    case DrawableAttached_House:
+        drawable_->set_geometry(manager->house_geometry[4].get());
+        break;
+    case DrawableAttached_Boat:
+        drawable_->set_geometry(manager->boat_geometry[0].get());
+        break;
+    }
+    drawable_->set_material(manager->mat_selected.get());
+    drawable_->set_material_settings(manager->mat_light_settings.get());
+    if (!attached_) {
+        manager->root->addChild(drawable_.get());
+        attached_ = true;
+    }
 }

@@ -213,6 +213,9 @@
     <ClInclude Include="..\..\..\include\geometry_custom_cube.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\geometry_custom_obj.h">
+      <Filter>include</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\geometry_custom_quad.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -291,6 +294,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\geometry_custom_cube.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\geometry_custom_obj.cc">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\geometry_custom_quad.cc">

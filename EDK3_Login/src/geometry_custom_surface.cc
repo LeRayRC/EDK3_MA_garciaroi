@@ -203,7 +203,7 @@ bool SurfaceCustom::bindAttribute(const Attribute a,
 void SurfaceCustom::render() const {
   //TODO
     EDK3::dev::GPUManager::Instance()->drawElements
-    (EDK3::dev::GPUManager::DrawMode::kDrawMode_Triangles, order_buffer->size(), order_buffer.get(), EDK3::Type::T_UINT, 0);
+    (draw_mode_, order_buffer->size(), order_buffer.get(), EDK3::Type::T_UINT, 0);
 }
 
 } //EDK3

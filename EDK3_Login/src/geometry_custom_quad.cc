@@ -126,7 +126,7 @@ bool QuadCustom::bindAttribute(const Attribute a,
 void QuadCustom::render() const {
   //TODO
     EDK3::dev::GPUManager::Instance()->drawElements
-    (EDK3::dev::GPUManager::DrawMode::kDrawMode_Triangles, 6, order_buffer.get(), EDK3::Type::T_UINT, 0);
+    (draw_mode_, 6, order_buffer.get(), EDK3::Type::T_UINT, 0);
 }
 
 } //EDK3

@@ -2,7 +2,7 @@
 #define _DEMO_MANAGER_H_ 1
 
 #include <stdlib.h>
-
+#include <vector>
 
 #include "interface.h"
 #include "EDK3/geometry.h"
@@ -26,6 +26,7 @@
 #include "geometry_custom_cube.h"
 #include "geometry_custom_quad.h"
 #include "geometry_custom_surface.h"
+#include "geometry_custom_obj.h"
 
 const int kWindowWidth = 1280;
 const int kWindowHeight = 768;
@@ -58,17 +59,19 @@ class DemoManager{
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> house_geometry;
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> boat_geometry;
 
-
+    std::vector<Entity*> entities_;
+    
     EDK3::ref_ptr<EDK3::TerrainCustom> terrain_custom;
     EDK3::ref_ptr<EDK3::RenderTarget> render_target;
     EDK3::ref_ptr<EDK3::PostprocessBasic> mat_postprocess;
     EDK3::ref_ptr<EDK3::PostprocessBasic::PostprocessBasicSettings> mat_postprocess_settings;
 
-    Entity entity_boat_;
+    Entity* entity_boat_;
     AnimationConfig anim_config_boat_;
 
     float dt;
     bool enable_postprocess;
+    bool enable_wireframe;
 
     bool show_normals;
 
@@ -76,8 +79,8 @@ class DemoManager{
     ImGuiWindow lights_window;
     ImGuiWindow performance_window;
     ImGuiWindow camera_window;
-    ImGuiWindow hierachy_window;
     ImGuiWindow control_window;
+    ImGuiWindow entities_window;
 
   //Methods
   private:

@@ -17,7 +17,6 @@ DemoManager::DemoManager() {}
 void DemoManager::init() {
   DemoManager *manager = DemoManager::getInstance();
 
-  manager->enable_postprocess = false;
   manager->root.alloc();
 
   manager->mat_basic.alloc();
@@ -26,8 +25,10 @@ void DemoManager::init() {
 
   manager->dt = 0.0f;
   manager->show_normals = false;
+  manager->enable_postprocess = false;
+  manager->enable_wireframe = false;
 
-  entity_boat_ = Entity();
+  entity_boat_ = new Entity();
   anim_config_boat_.is_moving = true;
   anim_config_boat_.is_rotating = true;
   anim_config_boat_.is_scaling = true;
@@ -43,12 +44,14 @@ void DemoManager::init() {
   anim_config_boat_.rotate_to = Vec3(0.0, 180.0f, 0.0f);
   anim_config_boat_.type_ = InterpolationType_Linear;
 
+  entities_.push_back(entity_boat_);
+
   InitDefaultWindowFlags(&manager->settings_window);
   InitDefaultWindowFlags(&manager->lights_window);
   InitDefaultWindowFlags(&manager->performance_window);
-  InitDefaultWindowFlags(&manager->hierachy_window);
   InitDefaultWindowFlags(&manager->camera_window);
   InitDefaultWindowFlags(&manager->control_window);
+  InitDefaultWindowFlags(&manager->entities_window);
 
   srand((unsigned int)time(NULL));
 }
