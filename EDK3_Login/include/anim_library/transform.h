@@ -1,30 +1,23 @@
-/**
- * @file transform.h
- * @author Luis Miguel Jiménez
- * @brief Header file that represents the Transform2D class
- *
- */
-
-#ifndef _TRANSFORM2D_H_
-#define _TRANSFORM2D_H_ 1
+#ifndef _TRANSFORM_H_
+#define _TRANSFORM_H_ 1
 
 #include <stdlib.h>
 #include <vector>
 
-#include "math_lib/vector_2.h"
-#include "math_lib/matrix_3.h"
+#include "../math_library/vector_2.h"
+#include "../math_library/matrix_3.h"
 
 /**
  * @brief This class represents a Transform2D with all its methods and attributes
  * 
  */
-class Transform2D{
+class Transform{
   public:
-    Mat3 matrix_;
-    Vec2 position_;
-    float rotation_;
-    Vec2 scale_;
-    Vec2 origin_;
+    //Mat3 matrix_;
+    Vec3 position_;
+    Vec3 rotation_;
+    Vec3 scale_;
+    Vec3 origin_;
     
 
   public:
@@ -40,7 +33,7 @@ class Transform2D{
     *
     * This constructor sets the initial state of the 2D transformation.
     */
-    Transform2D();
+    Transform();
 
     /**
     * @brief Constructor for Transform2D with specified parameters.
@@ -53,9 +46,9 @@ class Transform2D{
     *
     * This constructor allows creating a 2D transformation with custom parameters.
     */
-    Transform2D(Vec2 position, float rotation, Vec2 scale);
+    Transform(Vec3 position, Vec3 rotation, Vec3 scale);
     // Destructor
-    ~Transform2D();
+    ~Transform();
     
     // Operators
 
@@ -68,13 +61,13 @@ class Transform2D{
     *
     * This operator allows assigning the values of one Transform2D object to another.
     */
-    void operator=(const Transform2D& other);
+    void operator=(const Transform& other);
 
     // Setters
-    void set_position(Vec2 position);
-    void set_rotation(float rotation);
-    void set_scale(Vec2 sacale);
-    void set_origin(Vec2 origin);
+    void set_position(Vec3 position);
+    void set_rotation(Vec3 rotation);
+    void set_scale(Vec3 sacale);
+    void set_origin(Vec3 origin);
 
     // Methods
 
@@ -91,7 +84,7 @@ class Transform2D{
     * The order of transformations is translation, scaling, rotation, and then
     * translation based on the origin.
     */
-    Mat3 calculateMatrix() const;
+    //Mat3 calculateMatrix() const;
 
     /**
     * @brief Transform a vector of 2D points using the transformation matrix.
@@ -107,7 +100,7 @@ class Transform2D{
     * the transformation matrix of the Transform2D object. The resulting
     * transformed points are stored in the output vector `out`.
     */
-    void transformPoints(const std::vector<Vec2>& in, std::vector<Vec2>& out) const;
+    //void transformPoints(const std::vector<Vec2>& in, std::vector<Vec2>& out) const;
 
     // Debug
     void print();

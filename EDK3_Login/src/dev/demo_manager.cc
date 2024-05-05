@@ -3,6 +3,7 @@
 
 #include "interface.h"
 #include "time.h"
+#include "anim_library/interpolate.h"
 
 DemoManager * DemoManager::getInstance() {
   if (NULL == instance) {
@@ -16,7 +17,6 @@ DemoManager::DemoManager() {}
 void DemoManager::init() {
   DemoManager *manager = DemoManager::getInstance();
 
-  manager->enable_postprocess = false;
   manager->root.alloc();
 
   manager->mat_basic.alloc();
@@ -25,14 +25,20 @@ void DemoManager::init() {
 
   manager->dt = 0.0f;
   manager->show_normals = false;
+  manager->enable_postprocess = false;
+  manager->enable_wireframe = false;
 
   InitDefaultWindowFlags(&manager->settings_window);
   InitDefaultWindowFlags(&manager->lights_window);
   InitDefaultWindowFlags(&manager->performance_window);
-  InitDefaultWindowFlags(&manager->hierachy_window);
   InitDefaultWindowFlags(&manager->camera_window);
   InitDefaultWindowFlags(&manager->control_window);
+  InitDefaultWindowFlags(&manager->entities_window);
+  InitDefaultWindowFlags(&manager->animationconfigs_window);
+  performance_window.popen = false;
+  camera_window.popen = false;
 
+  animation_configs_counter = 0;
   srand((unsigned int)time(NULL));
 }
 

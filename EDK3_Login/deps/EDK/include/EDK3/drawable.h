@@ -11,6 +11,7 @@
 #include "material.h"
 #include "materialsettings.h"
 
+
 namespace EDK3 {
 
   class Drawable : public Node {
@@ -29,6 +30,7 @@ namespace EDK3 {
     const Material* material() const                  { return material_.get(); }
     const MaterialSettings* material_settings() const { return material_settings_.get(); }
     const Geometry* geometry() const                  { return geometry_.get(); }
+    
 
   protected:
     virtual ~Drawable();
@@ -39,6 +41,7 @@ namespace EDK3 {
     ref_ptr<Geometry> geometry_;
     ref_ptr<Material> material_;
     ref_ptr<MaterialSettings> material_settings_;
+    
   };
 
 } /* end of EDK Namespace */

@@ -204,11 +204,19 @@
     <ClInclude Include="..\..\..\deps\EDK\include\ESAT_extra\tiny_obj_loader.h" />
     <ClInclude Include="..\..\..\deps\Perlin\include\Perlin\SimplexNoise.h" />
     <ClInclude Include="..\..\..\deps\STB\include\stbi_image.h" />
+    <ClInclude Include="..\..\..\include\anim_library\animationinstance.h" />
+    <ClInclude Include="..\..\..\include\anim_library\color.h" />
+    <ClInclude Include="..\..\..\include\anim_library\demo.h" />
+    <ClInclude Include="..\..\..\include\anim_library\entity.h" />
+    <ClInclude Include="..\..\..\include\anim_library\interpolate.h" />
+    <ClInclude Include="..\..\..\include\anim_library\math_utils.h" />
+    <ClInclude Include="..\..\..\include\anim_library\transform.h" />
     <ClInclude Include="..\..\..\include\camera_custom.h" />
     <ClInclude Include="..\..\..\include\dev\demo_manager.h" />
     <ClInclude Include="..\..\..\include\dev\interface.h" />
     <ClInclude Include="..\..\..\include\dev\scene.h" />
     <ClInclude Include="..\..\..\include\geometry_custom_cube.h" />
+    <ClInclude Include="..\..\..\include\geometry_custom_obj.h" />
     <ClInclude Include="..\..\..\include\geometry_custom_quad.h" />
     <ClInclude Include="..\..\..\include\geometry_custom_sphere.h" />
     <ClInclude Include="..\..\..\include\geometry_custom_surface.h" />
@@ -226,11 +234,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\deps\Perlin\src\SimplexNoise.cpp" />
+    <ClCompile Include="..\..\..\src\anim_library\animationinstance.cc" />
+    <ClCompile Include="..\..\..\src\anim_library\color.cc" />
+    <ClCompile Include="..\..\..\src\anim_library\demo.cc" />
+    <ClCompile Include="..\..\..\src\anim_library\entity.cc" />
+    <ClCompile Include="..\..\..\src\anim_library\interpolate.cc" />
+    <ClCompile Include="..\..\..\src\anim_library\transform.cc" />
     <ClCompile Include="..\..\..\src\dev\demo_manager.cc" />
     <ClCompile Include="..\..\..\src\dev\interface.cc" />
     <ClCompile Include="..\..\..\src\dev\scene.cc" />
     <ClCompile Include="..\..\..\src\geometry_custom_camera.cc" />
     <ClCompile Include="..\..\..\src\geometry_custom_cube.cc" />
+    <ClCompile Include="..\..\..\src\geometry_custom_obj.cc" />
     <ClCompile Include="..\..\..\src\geometry_custom_quad.cc" />
     <ClCompile Include="..\..\..\src\geometry_custom_sphere.cc" />
     <ClCompile Include="..\..\..\src\geometry_custom_surface.cc" />

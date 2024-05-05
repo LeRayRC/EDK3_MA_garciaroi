@@ -8,28 +8,29 @@
 #define _ANIMATION_INSTANCE_H_ 1
 
 #include "entity.h"
-#include "math_lib/vector_2.h"
+#include "../math_library/vector_2.h"
+#include "../math_library/vector_3.h"
 #include "interpolate.h"
 
 struct AnimationConfig{
   int id;
-  std::string name;
-  std::string temp_name;
+  char name[16];
+  char temp_name[16];
   // Flags
   bool is_moving;
   bool is_rotating;
   bool is_scaling;
   // Move
-  Vec2 move_from;
-  Vec2 move_to;
+  Vec3 move_from;
+  Vec3 move_to;
   float move_duration;
   // Rotation --> radians
-  float rotate_from;
-  float rotate_to;
+  Vec3 rotate_from;
+  Vec3 rotate_to;
   float rotate_duration;
   // Scale
-  Vec2 scale_from;
-  Vec2 scale_to;
+  Vec3 scale_from;
+  Vec3 scale_to;
   float scale_duration;
 
   InterpolationType type_;
@@ -42,6 +43,10 @@ struct AnimationStatus{
   float percent_;
   float elapsed_time_;
 };
+
+void ResetAnimationConfig(AnimationConfig& config);
+
+void UpdateAnimationConfigsString();
 
 enum AnimationStatusOption{
   AnimationStatusOption_Rotation,
@@ -187,6 +192,7 @@ class AnimationInstance{
     * @return The duration of the specified animation status.
     */
     float get_duration(int status);
+    
 }; 
 
 #endif

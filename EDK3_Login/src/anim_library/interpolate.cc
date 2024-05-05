@@ -1,4 +1,4 @@
-#include "interpolate.h"
+#include "anim_library/interpolate.h"
 
 #include <math.h>
 

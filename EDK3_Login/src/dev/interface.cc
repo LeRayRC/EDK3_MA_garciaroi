@@ -44,7 +44,7 @@ void WindowSettings() {
   manager->settings_window.flags.no_resize = false;
   SetFlags(&manager->settings_window);
   ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
-  // ImGui::Begin("Settings", NULL, game->settings_window.window_flags);
+  // ImGui::Begin("Settings", NULL, manager->settings_window.window_flags);
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu("Windows")) {
       if (ImGui::BeginMenu("Settings")) {
@@ -76,20 +76,55 @@ void WindowSettings() {
           ImGui::EndMenu();
       }
 
-      if (ImGui::BeginMenu("Hierachy")) {
-          ImGui::Checkbox("Opened", &manager->hierachy_window.popen);
-          ImGui::Checkbox("No Titlebar", &manager->hierachy_window.flags.no_titlebar);
-          ImGui::Checkbox("No Resize", &manager->hierachy_window.flags.no_resize);
-          ImGui::Checkbox("No Move", &manager->hierachy_window.flags.no_move);
+      if (ImGui::BeginMenu("Control")) {
+          ImGui::Checkbox("Opened", &manager->control_window.popen);
+          ImGui::Checkbox("No Titlebar", &manager->control_window.flags.no_titlebar);
+          ImGui::Checkbox("No Resize", &manager->control_window.flags.no_resize);
+          ImGui::Checkbox("No Move", &manager->control_window.flags.no_move);
           ImGui::EndMenu();
       }
+
+      if (ImGui::BeginMenu("Entities")) {
+          ImGui::Checkbox("Opened", &manager->entities_window.popen);
+          ImGui::Checkbox("No Titlebar", &manager->entities_window.flags.no_titlebar);
+          ImGui::Checkbox("No Resize", &manager->entities_window.flags.no_resize);
+          ImGui::Checkbox("No Move", &manager->entities_window.flags.no_move);
+          ImGui::EndMenu();
+      }
+
       ImGui::EndMenu();
     }
-    if (ImGui::BeginMenu("Demo")) {
+    /*if (ImGui::BeginMenu("Demo")) {
         if (ImGui::Button("Load Demo")) {
             printf("Loading Demo\n");
         }
     ImGui::EndMenu();
+    }*/
+
+    if (ImGui::BeginMenu("Entities")) {
+        if (ImGui::Button("New Empty Entity")) {
+            Entity* new_entity = new Entity(true,"EmptyObj");
+            new_entity->init();
+            manager->entities_.push_back(new_entity);
+        }
+        if (ImGui::Button("New Terrain")) {
+            //Entity* new_entity = new Entity(true, "TerrainObj");
+            //manager->entities_.push_back(new_entity);
+        }
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::BeginMenu("Animation Configs")) {
+        if (ImGui::Button("New Empty Animation Config")) {
+            AnimationConfig anim_config;
+            snprintf(anim_config.name, 16, "Anim Config %d", manager->animation_configs_counter);
+            snprintf(anim_config.temp_name, 16, "%s", anim_config.name);
+            ResetAnimationConfig(anim_config);
+            manager->animation_configs_.push_back(anim_config);
+            manager->animation_configs_counter++;
+            UpdateAnimationConfigsString();
+        }
+        ImGui::EndMenu();
     }
     
     ImGui::EndMainMenuBar();
@@ -135,12 +170,17 @@ void WindowsController() {
   if (manager->camera_window.popen) {
       CameraWindow();
   }
-  if (manager->hierachy_window.popen) {
-      HierachyWindow();
+  if (manager->entities_window.popen) {
+      EntitiesManagerWindow();
   }
   if (manager->control_window.popen) {
       ControlWindow();
   }
+
+  if (manager->animationconfigs_window.popen) {
+      AnimationConfigsManagerWindow();
+  }
+  
 }
 
 void LightsWindow() {
@@ -196,19 +236,6 @@ void LightsWindow() {
         ImGui::End();
     }
 
-void HierachyWindow() {
-    DemoManager* manager = DemoManager::getInstance();
-    manager->hierachy_window.flags.no_resize = false;
-    SetFlags(&manager->hierachy_window);
-    ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
-    ImGui::Begin("Hierachy Window", &manager->hierachy_window.popen, manager->hierachy_window.window_flags);
-    WindowMenu(&manager->hierachy_window);
-
-
-
-    ImGui::End();
-}
-
 
 void PerformanceWindow(double dt) {
     DemoManager* manager = DemoManager::getInstance();
@@ -257,219 +284,219 @@ void ControlWindow() {
     WindowMenu(&manager->control_window);
 
     ImGui::Checkbox("Enable Postprocess", &manager->enable_postprocess);
-    ImGui::Checkbox("Show normals", &manager->show_normals);
-
+    if (ImGui::Checkbox("Show normals", &manager->show_normals)) {
+        EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
+        if (manager->show_normals) {
+            mat_selected = manager->mat_normals;
+        }
+        else {
+            mat_selected = manager->mat_basic;
+        }
+        for (int i = 0; i < manager->root->num_children(); i++) {
+            EDK3::Drawable* drawable = dynamic_cast<EDK3::Drawable*>(manager->root->child(i));
+            drawable->set_material(mat_selected.get());
+        }
+    }
+    if(ImGui::Checkbox("Wireframe mode", &manager->enable_wireframe)) {
+        EDK3::Node* root = manager->root.get();
+        for (int i = 0; i < root->num_children(); i++) {
+            EDK3::Geometry* geometry = dynamic_cast<EDK3::Drawable*>(root->child(i))->geometry();
+            if (geometry) {
+                if (manager->enable_wireframe) {
+                    geometry->setDrawMode(EDK3::dev::GPUManager::DrawMode::kDrawMode_Lines);
+                }
+                else {
+                    geometry->setDrawMode(EDK3::dev::GPUManager::DrawMode::kDrawMode_Triangles);
+                }
+            }
+        }
+        
+    }
+                
     ImGui::End();
 }
 
-/*
 void EntitiesManagerWindow() {
-  Game *game = Game::getInstance();
-  SetFlags(&game->entities_window);
-  ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
+  static const char drawable_types[60] = { "Cube\0Quad\0Sphere\0Terrain\0Donut\0Tree\0House\0Boat" };
+  DemoManager* manager = DemoManager::getInstance();
+  SetFlags(&manager->entities_window);
+  ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
 
-  ImGui::Begin("Entities Manager", &game->entities_window.popen, game->entities_window.window_flags);
-  WindowMenu(&game->entities_window);
+  ImGui::Begin("Entities Manager", &manager->entities_window.popen, manager->entities_window.window_flags);
+  WindowMenu(&manager->entities_window);
   // ImGui::Text("There will be entities here");
-  for (int i = 0; i < game->entities_.size(); i++) {
+  for (int i = 0; i < manager->entities_.size(); i++) {
     ImGui::PushID(i);
-    if (ImGui::TreeNode(&game->entities_[i]->name_[0])) {
-      ImGui::InputText(" ", &game->entities_[i]->temp_name_);
+    if (ImGui::TreeNode(manager->entities_[i]->name_)) {
+       if(ImGui::Checkbox("Enable", &manager->entities_[i]->enabled_)){
+           manager->entities_[i]->drawable_->set_visible(manager->entities_[i]->enabled_);
+       }
+      ImGui::InputText(" ", manager->entities_[i]->temp_name_,15);
       ImGui::SameLine();
 
-      ImGui::Checkbox("Enable", &game->entities_[i]->enabled_);
+      
 
       if (ImGui::Button("Update name")) {
-        game->entities_[i]->name_ = game->entities_[i]->temp_name_;
-      }
-
-      ImGui::DragFloat2("Position", &game->entities_[i]->transform_.position_.x, 1.0f, 0.0f, 1280.0f);
-      ImGui::DragFloat("Rotation", &game->entities_[i]->transform_.rotation_, 0.1f, 0.0f, 6.28f);
-      if(game->entities_[i]->type_ == EntityType_Sprite){
-        ImGui::DragFloat2("Scale", &game->entities_[i]->transform_.scale_.x, 0.01f, 0.0f, 2.0f);
-      }
-      else{
-        ImGui::DragFloat2("Scale", &game->entities_[i]->transform_.scale_.x, 1.0f, 1.0f, 500.0f);
+          snprintf(manager->entities_[i]->name_, 16, "%s\0", manager->entities_[i]->temp_name_);
       }
       
-      if (game->entities_[i]->type_ == EntityType_Sprite) {
-        Sprite *sprite = (Sprite *)game->entities_[i];
-        ImGui::DragFloat("Origin X", &game->entities_[i]->transform_.origin_.x, 1.0f, -1.0f * sprite->width(), 0.0f);
-        ImGui::DragFloat("Origin Y", &game->entities_[i]->transform_.origin_.y, 1.0f, -1.0f * sprite->height(), 0.0f);
-        if(ImGui::Button("Center")){
-          sprite->transform_.set_origin({sprite->width()*(-0.5f),
-                                        sprite->height()*(-0.5f)});
-        }
-      }else{
-        ImGui::Checkbox("Solid",&((Path*)game->entities_[i])->solid_);
-        static ImVec4 fill_color = ImVec4((float)(((Path *)(game->entities_[i]))->fill_color_.red_/255.0f),
-                                    (float)(((Path *)(game->entities_[i]))->fill_color_.green_/255.0f),
-                                    (float)(((Path *)(game->entities_[i]))->fill_color_.blue_/255.0f),
-                                    1.0f);
-        if(fill_color.w > 255.0f) fill_color.w = 255.0f;
-        ImGui::ColorEdit4("Fill Color", &fill_color.x);
-        ((Path *)(game->entities_[i]))->set_fill_color((unsigned char)(fill_color.x*255),
-                                                        (unsigned char)(fill_color.y*255),
-                                                        (unsigned char)(fill_color.z*255),
-                                                        (unsigned char)(fill_color.w*255));
-
-        static ImVec4 border_color = {(float)(((Path *)(game->entities_[i]))->border_color_.red_/255.0f),
-                                      (float)(((Path *)(game->entities_[i]))->border_color_.green_/255.0f),
-                                      (float)(((Path *)(game->entities_[i]))->border_color_.blue_/255.0f),
-                                      (float)(((Path *)(game->entities_[i]))->border_color_.alpha_/255.0f)};
-        if(border_color.w > 255.0f) border_color.w = 255.0f;
-        ImGui::ColorEdit4("Border Color", &border_color.x);
-        ((Path *)(game->entities_[i]))->set_border_color((unsigned char)(border_color.x*255),
-                                                        (unsigned char)(border_color.y*255),
-                                                        (unsigned char)(border_color.z*255),
-                                                        (unsigned char)(border_color.w*255));
+      if (ImGui::Combo("Mesh", &manager->entities_[i]->drawableAttached_,drawable_types, 10)) {
+          manager->entities_[i]->attachDrawable((DrawableAttached)manager->entities_[i]->drawableAttached_);
       }
+      
+      ImGui::DragFloat3("Position", &manager->entities_[i]->position_.x, 0.1f, -500.0f, 500.0f);
+      ImGui::DragFloat3("Rotation", &manager->entities_[i]->rotation_.x, 0.1f, 0.0f, 360.0f);
+      ImGui::DragFloat3("Scale", &manager->entities_[i]->scale_.x, 0.1f, 0.0f, 500.0f);
+      
+      
 
-      if (game->animation_configs_.size() >= 1) {
-        if (ImGui::BeginCombo("Animation Config", &game->animation_configs_[game->entities_[i]->animation_config_selected].name[0])) {
-          for (int j = 0; j < game->animation_configs_.size(); j++) {
-            const bool is_selected = (game->entities_[i]->animation_config_selected == j);
-            if (game->animation_configs_[j].name.length() == 0) {
-              if (ImGui::Selectable(" ", is_selected))
-                game->entities_[i]->animation_config_selected = j;
-            } else {
-              if (ImGui::Selectable(&game->animation_configs_[j].name[0], is_selected))
-                game->entities_[i]->animation_config_selected = j;
-            }
-
-            // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-            if (is_selected)
-              ImGui::SetItemDefaultFocus();
-          }
-          ImGui::EndCombo();
+      if (manager->animation_configs_.size() >= 1) {
+          if (ImGui::Combo("AnimationConfig", &manager->entities_[i]->animation_config_selected,
+              manager->animation_configs_names_.get(), 4)) {
+              if (manager->entities_[i]->animation_config_selected >= manager->animation_configs_.size()) {
+                  manager->entities_[i]->animation_config_selected = manager->animation_configs_.size() - 1;
+              }
         }
 
         if (ImGui::Button("Animate!")) {
-          game->entities_[i]->playAnimation(game->animation_configs_[game->entities_[i]->animation_config_selected]);
+          manager->entities_[i]->playAnimation(manager->animation_configs_[manager->entities_[i]->animation_config_selected]);
         }
         ImGui::SameLine();
         if (ImGui::Button("Stop")) {
-          game->entities_[i]->stopAnimation();
+          manager->entities_[i]->stopAnimation();
         }
         ImGui::SameLine();
         if (ImGui::Button("Play")) {
-          game->entities_[i]->set_play_animation(true);
+          manager->entities_[i]->set_play_animation(true);
         }
         ImGui::SameLine();
         if (ImGui::Button("Pause")) {
-          game->entities_[i]->set_play_animation(false);
+          manager->entities_[i]->set_play_animation(false);
         }
 
         ImGui::SameLine();
 
-        if (nullptr != game->entities_[i]->anim_instance_) {
-          if (ImGui::Checkbox("revert", &game->entities_[i]->anim_instance_->revert_)) {
-            if (game->entities_[i]->anim_instance_->config_.is_moving) {
-              game->entities_[i]->anim_instance_->set_animation_status(AnimationStatusOption_Position, false);
+        if (nullptr != manager->entities_[i]->anim_instance_) {
+          if (ImGui::Checkbox("revert", &manager->entities_[i]->anim_instance_->revert_)) {
+            if (manager->entities_[i]->anim_instance_->config_.is_moving) {
+              manager->entities_[i]->anim_instance_->set_animation_status(AnimationStatusOption_Position, false);
             }
-            if (game->entities_[i]->anim_instance_->config_.is_rotating) {
-              game->entities_[i]->anim_instance_->set_animation_status(AnimationStatusOption_Rotation, false);
+            if (manager->entities_[i]->anim_instance_->config_.is_rotating) {
+              manager->entities_[i]->anim_instance_->set_animation_status(AnimationStatusOption_Rotation, false);
             }
-            if (game->entities_[i]->anim_instance_->config_.is_scaling) {
-              game->entities_[i]->anim_instance_->set_animation_status(AnimationStatusOption_Scale, false);
+            if (manager->entities_[i]->anim_instance_->config_.is_scaling) {
+              manager->entities_[i]->anim_instance_->set_animation_status(AnimationStatusOption_Scale, false);
             }
           }
 
           // Vec2 barSize(200, 20);
 
-          // ImU32 color = IM_COL32(static_cast<unsigned char>(255 * &game->entities_[i]->anim_instance_->get_progress(0).percent_), 0, 0, 255);
+          // ImU32 color = IM_COL32(static_cast<unsigned char>(255 * &manager->entities_[i]->anim_instance_->get_progress(0).percent_), 0, 0, 255);
           // ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(0.0f, 0.0f), ImVec2(100.0f, 100.0f),
           //                                           color);
 
-          // ImGui::SliderFloat("Variable", &game->entities_[i]->anim_instance_->get_progress(0).percent_, 0.0f, 1.0f);
-          if (game->entities_[i]->anim_instance_->get_progress(0) > 0) {
+          // ImGui::SliderFloat("Variable", &manager->entities_[i]->anim_instance_->get_progress(0).percent_, 0.0f, 1.0f);
+          if (manager->entities_[i]->anim_instance_->get_progress(0) > 0) {
             ImGui::Text("Movement Progress: ");
             ImGui::SameLine();
             // ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(41.0f, 74.0f, 122.0f, 1.0f));
-            ImGui::ProgressBar(game->entities_[i]->anim_instance_->get_progress(0), ImVec2(200.0f, 20.0f));
+            ImGui::ProgressBar(manager->entities_[i]->anim_instance_->get_progress(0), ImVec2(200.0f, 20.0f));
             // ImGui::PopStyleColor();
           }
-          if (game->entities_[i]->anim_instance_->get_progress(1) > 0) {
+          if (manager->entities_[i]->anim_instance_->get_progress(1) > 0) {
             ImGui::Text("Rotation Progress: ");
             ImGui::SameLine();
-            ImGui::ProgressBar(game->entities_[i]->anim_instance_->get_progress(1), ImVec2(200.0f, 20.0f));
+            ImGui::ProgressBar(manager->entities_[i]->anim_instance_->get_progress(1), ImVec2(200.0f, 20.0f));
           }
-          if (game->entities_[i]->anim_instance_->get_progress(2) > 0) {
+          if (manager->entities_[i]->anim_instance_->get_progress(2) > 0) {
             ImGui::Text("Scale Progress:    ");
             ImGui::SameLine();
-            ImGui::ProgressBar(game->entities_[i]->anim_instance_->get_progress(2), ImVec2(200.0f, 20.0f));
+            ImGui::ProgressBar(manager->entities_[i]->anim_instance_->get_progress(2), ImVec2(200.0f, 20.0f));
           }
-          if (game->entities_[i]->anim_instance_->config_.total_delay > 0.0f && game->entities_[i]->anim_instance_->config_.current_delay < game->entities_[i]->anim_instance_->config_.total_delay) {
+          if (manager->entities_[i]->anim_instance_->config_.total_delay > 0.0f && manager->entities_[i]->anim_instance_->config_.current_delay < manager->entities_[i]->anim_instance_->config_.total_delay) {
             ImGui::Text("Delay Progress:    ");
             ImGui::SameLine();
-            ImGui::ProgressBar(game->entities_[i]->anim_instance_->config_.current_delay/game->entities_[i]->anim_instance_->config_.total_delay, ImVec2(200.0f, 20.0f));
+            ImGui::ProgressBar(manager->entities_[i]->anim_instance_->config_.current_delay/manager->entities_[i]->anim_instance_->config_.total_delay, ImVec2(200.0f, 20.0f));
           }
         } 
         else {
           if (ImGui::Button("Inverse")) {
-            game->entities_[i]->playAnimation(game->animation_configs_[game->entities_[i]->animation_config_selected]);
-            game->entities_[i]->anim_instance_->revert_ = true;
-            game->entities_[i]->anim_instance_->set_elapsed_time(0, game->entities_[i]->anim_instance_->get_duration(0));
-            game->entities_[i]->anim_instance_->set_elapsed_time(1, game->entities_[i]->anim_instance_->get_duration(1));
-            game->entities_[i]->anim_instance_->set_elapsed_time(2, game->entities_[i]->anim_instance_->get_duration(2));
-          }
-          if(ImGui::Button("Delete Entity")){
-          //Clear from vector and then delete
-            delete game->entities_[i];
-            game->entities_.erase(game->entities_.begin()+i);
+            manager->entities_[i]->playAnimation(manager->animation_configs_[manager->entities_[i]->animation_config_selected]);
+            manager->entities_[i]->anim_instance_->revert_ = true;
+            manager->entities_[i]->anim_instance_->set_elapsed_time(0, manager->entities_[i]->anim_instance_->get_duration(0));
+            manager->entities_[i]->anim_instance_->set_elapsed_time(1, manager->entities_[i]->anim_instance_->get_duration(1));
+            manager->entities_[i]->anim_instance_->set_elapsed_time(2, manager->entities_[i]->anim_instance_->get_duration(2));
           }
         }
-        
       }
+
+      if (nullptr == manager->entities_[i]->anim_instance_){
+        if (ImGui::Button("Delete Entity")) {
+            //Clear from vector and then delete
+            for (int j = 0; j < manager->root->num_children(); j++) {
+                EDK3::Node* node = manager->root->child(j);
+                if (node == manager->entities_[i]->drawable_.get()) {
+                    manager->root->removeChild(node);
+                    break;
+                }
+            }
+            delete manager->entities_[i];
+            manager->entities_.erase(manager->entities_.begin() + i);
+        }
+      }
+        
       ImGui::TreePop();
-    }
+      }
+      
+      
     ImGui::PopID();
-  }
+    }
   ImGui::End();
-}
+  }
+
+
 
 void AnimationConfigsManagerWindow() {
-  Game *game = Game::getInstance();
-  SetFlags(&game->animationconfigs_window);
-  ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
+  DemoManager *manager = DemoManager::getInstance();
+  SetFlags(&manager->animationconfigs_window);
+  ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
   
-  ImGui::Begin("Animations Config Manager", &game->animationconfigs_window.popen, game->animationconfigs_window.window_flags);
-  WindowMenu(&game->animationconfigs_window);
+  ImGui::Begin("Animations Config Manager", &manager->animationconfigs_window.popen, manager->animationconfigs_window.window_flags);
+  WindowMenu(&manager->animationconfigs_window);
 
-  for (int i = 0; i < game->animation_configs_.size(); i++) {
+  for (int i = 0; i < manager->animation_configs_.size(); i++) {
     bool deletable=true;
     ImGui::PushID(i);
-    if (ImGui::TreeNode(&game->animation_configs_[i].name[0])) {
-      ImGui::Checkbox("Is Moving", &game->animation_configs_[i].is_moving);
-      if (game->animation_configs_[i].is_moving) {
-        ImGui::InputFloat2("Move from", &game->animation_configs_[i].move_from.x);
-        ImGui::InputFloat2("Move To", &game->animation_configs_[i].move_to.x);
-        ImGui::DragFloat("Move duration", &game->animation_configs_[i].move_duration, 0.1f, 0.0f, game->kMaxAnimationDuration);
-        ImGui::NewLine();
+    if (ImGui::TreeNode(manager->animation_configs_[i].name)) {
+      ImGui::Checkbox("Is Moving", &manager->animation_configs_[i].is_moving);
+      if (manager->animation_configs_[i].is_moving) {
+        ImGui::InputFloat3("Move from", &manager->animation_configs_[i].move_from.x);
+        ImGui::InputFloat3("Move To", &manager->animation_configs_[i].move_to.x);
+        ImGui::DragFloat("Move duration", &manager->animation_configs_[i].move_duration, 0.1f, 0.0f, manager->kMaxAnimationDuration);
       }
 
-      ImGui::Checkbox("Is Rotating", &game->animation_configs_[i].is_rotating);
-      if (game->animation_configs_[i].is_rotating) {
-        ImGui::InputFloat("rotate from", &game->animation_configs_[i].rotate_from);
-        ImGui::InputFloat("rotate to", &game->animation_configs_[i].rotate_to);
-        ImGui::DragFloat("rotate duration", &game->animation_configs_[i].rotate_duration, 0.1f, 0.0f, game->kMaxAnimationDuration);
-        ImGui::NewLine();
+      ImGui::Checkbox("Is Rotating", &manager->animation_configs_[i].is_rotating);
+      if (manager->animation_configs_[i].is_rotating) {
+        ImGui::InputFloat3("rotate from", &manager->animation_configs_[i].rotate_from.x);
+        ImGui::InputFloat3("rotate to", &manager->animation_configs_[i].rotate_to.x);
+        ImGui::DragFloat("rotate duration", &manager->animation_configs_[i].rotate_duration, 0.1f, 0.0f, manager->kMaxAnimationDuration);
       }
 
-      ImGui::Checkbox("Is Scaling", &game->animation_configs_[i].is_scaling);
-      if (game->animation_configs_[i].is_scaling) {
-        ImGui::InputFloat2("scale from", &game->animation_configs_[i].scale_from.x);
-        ImGui::InputFloat2("scale to", &game->animation_configs_[i].scale_to.x);
-        ImGui::DragFloat("scale duration", &game->animation_configs_[i].scale_duration, 0.1f, 0.0f, game->kMaxAnimationDuration);
+      ImGui::Checkbox("Is Scaling", &manager->animation_configs_[i].is_scaling);
+      if (manager->animation_configs_[i].is_scaling) {
+        ImGui::InputFloat3("scale from", &manager->animation_configs_[i].scale_from.x);
+        ImGui::InputFloat3("scale to", &manager->animation_configs_[i].scale_to.x);
+        ImGui::DragFloat("scale duration", &manager->animation_configs_[i].scale_duration, 0.1f, 0.0f, manager->kMaxAnimationDuration);
       }
 
-      if (ImGui::BeginCombo("Interpolation", Interpolate::GetInterpolationTypeName(game->animation_configs_[i].type_))) {
+      /*
+      if (ImGui::BeginCombo("Interpolation", Interpolate::GetInterpolationTypeName(manager->animation_configs_[i].type_))) {
         for (int j = 0; j < (int)InterpolationType_None; j++) {
           InterpolationType type = static_cast<InterpolationType>(j);
-          const bool is_selected = (game->animation_configs_[i].type_ == type);
+          const bool is_selected = (manager->animation_configs_[i].type_ == type);
 
           if (ImGui::Selectable(Interpolate::GetInterpolationTypeName(type), is_selected)) {
-            game->animation_configs_[i].type_ = type;
+            manager->animation_configs_[i].type_ = type;
           }
 
           if (is_selected)
@@ -478,38 +505,35 @@ void AnimationConfigsManagerWindow() {
         ImGui::EndCombo();
       }
 
-      ImGui::DragFloat("Delay", &game->animation_configs_[i].total_delay, 0.1f, 0.0f, 10.0f);
+      */
 
-      ImGui::InputText(" ", &game->animation_configs_[i].temp_name);
+      ImGui::DragFloat("Delay", &manager->animation_configs_[i].total_delay, 0.1f, 0.0f, 10.0f);
+
+      ImGui::InputText(" ", manager->animation_configs_[i].temp_name,16);
       ImGui::SameLine();
 
       if (ImGui::Button("Update name")) {
-        game->animation_configs_[i].name = game->animation_configs_[i].temp_name;
+          snprintf(manager->animation_configs_[i].name,16, "%s", manager->animation_configs_[i].temp_name);
       }
-      if (ImGui::Button("Save")) {
-        // game->animation_configs_[i].name = game->animation_configs_[i].temp_name;
-        game->db_.saveAnimation(game->animation_configs_[i], game->animation_configs_db_[i]);
-        Game::getInstance()->animation_configs_.clear();
-        Game::getInstance()->animation_configs_db_.clear();
-        game->db_.runQuery("SELECT * from animations;", game->db_.processAnimations, 0);
-      }
-      
-      for(int j=0;j<game->entities_.size() && deletable;j++){
-        deletable = strcmp(game->animation_configs_[game->entities_[j]->animation_config_selected].name.c_str(), game->animation_configs_[i].name.c_str());
+
+      for(int j=0;j<manager->entities_.size() && deletable;j++){
+        deletable = strcmp(manager->animation_configs_[manager->entities_[j]->animation_config_selected].name, manager->animation_configs_[i].name);
       }
 
       if (ImGui::Button("Delete")) {
         if(deletable){
           
-          if(game->db_.deleteAnimation(&game->animation_configs_[i], &game->animation_configs_db_[i])){
-            for(int j = 0; j < game->entities_.size(); j++){
-              if (game->entities_[j]->animation_config_selected > i) {
-                game->entities_[j]->animation_config_selected--;
+          //game->animation_configs_.erase(game->animation_configs_.begin() + i);
+          //if(manager->db_.deleteAnimation(&manager->animation_configs_[i], &manager->animation_configs_db_[i])){
+            manager->animation_configs_.erase(manager->animation_configs_.begin() + i);
+            for(int j = 0; j < manager->entities_.size(); j++){
+              if (manager->entities_[j]->animation_config_selected > i) {
+                manager->entities_[j]->animation_config_selected--;
               }
             }
-          }
+          //}
         }
-        // game->animation_configs_[i].name = game->animation_configs_[i].temp_name;
+        // manager->animation_configs_[i].name = manager->animation_configs_[i].temp_name;
       }
       ImGui::SameLine();
       if (deletable) {
@@ -527,72 +551,24 @@ void AnimationConfigsManagerWindow() {
   ImGui::End();
 }
 
-void NewPathWindow() {
-  Game *game = Game::getInstance();
-  static bool is_regular = true;
-  static int n_vertexes = game->kMinPathVertexes;
-  static Vec2 vertexes[game->kMaxPathVertexes];
-  static Vec2 position;
-  static float rotation;
-  static Vec2 scale;
-  static char n_vertexes_char[20];
-  SetFlags(&game->newpath_window);
-  ImGui::SetNextWindowPos(ImVec2(640, 360), ImGuiCond_FirstUseEver);
-  ImGui::Begin("New Path", &game->newpath_window.popen, game->newpath_window.window_flags);
-  WindowMenu(&game->newpath_window);
-  ImGui::Text("New path");
-
-  ImGui::Checkbox("Is regular", &is_regular);
-  ImGui::DragInt("Num vertexes", &n_vertexes, 1.0f, game->kMinPathVertexes, game->kMaxPathVertexes);
-  ImGui::InputFloat2("Position", &position.x);
-  ImGui::DragFloat("Rotation", &rotation, 0.1f, 0.0f, 6.28f);
-  ImGui::InputFloat2("Scale", &scale.x);
-
-  if (!is_regular) {
-    ImGui::NewLine();
-    ImGui::Text("Vertexes values");
-    for (int i = 0; i < n_vertexes; i++) {
-      ImGui::PushID(i);
-      snprintf(n_vertexes_char, 20, "Vertex %d", i);
-      ImGui::DragFloat2(n_vertexes_char, &vertexes[i].x, 0.01f, -1.0f, 1.0f);
-      ImGui::PopID();
-    }
-  }
-  if (ImGui::Button("Create Path")) {
-    Path *path;
-    if (is_regular) {
-      path = new Path();
-      path->InitRegularPolygon(n_vertexes);
-      path->transform_.set_position(position);
-      path->transform_.set_rotation(rotation);
-      path->transform_.set_scale(scale);
-    } else {
-      path = new Path(Color(255, 255, 255), Color(), false, vertexes, n_vertexes);
-      path->transform_.set_position(position);
-      path->transform_.set_rotation(rotation);
-      path->transform_.set_scale(scale);
-    }
-    game->entities_.push_back(path);
-  }
-  ImGui::End();
-}
+/*
 
 void NewAnimationConfigWindow() {
-  Game *game = Game::getInstance();
+  manager *manager = manager::getInstance();
   bool unique = true;
   static AnimationConfig temp_anim_config;
-  SetFlags(&game->newanimationconfig_window);
+  SetFlags(&manager->newanimationconfig_window);
   ImGui::SetNextWindowPos(ImVec2(200, 200), ImGuiCond_FirstUseEver);
 
-  ImGui::Begin("New Animation Config", &game->newanimationconfig_window.popen, game->newanimationconfig_window.window_flags);
-  WindowMenu(&game->newanimationconfig_window);
+  ImGui::Begin("New Animation Config", &manager->newanimationconfig_window.popen, manager->newanimationconfig_window.window_flags);
+  WindowMenu(&manager->newanimationconfig_window);
   ImGui::Text("New animation config window");
 
   ImGui::Checkbox("Is Moving", &temp_anim_config.is_moving);
   if (temp_anim_config.is_moving) {
     ImGui::InputFloat2("Move from", &temp_anim_config.move_from.x);
     ImGui::InputFloat2("Move To", &temp_anim_config.move_to.x);
-    ImGui::DragFloat("Move duration", &temp_anim_config.move_duration, 0.1f, 0.0f, game->kMaxAnimationDuration);
+    ImGui::DragFloat("Move duration", &temp_anim_config.move_duration, 0.1f, 0.0f, manager->kMaxAnimationDuration);
     ImGui::NewLine();
   }
 
@@ -600,7 +576,7 @@ void NewAnimationConfigWindow() {
   if (temp_anim_config.is_rotating) {
     ImGui::InputFloat("rotate from", &temp_anim_config.rotate_from);
     ImGui::InputFloat("rotate to", &temp_anim_config.rotate_to);
-    ImGui::DragFloat("rotate duration", &temp_anim_config.rotate_duration, 0.1f, 0.0f, game->kMaxAnimationDuration);
+    ImGui::DragFloat("rotate duration", &temp_anim_config.rotate_duration, 0.1f, 0.0f, manager->kMaxAnimationDuration);
     ImGui::NewLine();
   }
 
@@ -608,7 +584,7 @@ void NewAnimationConfigWindow() {
   if (temp_anim_config.is_scaling) {
     ImGui::InputFloat2("scale from", &temp_anim_config.scale_from.x);
     ImGui::InputFloat2("scale to", &temp_anim_config.scale_to.x);
-    ImGui::DragFloat("scale duration", &temp_anim_config.scale_duration, 0.1f, 0.0f, game->kMaxAnimationDuration);
+    ImGui::DragFloat("scale duration", &temp_anim_config.scale_duration, 0.1f, 0.0f, manager->kMaxAnimationDuration);
   }
   ImGui::NewLine();
 
@@ -633,18 +609,18 @@ void NewAnimationConfigWindow() {
 
   ImGui::InputText("Name", &temp_anim_config.name);
 
-  for(int i = 0; i < game->animation_configs_.size() && unique;i++){
-        unique = strcmp(game->animation_configs_[i].name.c_str(),  temp_anim_config.name.c_str());
+  for(int i = 0; i < manager->animation_configs_.size() && unique;i++){
+        unique = strcmp(manager->animation_configs_[i].name.c_str(),  temp_anim_config.name.c_str());
   }
 
   if (ImGui::Button("Create new configuration")) {
     if (unique) {
-      game->db_.insertAnimation(temp_anim_config);
-      game->animation_configs_.clear();
-      game->animation_configs_db_.clear();
+      manager->db_.insertAnimation(temp_anim_config);
+      manager->animation_configs_.clear();
+      manager->animation_configs_db_.clear();
 
-      if (game->db_.runQuery("SELECT * from animations;", game->db_.processAnimations, 0) != SQLITE_OK) {
-        printf("%s\n", game->db_.err_msg);
+      if (manager->db_.runQuery("SELECT * from animations;", manager->db_.processAnimations, 0) != SQLITE_OK) {
+        printf("%s\n", manager->db_.err_msg);
       }
     }
   }
@@ -660,131 +636,4 @@ void NewAnimationConfigWindow() {
 
   ImGui::End();
 }
-
-void NewTextureWindow() {
-  Game *game = Game::getInstance();
-  static std::string path_to_sprite;
-  static bool failed_to_import = false;
-  static bool valid_path = false;
-  SetFlags(&game->newtexture_window);
-  ImGui::SetNextWindowPos(ImVec2(640, 360), ImGuiCond_FirstUseEver);
-  ImGui::Begin("New Texture", &game->newtexture_window.popen, game->newtexture_window.window_flags);
-  WindowMenu(&game->newtexture_window);
-
-  if (path_to_sprite.size() > 0) {
-    ImGui::Text("%s", &path_to_sprite[0]);
-  } else {
-    ImGui::Text(" ");
-  }
-
-  if (ImGui::Button("Browse")) {
-    auto f = pfd::open_file("Choose files to read", pfd::path::home(),
-                            {"Text Files (.png .jpg)", "*.png *.jpg",
-                             "All Files", "*"},
-                            pfd::opt::none);
-    for (std::string const &name : f.result()) {
-      for (int i = 0; i < name.size(); i++) {
-        if (name[i] < 32) {
-          valid_path = false;
-          break;
-        } else {
-          valid_path = true;
-        }
-      }
-      if (valid_path) {
-        path_to_sprite = name;
-      }
-    }
-  }
-  ImGui::SameLine();
-  if (valid_path) {
-    if (ImGui::Button("Import")) {
-      if (path_to_sprite.size() > 0) {
-        Texture *texture = Texture::CreateTexture(path_to_sprite.c_str());
-        if (nullptr != texture) {
-          game->textures_.push_back(texture);
-          failed_to_import = false;
-          game->newtexture_window.popen = false;
-        } else {
-          failed_to_import = true;
-        }
-      }
-    }
-    if (failed_to_import) {
-      ImGui::Text("Failed to import texture");
-    }
-  } else {
-    ImGui::Text("Path no valid, browse again");
-  }
-
-  ImGui::End();
-}
-
-void NewSpriteWindow() {
-  Game *game = Game::getInstance();
-  static int texture_selected = 0;
-  static Vec2 position;
-  static Vec2 size;
-  static Vec2 window_size;
-
-  SetFlags(&game->newsprite_window);
-  ImGui::SetNextWindowPos(ImVec2(640, 360), ImGuiCond_FirstUseEver);
-  ImGui::Begin("New Sprite", &game->newsprite_window.popen, game->newsprite_window.window_flags);
-  WindowMenu(&game->newsprite_window);
-
-  if (game->textures_.size() > 0) {
-
-    // const char* last_separator = strrchr(game->textures_[texture_selected]->path_.c_str(),'\\');
-    // if( last_separator != nullptr){
-    // if (ImGui::BeginCombo("Select Texture", last_separator+1)){
-    if (ImGui::BeginCombo("Select Texture", game->textures_[texture_selected]->path_.c_str())) {
-      for (int j = 0; j < game->textures_.size(); j++) {
-        const bool is_selected = (texture_selected == j);
-        if (ImGui::Selectable(&game->textures_[j]->path_[0], is_selected))
-          texture_selected = j;
-        // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-        if (is_selected)
-          ImGui::SetItemDefaultFocus();
-      }
-      ImGui::EndCombo();
-    }
-
-    ImGui::DragFloat("Pos X:", &position.x, 1.0f, -1.0f * game->textures_[texture_selected]->width(), 0.0f);
-    ImGui::DragFloat("Pos Y:", &position.y, 1.0f, -1.0f * game->textures_[texture_selected]->height(), 0.0f);
-
-    if (size.x > (game->textures_[texture_selected]->width() + position.x)) {
-      size.x = game->textures_[texture_selected]->width() + position.x;
-    }
-    if (size.y > (game->textures_[texture_selected]->height() + position.y)) {
-      size.y = game->textures_[texture_selected]->height() + position.y;
-    }
-    ImGui::DragFloat("Size X", &size.x, 1.0f, 0.0f, (float)(game->textures_[texture_selected]->width() + position.x));
-    ImGui::DragFloat("Size Y", &size.y, 1.0f, 0.0f, (float)(game->textures_[texture_selected]->height() + position.y));
-
-    ImGui::BeginChild("TextureToLoad", ImVec2(size.x, size.y), true, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-    ImGui::SetCursorPos(ImVec2(position.x, position.y));
-    ImageFromTexture(game->textures_[texture_selected]->handle_);
-    // }else{
-    //   ImGui::Text("Error getting textures");
-    // }
-
-    ImGui::EndChild();
-
-    if (ImGui::Button("Create")) {
-      Sprite *sprite = new Sprite(*game->textures_[texture_selected], (int)(position.x * -1.0f),
-                                  (int)(position.y * -1.0f),
-                                  (int)size.x,
-                                  (int)size.y);
-      if (nullptr != sprite) {
-        game->entities_.push_back(sprite);
-      }
-    }
-
-  } else {
-    ImGui::Text("There are no textures imported");
-  }
-
-  ImGui::End();
-}
-
 */

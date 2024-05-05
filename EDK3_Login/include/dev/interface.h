@@ -93,6 +93,7 @@ void SetFlags(ImGuiWindow* window);
 void LightsWindow();
 void PerformanceWindow(double dt);
 void CameraWindow();
-void HierachyWindow();
+void EntitiesManagerWindow();
 void ControlWindow();
+void AnimationConfigsManagerWindow();
 #endif

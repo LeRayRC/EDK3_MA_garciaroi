@@ -16,6 +16,8 @@
 
 #include "EDK3/geometry.h"
 #include "EDK3/dev/buffer.h"
+#include "EDK3/dev/gpumanager.h"
+
 
 
 namespace EDK3 {
@@ -32,6 +34,7 @@ class TerrainCustom : public EDK3::Geometry {
                              unsigned int where_to_bind_attribute) const override;
   virtual void render() const override;
 
+
  protected:
   virtual ~TerrainCustom();
 
@@ -39,6 +42,8 @@ class TerrainCustom : public EDK3::Geometry {
   TerrainCustom(const TerrainCustom&);
   TerrainCustom(TerrainCustom&&);
   TerrainCustom& operator=(const TerrainCustom&);
+
+
 
   EDK3::ref_ptr<EDK3::dev::Buffer> elements_buffer;
   EDK3::ref_ptr<EDK3::dev::Buffer> order_buffer;

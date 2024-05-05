@@ -10,7 +10,6 @@
 
 #include "ESAT/math.h"
 #include "EDK3/dev/gpumanager.h"
-#include "EDK3/dev/gpumanager.h"
 #include "Perlin/SimplexNoise.h"
 #include "math_helpers.h"
 #include "math_library/vector_3.h"
@@ -43,6 +42,10 @@ void TerrainCustom::init(const int num_cols, const int num_rows,
       //ESAT::Vec3 normal;
       //ESAT::Vec2 uv;
   };
+
+  //draw_mode_ = EDK3::dev::GPUManager::DrawMode::kDrawMode_Triangles;
+  num_cols_ = num_cols;
+  num_rows_ = num_rows;
               
   EDK3::scoped_array<MeshVtx> mesh_elements;
   EDK3::scoped_array<unsigned int> mesh_order;
@@ -199,6 +202,8 @@ void TerrainCustom::init(const int num_cols, const int num_rows,
 
   order_buffer->init(mesh_order.sizeInBytes());
   order_buffer->uploadData(mesh_order.get(), mesh_order.sizeInBytes(),0);
+
+  
 }
 
 bool TerrainCustom::bindAttribute(const Attribute a,
@@ -227,7 +232,7 @@ bool TerrainCustom::bindAttribute(const Attribute a,
 void TerrainCustom::render() const {
   //TODO
     EDK3::dev::GPUManager::Instance()->drawElements
-    (EDK3::dev::GPUManager::DrawMode::kDrawMode_Triangles, order_buffer->size(), order_buffer.get(), EDK3::Type::T_UINT, 0);
+    (draw_mode_, num_cols_ * num_rows_ * 6, order_buffer.get(), EDK3::Type::T_UINT, 0);
 }
 
 } //EDK3
