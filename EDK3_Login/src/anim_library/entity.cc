@@ -20,6 +20,9 @@ Entity::Entity() {
   anim_instance_ = nullptr;
   play_animation_ = true;
   attached_ = false;
+  position_ = { 0.0f,0.0f,0.0f };
+  rotation_ = { 0.0f,0.0f,0.0f };
+  scale_ = { 1.0f,1.0f,1.0f };
   drawable_.alloc();
   drawable_->set_name(name_);
 }
@@ -34,6 +37,9 @@ Entity::Entity(bool enabled, char *name) {
   anim_instance_ = nullptr;
   play_animation_ = true;
   attached_ = false;
+  position_ = { 0.0f,0.0f,0.0f };
+  rotation_ = { 0.0f,0.0f,0.0f };
+  scale_ = { 1.0f,1.0f,1.0f };
   drawable_.alloc();
   drawable_->set_name(name_);
 }
@@ -47,6 +53,9 @@ Entity::Entity(const Entity &other) {
   id_ = Entity::next_entity_id;
   attached_ = other.attached_;
   Entity::next_entity_id++;
+  position_ = other.position_;
+  rotation_ = other.rotation_;
+  scale_ = other.scale_;
   drawable_ = other.drawable_;
   drawable_->set_name(other.name_);
 }
@@ -81,6 +90,9 @@ void Entity::update() {
             }
         }
     }
+    drawable_->set_position(position_.x, position_.y, position_.z);
+    drawable_->set_rotation_xyz(rotation_.x, rotation_.y, rotation_.z);
+    drawable_->set_scale(scale_.x, scale_.y, scale_.z);
 }
 
 void Entity::playAnimation(const AnimationConfig &anim_config) {
@@ -101,10 +113,37 @@ void Entity::stopAnimation() {
 }
 
 void Entity::init() {
-    drawable_->set_rotation_xyz(0.0f, 0.0f, 0.0f);
-    drawable_->set_position(0.0f, 100.0f, 0.0f);
-    drawable_->set_scale(1.0f, 1.0f, 1.0f);
+    position_ = Vec3(0.0f, 0.0f, 0.0f);
+    scale_ = Vec3(1.0f, 1.0f, 1.0f);
+    rotation_ = Vec3(0.0f, 0.0f, 0.0f);
 }
+
+void Entity::set_position(Vec3 pos) {
+    position_ = pos;
+    
+}
+
+void Entity::set_rotation(Vec3 rot) {
+    rotation_ = rot;
+}
+
+void Entity::set_scale(Vec3 scale) {
+    scale_ = scale;
+}
+
+Vec3 Entity::position() const {
+    return position_;
+}
+
+Vec3 Entity::rotation() const {
+    return rotation_;
+}
+
+Vec3 Entity::scale() const {
+    return scale_;
+}
+
+
 
 void Entity::setupDrawable(EDK3::Geometry* geo,
     EDK3::MaterialCustom* mat,
@@ -122,6 +161,7 @@ void Entity::setupDrawable(EDK3::Geometry* geo,
 
 void Entity::attachDrawable(DrawableAttached drawableAttached) {
     DemoManager* manager = DemoManager::getInstance();
+    drawableAttached_ = drawableAttached;
     switch (drawableAttached)
     {
     case DrawableAttached_Cube:

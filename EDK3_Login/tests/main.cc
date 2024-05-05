@@ -48,75 +48,27 @@ void InitScene() {
     DemoManager* manager = DemoManager::getInstance();
     //Allocating root node:
     EDK3::Node* root = manager->root.get();
-
-    //Calculate torus surface
-
-    //Entity basic_entity = Entity();
-
-    //Init Geometries
-
-    //load geometry
-
-    //InitTerrain();
     InitSceneGeometries();
-
     InitSceneMaterials();
+    InitSceneEntities();
 
-    SetupDrawable(manager->terrain_custom.get(),
-                  manager->mat_selected.get(),
-                  manager->mat_light_settings.get(),
-                  Vec3(0.0f, -100.0f, 0.0f));
-
-
-    SetupDrawable(manager->custom_tree.get(),
-                  manager->mat_selected.get(),
-                  manager->mat_light_settings.get(),
-                  Vec3(0.97f, -90.0f, -5.0f));
-
-    SetupDrawable(manager->custom_sphere.get(),
-                  manager->mat_selected.get(),
-                  manager->mat_light_settings.get(),
-                  Vec3(-12.0f, -42.0f, 100.0f));
-
-    SetupDrawable(manager->custom_cube.get(),
-                  manager->mat_selected.get(),
-                  manager->mat_light_settings.get(),
-                  Vec3(-95.0f, -40.0f, -88.0f));
-
-    SetupDrawable(manager->custom_torus.get(),
-                  manager->mat_selected.get(),
-                  manager->mat_light_settings.get(),
-                  Vec3(26.0f, -30.0f, -28.0f));
-
-    SetupDrawable(manager->custom_quad.get(),
-                  manager->mat_selected.get(),
-                  manager->mat_light_settings.get(),
-                  Vec3(80.0f, -15.0f, 0.0f));
-    /*
-    SetupDrawable(manager->house_geometry[4].get(),
-                  manager->mat_selected.get(),
-                  manager->mat_light_settings.get(),
-                  Vec3(18.0f, -85.0f, -9.0f),
-                  Vec3(0.5f, 0.5f,0.5f));
-
-    SetupDrawable(manager->boat_geometry[0].get(),
-                  manager->mat_selected.get(),
-                  manager->mat_light_settings.get(),
-                  Vec3(40.0f, -98.0f, 100.0f),
-                  Vec3(3.0f, 3.0f, 3.0f));
-
-    manager->entity_boat_->setupDrawable(
-        manager->boat_geometry[0].get(),
-        manager->mat_selected.get(),
-        manager->mat_light_settings.get(),
-        Vec3(00.0f, 0.0f, 0.0f),
-        Vec3(3.0f, 3.0f, 3.0f));
-    */
-
-    Entity* test_entity = new Entity();
-    test_entity->init();
-    manager->entities_.push_back(test_entity);
-    manager->entities_[0]->attachDrawable(DrawableAttached_Terrain);
+    /*AnimationConfig anim1;
+    snprintf(anim1.name, 16, "Test1");
+    snprintf(anim1.temp_name, 16, "%s", anim1.name);
+    anim1.is_moving = true;
+    anim1.move_from = { 0.0f,0.0f,0.0f };
+    anim1.move_to = { 0.0, 100.0f, 0.0f };
+    anim1.move_duration = 10000.0f;
+    anim1.is_rotating = false;
+    anim1.is_scaling = false;
+    AnimationConfig anim2;
+    snprintf(anim2.name, 16, "Test2");
+    snprintf(anim2.temp_name, 16, "%s", anim2.name);
+    manager->animation_configs_.push_back(anim1);
+    manager->animation_configs_counter++;
+    manager->animation_configs_.push_back(anim2);
+    manager->animation_configs_counter++;
+    UpdateAnimationConfigsString();*/
 
     //Allocating and initializing the camera:
     manager->camera.alloc();
@@ -133,7 +85,6 @@ void InitScene() {
     manager->camera->window_size().y);
     manager->camera->setupPerspective(70.0f, 8.0f / 6.0f, 1.0f, 1500.0f);
 
-
     EDK3::dev::GPUManager::CheckGLError("Prepare END");
 }
 
@@ -144,21 +95,25 @@ void UpdateFn() {
         manager->camera->window_size().y);
     EDK3::Node* root = manager->root.get();
 
-    EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
+    for (int i = 0; i < manager->entities_.size(); i++) {
+        manager->entities_[i]->update();
+    }
+
+    /*EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
     if (manager->show_normals) {
       mat_selected = manager->mat_normals;
     }
     else {
       mat_selected = manager->mat_basic;
-    }
-    for (int i = 0; i < root->num_children(); i++) {
-      EDK3::Drawable* drawable = dynamic_cast<EDK3::Drawable*>(root->child(i));
-      //root->child(i)->
-      const float* drawable_position = drawable->position();
-      Vec3 position = { drawable_position[0],drawable_position[1],drawable_position[2] };
-      UpdateDrawable(drawable, mat_selected.get(), manager->mat_light_settings.get(),position );
+    }*/
+    //for (int i = 0; i < root->num_children(); i++) {
+    //  EDK3::Drawable* drawable = dynamic_cast<EDK3::Drawable*>(root->child(i));
+    //  //root->child(i)->
+    //  const float* drawable_position = drawable->position();
+    //  Vec3 position = { drawable_position[0],drawable_position[1],drawable_position[2] };
+    //  UpdateDrawable(drawable, mat_selected.get(), manager->mat_light_settings.get(),position );
 
-    }
+    //}
 
 
     //EDK3::Node* drawable = root->child(6);

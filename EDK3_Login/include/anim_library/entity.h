@@ -50,7 +50,9 @@ class Entity{
 
     char name_[16];
     char temp_name_[16];
-
+    Vec3 position_;
+    Vec3 rotation_;
+    Vec3 scale_;
   // Methods
   public:
     // Constructors
@@ -137,6 +139,14 @@ class Entity{
     void stopAnimation();
 
     virtual void update();
+
+    void set_position(Vec3 pos);
+    void set_rotation(Vec3 rot);
+    void set_scale(Vec3 scale);
+
+    Vec3 position() const;
+    Vec3 rotation() const;
+    Vec3 scale() const;
 
     void setupDrawable(EDK3::Geometry* geo,
         EDK3::MaterialCustom* mat,

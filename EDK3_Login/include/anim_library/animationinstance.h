@@ -14,8 +14,8 @@
 
 struct AnimationConfig{
   int id;
-  std::string name;
-  std::string temp_name;
+  char name[16];
+  char temp_name[16];
   // Flags
   bool is_moving;
   bool is_rotating;
@@ -43,6 +43,10 @@ struct AnimationStatus{
   float percent_;
   float elapsed_time_;
 };
+
+void ResetAnimationConfig(AnimationConfig& config);
+
+void UpdateAnimationConfigsString();
 
 enum AnimationStatusOption{
   AnimationStatusOption_Rotation,
@@ -188,6 +192,7 @@ class AnimationInstance{
     * @return The duration of the specified animation status.
     */
     float get_duration(int status);
+    
 }; 
 
 #endif

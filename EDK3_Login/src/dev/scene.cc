@@ -72,7 +72,6 @@ void UpdateDrawable(EDK3::Drawable* drawable,
   drawable->set_material(mat);
   drawable->set_material_settings(mat_settings);
   drawable->set_position(pos.x, pos.y, pos.z);
-  drawable->set_HPR(0.0f, 0.0f, 0.0f);
 }
 
 void InitSceneGeometries() {
@@ -218,4 +217,93 @@ void InitSceneMaterials() {
     else {
         manager->mat_selected = manager->mat_basic;
     }
+}
+
+void InitSceneEntities() {
+    DemoManager* manager = DemoManager::getInstance();
+    Entity* obj_entity;
+    obj_entity = new Entity(true, "Terrain");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 0.0f, -100.0f, 0.0f });
+        obj_entity->attachDrawable(DrawableAttached_Terrain);
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    obj_entity = new Entity(true, "Tree");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 0.97f, -90.0f, -5.0f });
+        obj_entity->attachDrawable(DrawableAttached_Tree);
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    obj_entity = new Entity(true, "Sphere");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ -12.0f, -42.0f, 100.0f });
+        obj_entity->attachDrawable(DrawableAttached_Sphere);
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    obj_entity = new Entity(true, "Cube");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ -95.0f, -40.0f, -88.0f });
+        obj_entity->attachDrawable(DrawableAttached_Cube);
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+
+    obj_entity = new Entity(true, "Donut");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 26.0f, -30.0f, -28.0f });
+        obj_entity->attachDrawable(DrawableAttached_Donut);
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    obj_entity = new Entity(true, "Quad");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 80.0f, -15.0f, 0.0f });
+        obj_entity->attachDrawable(DrawableAttached_Quad);
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    obj_entity = new Entity(true, "Quad");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 80.0f, -15.0f, 0.0f });
+        obj_entity->attachDrawable(DrawableAttached_Quad);
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    obj_entity = new Entity(true, "House");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 18.0f, -85.0f, -9.0f });
+        obj_entity->set_scale({ 0.5f, 0.5f, 0.5f });
+        obj_entity->attachDrawable(DrawableAttached_House);
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    obj_entity = new Entity(true, "Boat");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 40.0f, -98.0f, 100.0f });
+        obj_entity->set_scale({ 4.5f, 4.5f, 4.5f });
+        obj_entity->attachDrawable(DrawableAttached_Boat);
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
 }

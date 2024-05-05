@@ -25,5 +25,6 @@ void UpdateDrawable(EDK3::Drawable* geo,
 
 void InitSceneGeometries();
 void InitSceneMaterials();
+void InitSceneEntities();
 
 #endif

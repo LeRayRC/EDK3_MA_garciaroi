@@ -95,4 +95,5 @@ void PerformanceWindow(double dt);
 void CameraWindow();
 void EntitiesManagerWindow();
 void ControlWindow();
+void AnimationConfigsManagerWindow();
 #endif

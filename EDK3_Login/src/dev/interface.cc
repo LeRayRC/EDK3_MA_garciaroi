@@ -76,14 +76,30 @@ void WindowSettings() {
           ImGui::EndMenu();
       }
 
+      if (ImGui::BeginMenu("Control")) {
+          ImGui::Checkbox("Opened", &manager->control_window.popen);
+          ImGui::Checkbox("No Titlebar", &manager->control_window.flags.no_titlebar);
+          ImGui::Checkbox("No Resize", &manager->control_window.flags.no_resize);
+          ImGui::Checkbox("No Move", &manager->control_window.flags.no_move);
+          ImGui::EndMenu();
+      }
+
+      if (ImGui::BeginMenu("Entities")) {
+          ImGui::Checkbox("Opened", &manager->entities_window.popen);
+          ImGui::Checkbox("No Titlebar", &manager->entities_window.flags.no_titlebar);
+          ImGui::Checkbox("No Resize", &manager->entities_window.flags.no_resize);
+          ImGui::Checkbox("No Move", &manager->entities_window.flags.no_move);
+          ImGui::EndMenu();
+      }
+
       ImGui::EndMenu();
     }
-    if (ImGui::BeginMenu("Demo")) {
+    /*if (ImGui::BeginMenu("Demo")) {
         if (ImGui::Button("Load Demo")) {
             printf("Loading Demo\n");
         }
     ImGui::EndMenu();
-    }
+    }*/
 
     if (ImGui::BeginMenu("Entities")) {
         if (ImGui::Button("New Empty Entity")) {
@@ -94,6 +110,19 @@ void WindowSettings() {
         if (ImGui::Button("New Terrain")) {
             //Entity* new_entity = new Entity(true, "TerrainObj");
             //manager->entities_.push_back(new_entity);
+        }
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::BeginMenu("Animation Configs")) {
+        if (ImGui::Button("New Empty Animation Config")) {
+            AnimationConfig anim_config;
+            snprintf(anim_config.name, 16, "Anim Config %d", manager->animation_configs_counter);
+            snprintf(anim_config.temp_name, 16, "%s", anim_config.name);
+            ResetAnimationConfig(anim_config);
+            manager->animation_configs_.push_back(anim_config);
+            manager->animation_configs_counter++;
+            UpdateAnimationConfigsString();
         }
         ImGui::EndMenu();
     }
@@ -147,6 +176,11 @@ void WindowsController() {
   if (manager->control_window.popen) {
       ControlWindow();
   }
+
+  if (manager->animationconfigs_window.popen) {
+      AnimationConfigsManagerWindow();
+  }
+  
 }
 
 void LightsWindow() {
@@ -250,7 +284,19 @@ void ControlWindow() {
     WindowMenu(&manager->control_window);
 
     ImGui::Checkbox("Enable Postprocess", &manager->enable_postprocess);
-    ImGui::Checkbox("Show normals", &manager->show_normals);
+    if (ImGui::Checkbox("Show normals", &manager->show_normals)) {
+        EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
+        if (manager->show_normals) {
+            mat_selected = manager->mat_normals;
+        }
+        else {
+            mat_selected = manager->mat_basic;
+        }
+        for (int i = 0; i < manager->root->num_children(); i++) {
+            EDK3::Drawable* drawable = dynamic_cast<EDK3::Drawable*>(manager->root->child(i));
+            drawable->set_material(mat_selected.get());
+        }
+    }
     if(ImGui::Checkbox("Wireframe mode", &manager->enable_wireframe)) {
         EDK3::Node* root = manager->root.get();
         for (int i = 0; i < root->num_children(); i++) {
@@ -265,9 +311,6 @@ void ControlWindow() {
             }
         }
         
-    }
-    if (ImGui::Button("Activate boat animation")) {
-        manager->entity_boat_->playAnimation(manager->anim_config_boat_);
     }
                 
     ImGui::End();
@@ -285,7 +328,9 @@ void EntitiesManagerWindow() {
   for (int i = 0; i < manager->entities_.size(); i++) {
     ImGui::PushID(i);
     if (ImGui::TreeNode(manager->entities_[i]->name_)) {
-      ImGui::Checkbox("Enable", &manager->entities_[i]->enabled_);
+       if(ImGui::Checkbox("Enable", &manager->entities_[i]->enabled_)){
+           manager->entities_[i]->drawable_->set_visible(manager->entities_[i]->enabled_);
+       }
       ImGui::InputText(" ", manager->entities_[i]->temp_name_,15);
       ImGui::SameLine();
 
@@ -298,67 +343,19 @@ void EntitiesManagerWindow() {
       if (ImGui::Combo("Mesh", &manager->entities_[i]->drawableAttached_,drawable_types, 10)) {
           manager->entities_[i]->attachDrawable((DrawableAttached)manager->entities_[i]->drawableAttached_);
       }
-      /*
       
-      ImGui::DragFloat2("Position", &manager->entities_[i]->transform_.position_.x, 1.0f, 0.0f, 1280.0f);
-      ImGui::DragFloat("Rotation", &manager->entities_[i]->transform_.rotation_, 0.1f, 0.0f, 6.28f);
-      if(manager->entities_[i]->type_ == EntityType_Sprite){
-        ImGui::DragFloat2("Scale", &manager->entities_[i]->transform_.scale_.x, 0.01f, 0.0f, 2.0f);
-      }
-      else{
-        ImGui::DragFloat2("Scale", &manager->entities_[i]->transform_.scale_.x, 1.0f, 1.0f, 500.0f);
-      }
+      ImGui::DragFloat3("Position", &manager->entities_[i]->position_.x, 0.1f, -500.0f, 500.0f);
+      ImGui::DragFloat3("Rotation", &manager->entities_[i]->rotation_.x, 0.1f, 0.0f, 360.0f);
+      ImGui::DragFloat3("Scale", &manager->entities_[i]->scale_.x, 0.1f, 0.0f, 500.0f);
       
-      if (manager->entities_[i]->type_ == EntityType_Sprite) {
-        Sprite *sprite = (Sprite *)manager->entities_[i];
-        ImGui::DragFloat("Origin X", &manager->entities_[i]->transform_.origin_.x, 1.0f, -1.0f * sprite->width(), 0.0f);
-        ImGui::DragFloat("Origin Y", &manager->entities_[i]->transform_.origin_.y, 1.0f, -1.0f * sprite->height(), 0.0f);
-        if(ImGui::Button("Center")){
-          sprite->transform_.set_origin({sprite->width()*(-0.5f),
-                                        sprite->height()*(-0.5f)});
-        }
-      }else{
-        ImGui::Checkbox("Solid",&((Path*)manager->entities_[i])->solid_);
-        static ImVec4 fill_color = ImVec4((float)(((Path *)(manager->entities_[i]))->fill_color_.red_/255.0f),
-                                    (float)(((Path *)(manager->entities_[i]))->fill_color_.green_/255.0f),
-                                    (float)(((Path *)(manager->entities_[i]))->fill_color_.blue_/255.0f),
-                                    1.0f);
-        if(fill_color.w > 255.0f) fill_color.w = 255.0f;
-        ImGui::ColorEdit4("Fill Color", &fill_color.x);
-        ((Path *)(manager->entities_[i]))->set_fill_color((unsigned char)(fill_color.x*255),
-                                                        (unsigned char)(fill_color.y*255),
-                                                        (unsigned char)(fill_color.z*255),
-                                                        (unsigned char)(fill_color.w*255));
-
-        static ImVec4 border_color = {(float)(((Path *)(manager->entities_[i]))->border_color_.red_/255.0f),
-                                      (float)(((Path *)(manager->entities_[i]))->border_color_.green_/255.0f),
-                                      (float)(((Path *)(manager->entities_[i]))->border_color_.blue_/255.0f),
-                                      (float)(((Path *)(manager->entities_[i]))->border_color_.alpha_/255.0f)};
-        if(border_color.w > 255.0f) border_color.w = 255.0f;
-        ImGui::ColorEdit4("Border Color", &border_color.x);
-        ((Path *)(manager->entities_[i]))->set_border_color((unsigned char)(border_color.x*255),
-                                                        (unsigned char)(border_color.y*255),
-                                                        (unsigned char)(border_color.z*255),
-                                                        (unsigned char)(border_color.w*255));
-      }
+      
 
       if (manager->animation_configs_.size() >= 1) {
-        if (ImGui::BeginCombo("Animation Config", &manager->animation_configs_[manager->entities_[i]->animation_config_selected].name[0])) {
-          for (int j = 0; j < manager->animation_configs_.size(); j++) {
-            const bool is_selected = (manager->entities_[i]->animation_config_selected == j);
-            if (manager->animation_configs_[j].name.length() == 0) {
-              if (ImGui::Selectable(" ", is_selected))
-                manager->entities_[i]->animation_config_selected = j;
-            } else {
-              if (ImGui::Selectable(&manager->animation_configs_[j].name[0], is_selected))
-                manager->entities_[i]->animation_config_selected = j;
-            }
-
-            // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-            if (is_selected)
-              ImGui::SetItemDefaultFocus();
-          }
-          ImGui::EndCombo();
+          if (ImGui::Combo("AnimationConfig", &manager->entities_[i]->animation_config_selected,
+              manager->animation_configs_names_.get(), 4)) {
+              if (manager->entities_[i]->animation_config_selected >= manager->animation_configs_.size()) {
+                  manager->entities_[i]->animation_config_selected = manager->animation_configs_.size() - 1;
+              }
         }
 
         if (ImGui::Button("Animate!")) {
@@ -430,28 +427,39 @@ void EntitiesManagerWindow() {
             manager->entities_[i]->anim_instance_->set_elapsed_time(1, manager->entities_[i]->anim_instance_->get_duration(1));
             manager->entities_[i]->anim_instance_->set_elapsed_time(2, manager->entities_[i]->anim_instance_->get_duration(2));
           }
-          if(ImGui::Button("Delete Entity")){
-          //Clear from vector and then delete
-            delete manager->entities_[i];
-            manager->entities_.erase(manager->entities_.begin()+i);
-          }
         }
+      }
+
+      if (nullptr == manager->entities_[i]->anim_instance_){
+        if (ImGui::Button("Delete Entity")) {
+            //Clear from vector and then delete
+            for (int j = 0; j < manager->root->num_children(); j++) {
+                EDK3::Node* node = manager->root->child(j);
+                if (node == manager->entities_[i]->drawable_.get()) {
+                    manager->root->removeChild(node);
+                    break;
+                }
+            }
+            delete manager->entities_[i];
+            manager->entities_.erase(manager->entities_.begin() + i);
+        }
+      }
         
+      ImGui::TreePop();
       }
       
-      */
-      ImGui::TreePop();
-    }
+      
     ImGui::PopID();
-  }
+    }
   ImGui::End();
-}
-/*
+  }
+
+
 
 void AnimationConfigsManagerWindow() {
-  manager *manager = manager::getInstance();
+  DemoManager *manager = DemoManager::getInstance();
   SetFlags(&manager->animationconfigs_window);
-  ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
+  ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
   
   ImGui::Begin("Animations Config Manager", &manager->animationconfigs_window.popen, manager->animationconfigs_window.window_flags);
   WindowMenu(&manager->animationconfigs_window);
@@ -459,30 +467,29 @@ void AnimationConfigsManagerWindow() {
   for (int i = 0; i < manager->animation_configs_.size(); i++) {
     bool deletable=true;
     ImGui::PushID(i);
-    if (ImGui::TreeNode(&manager->animation_configs_[i].name[0])) {
+    if (ImGui::TreeNode(manager->animation_configs_[i].name)) {
       ImGui::Checkbox("Is Moving", &manager->animation_configs_[i].is_moving);
       if (manager->animation_configs_[i].is_moving) {
-        ImGui::InputFloat2("Move from", &manager->animation_configs_[i].move_from.x);
-        ImGui::InputFloat2("Move To", &manager->animation_configs_[i].move_to.x);
+        ImGui::InputFloat3("Move from", &manager->animation_configs_[i].move_from.x);
+        ImGui::InputFloat3("Move To", &manager->animation_configs_[i].move_to.x);
         ImGui::DragFloat("Move duration", &manager->animation_configs_[i].move_duration, 0.1f, 0.0f, manager->kMaxAnimationDuration);
-        ImGui::NewLine();
       }
 
       ImGui::Checkbox("Is Rotating", &manager->animation_configs_[i].is_rotating);
       if (manager->animation_configs_[i].is_rotating) {
-        ImGui::InputFloat("rotate from", &manager->animation_configs_[i].rotate_from);
-        ImGui::InputFloat("rotate to", &manager->animation_configs_[i].rotate_to);
+        ImGui::InputFloat3("rotate from", &manager->animation_configs_[i].rotate_from.x);
+        ImGui::InputFloat3("rotate to", &manager->animation_configs_[i].rotate_to.x);
         ImGui::DragFloat("rotate duration", &manager->animation_configs_[i].rotate_duration, 0.1f, 0.0f, manager->kMaxAnimationDuration);
-        ImGui::NewLine();
       }
 
       ImGui::Checkbox("Is Scaling", &manager->animation_configs_[i].is_scaling);
       if (manager->animation_configs_[i].is_scaling) {
-        ImGui::InputFloat2("scale from", &manager->animation_configs_[i].scale_from.x);
-        ImGui::InputFloat2("scale to", &manager->animation_configs_[i].scale_to.x);
+        ImGui::InputFloat3("scale from", &manager->animation_configs_[i].scale_from.x);
+        ImGui::InputFloat3("scale to", &manager->animation_configs_[i].scale_to.x);
         ImGui::DragFloat("scale duration", &manager->animation_configs_[i].scale_duration, 0.1f, 0.0f, manager->kMaxAnimationDuration);
       }
 
+      /*
       if (ImGui::BeginCombo("Interpolation", Interpolate::GetInterpolationTypeName(manager->animation_configs_[i].type_))) {
         for (int j = 0; j < (int)InterpolationType_None; j++) {
           InterpolationType type = static_cast<InterpolationType>(j);
@@ -498,36 +505,33 @@ void AnimationConfigsManagerWindow() {
         ImGui::EndCombo();
       }
 
+      */
+
       ImGui::DragFloat("Delay", &manager->animation_configs_[i].total_delay, 0.1f, 0.0f, 10.0f);
 
-      ImGui::InputText(" ", &manager->animation_configs_[i].temp_name);
+      ImGui::InputText(" ", manager->animation_configs_[i].temp_name,16);
       ImGui::SameLine();
 
       if (ImGui::Button("Update name")) {
-        manager->animation_configs_[i].name = manager->animation_configs_[i].temp_name;
+          snprintf(manager->animation_configs_[i].name,16, "%s", manager->animation_configs_[i].temp_name);
       }
-      if (ImGui::Button("Save")) {
-        // manager->animation_configs_[i].name = manager->animation_configs_[i].temp_name;
-        manager->db_.saveAnimation(manager->animation_configs_[i], manager->animation_configs_db_[i]);
-        manager::getInstance()->animation_configs_.clear();
-        manager::getInstance()->animation_configs_db_.clear();
-        manager->db_.runQuery("SELECT * from animations;", manager->db_.processAnimations, 0);
-      }
-      
+
       for(int j=0;j<manager->entities_.size() && deletable;j++){
-        deletable = strcmp(manager->animation_configs_[manager->entities_[j]->animation_config_selected].name.c_str(), manager->animation_configs_[i].name.c_str());
+        deletable = strcmp(manager->animation_configs_[manager->entities_[j]->animation_config_selected].name, manager->animation_configs_[i].name);
       }
 
       if (ImGui::Button("Delete")) {
         if(deletable){
           
-          if(manager->db_.deleteAnimation(&manager->animation_configs_[i], &manager->animation_configs_db_[i])){
+          //game->animation_configs_.erase(game->animation_configs_.begin() + i);
+          //if(manager->db_.deleteAnimation(&manager->animation_configs_[i], &manager->animation_configs_db_[i])){
+            manager->animation_configs_.erase(manager->animation_configs_.begin() + i);
             for(int j = 0; j < manager->entities_.size(); j++){
               if (manager->entities_[j]->animation_config_selected > i) {
                 manager->entities_[j]->animation_config_selected--;
               }
             }
-          }
+          //}
         }
         // manager->animation_configs_[i].name = manager->animation_configs_[i].temp_name;
       }
@@ -547,55 +551,7 @@ void AnimationConfigsManagerWindow() {
   ImGui::End();
 }
 
-void NewPathWindow() {
-  manager *manager = manager::getInstance();
-  static bool is_regular = true;
-  static int n_vertexes = manager->kMinPathVertexes;
-  static Vec2 vertexes[manager->kMaxPathVertexes];
-  static Vec2 position;
-  static float rotation;
-  static Vec2 scale;
-  static char n_vertexes_char[20];
-  SetFlags(&manager->newpath_window);
-  ImGui::SetNextWindowPos(ImVec2(640, 360), ImGuiCond_FirstUseEver);
-  ImGui::Begin("New Path", &manager->newpath_window.popen, manager->newpath_window.window_flags);
-  WindowMenu(&manager->newpath_window);
-  ImGui::Text("New path");
-
-  ImGui::Checkbox("Is regular", &is_regular);
-  ImGui::DragInt("Num vertexes", &n_vertexes, 1.0f, manager->kMinPathVertexes, manager->kMaxPathVertexes);
-  ImGui::InputFloat2("Position", &position.x);
-  ImGui::DragFloat("Rotation", &rotation, 0.1f, 0.0f, 6.28f);
-  ImGui::InputFloat2("Scale", &scale.x);
-
-  if (!is_regular) {
-    ImGui::NewLine();
-    ImGui::Text("Vertexes values");
-    for (int i = 0; i < n_vertexes; i++) {
-      ImGui::PushID(i);
-      snprintf(n_vertexes_char, 20, "Vertex %d", i);
-      ImGui::DragFloat2(n_vertexes_char, &vertexes[i].x, 0.01f, -1.0f, 1.0f);
-      ImGui::PopID();
-    }
-  }
-  if (ImGui::Button("Create Path")) {
-    Path *path;
-    if (is_regular) {
-      path = new Path();
-      path->InitRegularPolygon(n_vertexes);
-      path->transform_.set_position(position);
-      path->transform_.set_rotation(rotation);
-      path->transform_.set_scale(scale);
-    } else {
-      path = new Path(Color(255, 255, 255), Color(), false, vertexes, n_vertexes);
-      path->transform_.set_position(position);
-      path->transform_.set_rotation(rotation);
-      path->transform_.set_scale(scale);
-    }
-    manager->entities_.push_back(path);
-  }
-  ImGui::End();
-}
+/*
 
 void NewAnimationConfigWindow() {
   manager *manager = manager::getInstance();
@@ -680,131 +636,4 @@ void NewAnimationConfigWindow() {
 
   ImGui::End();
 }
-
-void NewTextureWindow() {
-  manager *manager = manager::getInstance();
-  static std::string path_to_sprite;
-  static bool failed_to_import = false;
-  static bool valid_path = false;
-  SetFlags(&manager->newtexture_window);
-  ImGui::SetNextWindowPos(ImVec2(640, 360), ImGuiCond_FirstUseEver);
-  ImGui::Begin("New Texture", &manager->newtexture_window.popen, manager->newtexture_window.window_flags);
-  WindowMenu(&manager->newtexture_window);
-
-  if (path_to_sprite.size() > 0) {
-    ImGui::Text("%s", &path_to_sprite[0]);
-  } else {
-    ImGui::Text(" ");
-  }
-
-  if (ImGui::Button("Browse")) {
-    auto f = pfd::open_file("Choose files to read", pfd::path::home(),
-                            {"Text Files (.png .jpg)", "*.png *.jpg",
-                             "All Files", "*"},
-                            pfd::opt::none);
-    for (std::string const &name : f.result()) {
-      for (int i = 0; i < name.size(); i++) {
-        if (name[i] < 32) {
-          valid_path = false;
-          break;
-        } else {
-          valid_path = true;
-        }
-      }
-      if (valid_path) {
-        path_to_sprite = name;
-      }
-    }
-  }
-  ImGui::SameLine();
-  if (valid_path) {
-    if (ImGui::Button("Import")) {
-      if (path_to_sprite.size() > 0) {
-        Texture *texture = Texture::CreateTexture(path_to_sprite.c_str());
-        if (nullptr != texture) {
-          manager->textures_.push_back(texture);
-          failed_to_import = false;
-          manager->newtexture_window.popen = false;
-        } else {
-          failed_to_import = true;
-        }
-      }
-    }
-    if (failed_to_import) {
-      ImGui::Text("Failed to import texture");
-    }
-  } else {
-    ImGui::Text("Path no valid, browse again");
-  }
-
-  ImGui::End();
-}
-
-void NewSpriteWindow() {
-  manager *manager = manager::getInstance();
-  static int texture_selected = 0;
-  static Vec2 position;
-  static Vec2 size;
-  static Vec2 window_size;
-
-  SetFlags(&manager->newsprite_window);
-  ImGui::SetNextWindowPos(ImVec2(640, 360), ImGuiCond_FirstUseEver);
-  ImGui::Begin("New Sprite", &manager->newsprite_window.popen, manager->newsprite_window.window_flags);
-  WindowMenu(&manager->newsprite_window);
-
-  if (manager->textures_.size() > 0) {
-
-    // const char* last_separator = strrchr(manager->textures_[texture_selected]->path_.c_str(),'\\');
-    // if( last_separator != nullptr){
-    // if (ImGui::BeginCombo("Select Texture", last_separator+1)){
-    if (ImGui::BeginCombo("Select Texture", manager->textures_[texture_selected]->path_.c_str())) {
-      for (int j = 0; j < manager->textures_.size(); j++) {
-        const bool is_selected = (texture_selected == j);
-        if (ImGui::Selectable(&manager->textures_[j]->path_[0], is_selected))
-          texture_selected = j;
-        // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-        if (is_selected)
-          ImGui::SetItemDefaultFocus();
-      }
-      ImGui::EndCombo();
-    }
-
-    ImGui::DragFloat("Pos X:", &position.x, 1.0f, -1.0f * manager->textures_[texture_selected]->width(), 0.0f);
-    ImGui::DragFloat("Pos Y:", &position.y, 1.0f, -1.0f * manager->textures_[texture_selected]->height(), 0.0f);
-
-    if (size.x > (manager->textures_[texture_selected]->width() + position.x)) {
-      size.x = manager->textures_[texture_selected]->width() + position.x;
-    }
-    if (size.y > (manager->textures_[texture_selected]->height() + position.y)) {
-      size.y = manager->textures_[texture_selected]->height() + position.y;
-    }
-    ImGui::DragFloat("Size X", &size.x, 1.0f, 0.0f, (float)(manager->textures_[texture_selected]->width() + position.x));
-    ImGui::DragFloat("Size Y", &size.y, 1.0f, 0.0f, (float)(manager->textures_[texture_selected]->height() + position.y));
-
-    ImGui::BeginChild("TextureToLoad", ImVec2(size.x, size.y), true, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-    ImGui::SetCursorPos(ImVec2(position.x, position.y));
-    ImageFromTexture(manager->textures_[texture_selected]->handle_);
-    // }else{
-    //   ImGui::Text("Error getting textures");
-    // }
-
-    ImGui::EndChild();
-
-    if (ImGui::Button("Create")) {
-      Sprite *sprite = new Sprite(*manager->textures_[texture_selected], (int)(position.x * -1.0f),
-                                  (int)(position.y * -1.0f),
-                                  (int)size.x,
-                                  (int)size.y);
-      if (nullptr != sprite) {
-        manager->entities_.push_back(sprite);
-      }
-    }
-
-  } else {
-    ImGui::Text("There are no textures imported");
-  }
-
-  ImGui::End();
-}
-
 */

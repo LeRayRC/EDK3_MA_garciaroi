@@ -22,6 +22,7 @@
 #include "postprocess_basic.h"
 #include "anim_library/animationinstance.h"
 #include "anim_library/entity.h"
+
 #include "geometry_custom_sphere.h"
 #include "geometry_custom_cube.h"
 #include "geometry_custom_quad.h"
@@ -60,14 +61,13 @@ class DemoManager{
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> boat_geometry;
 
     std::vector<Entity*> entities_;
+    std::vector<AnimationConfig> animation_configs_;
+    EDK3::scoped_array<char> animation_configs_names_;
     
     EDK3::ref_ptr<EDK3::TerrainCustom> terrain_custom;
     EDK3::ref_ptr<EDK3::RenderTarget> render_target;
     EDK3::ref_ptr<EDK3::PostprocessBasic> mat_postprocess;
     EDK3::ref_ptr<EDK3::PostprocessBasic::PostprocessBasicSettings> mat_postprocess_settings;
-
-    Entity* entity_boat_;
-    AnimationConfig anim_config_boat_;
 
     float dt;
     bool enable_postprocess;
@@ -81,7 +81,10 @@ class DemoManager{
     ImGuiWindow camera_window;
     ImGuiWindow control_window;
     ImGuiWindow entities_window;
+    ImGuiWindow animationconfigs_window;
 
+    float kMaxAnimationDuration = 60.0f;
+    int animation_configs_counter;
   //Methods
   private:
     // Constructor

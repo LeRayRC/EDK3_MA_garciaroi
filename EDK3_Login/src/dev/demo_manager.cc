@@ -28,31 +28,17 @@ void DemoManager::init() {
   manager->enable_postprocess = false;
   manager->enable_wireframe = false;
 
-  entity_boat_ = new Entity();
-  anim_config_boat_.is_moving = true;
-  anim_config_boat_.is_rotating = true;
-  anim_config_boat_.is_scaling = true;
-  anim_config_boat_.total_delay = 0.0f;
-  anim_config_boat_.move_duration = 10000.0f;
-  anim_config_boat_.move_from = Vec3(0.0f, 0.0f, 0.0f);
-  anim_config_boat_.move_to = Vec3(0.0, -50.0f, 0.0f);
-  anim_config_boat_.scale_duration = 10000.0f;
-  anim_config_boat_.scale_from = Vec3(3.0f, 3.0f, 3.0f);
-  anim_config_boat_.scale_to = Vec3(60.0, 60.0f, 60.0f);
-  anim_config_boat_.rotate_duration = 10000.0f;
-  anim_config_boat_.rotate_from = Vec3(0.0f, 0.0f, 0.0f);
-  anim_config_boat_.rotate_to = Vec3(0.0, 180.0f, 0.0f);
-  anim_config_boat_.type_ = InterpolationType_Linear;
-
-  //entities_.push_back(entity_boat_);
-
   InitDefaultWindowFlags(&manager->settings_window);
   InitDefaultWindowFlags(&manager->lights_window);
   InitDefaultWindowFlags(&manager->performance_window);
   InitDefaultWindowFlags(&manager->camera_window);
   InitDefaultWindowFlags(&manager->control_window);
   InitDefaultWindowFlags(&manager->entities_window);
+  InitDefaultWindowFlags(&manager->animationconfigs_window);
+  performance_window.popen = false;
+  camera_window.popen = false;
 
+  animation_configs_counter = 0;
   srand((unsigned int)time(NULL));
 }
 
