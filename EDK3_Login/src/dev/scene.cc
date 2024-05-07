@@ -154,13 +154,6 @@ void InitSceneGeometries() {
 void InitSceneMaterials() {
     EDK3::scoped_array<char> error_log;
     DemoManager* manager = DemoManager::getInstance();
-    //Loading texture:
-    EDK3::ref_ptr<EDK3::Texture> texture;
-    EDK3::Texture::Load("./test/cuesta.png", &texture);
-    if (!texture) {
-        printf("Can't load texture.png\n");
-        exit(-2);
-    }
 
     //Initializing the material and its settings:
     manager->mat_basic->init(error_log, "./shaders/basicVertex.vs", "./shaders/light_shader.fs");
@@ -208,7 +201,7 @@ void InitSceneMaterials() {
     manager->mat_light_settings->light_confs_[2].cutoff_ = 0.946f;
 
 
-    manager->mat_light_settings->set_texture(texture.get());
+    manager->mat_light_settings->set_texture(manager->texture_sand.get());
 
     
     if (manager->show_normals) {
@@ -306,4 +299,14 @@ void InitSceneEntities() {
     }
     obj_entity = nullptr;
 
+}
+
+void InitSceneTextures() {
+    DemoManager* manager = DemoManager::getInstance();
+
+    EDK3::Texture::Load("./textures/sand_texture.png", &manager->texture_sand);
+    if (!manager->texture_sand) {
+        printf("Error loading sand texture\n");
+        exit(-2);
+    }
 }

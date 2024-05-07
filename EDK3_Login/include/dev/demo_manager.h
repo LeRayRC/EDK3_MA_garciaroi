@@ -69,6 +69,8 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::PostprocessBasic> mat_postprocess;
     EDK3::ref_ptr<EDK3::PostprocessBasic::PostprocessBasicSettings> mat_postprocess_settings;
 
+    EDK3::ref_ptr<EDK3::Texture> texture_sand;
+
     float dt;
     bool enable_postprocess;
     bool enable_wireframe;

@@ -195,45 +195,44 @@ void LightsWindow() {
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> selected_light_settings = manager->mat_light_settings.get();
     char name[10];
     ImGui::DragFloat3("Ambient Color", &EDK3::MaterialCustom::LightSettings::ambient_color_.x, 0.01f, 0.0f, 1.0f);
+    ImGui::Checkbox("Use Texture", &selected_light_settings->use_texture_);
     for (int i = 0; i < 8; i++) {
         bool deletable = true;
         ImGui::PushID(i);
         sprintf(name, "Light %d\0", i + 1);
         if (ImGui::TreeNode(name)) {
             ImGui::Checkbox("Enabled", &selected_light_settings->light_confs_[i].enabled_);
-            if (selected_light_settings->light_confs_[i].enabled_) {
-                ImGui::Text("Enabled");
+            
+            ImGui::Combo("Type", &selected_light_settings->light_confs_[i].type_,
+                light_types, 3);
+            if (&selected_light_settings->light_confs_[i] != 0) {
+                ImGui::DragFloat3("Position", &selected_light_settings->light_confs_[i].pos_.x, 0.1f, -100.0f, 100.0f);
             }
-                ImGui::Combo("Type", &selected_light_settings->light_confs_[i].type_,
-                    light_types, 3);
-                if (&selected_light_settings->light_confs_[i] != 0) {
-                    ImGui::DragFloat3("Position", &selected_light_settings->light_confs_[i].pos_.x, 0.1f, -100.0f, 100.0f);
-                }
 
-                if (selected_light_settings->light_confs_[i].type_ == 0) {
-                    ImGui::DragFloat3("Direction", &selected_light_settings->light_confs_[i].dir_.x, 0.1f, -1.0f, 1.0f);
-                }
-                if (selected_light_settings->light_confs_[i].type_ == 2) {
-                    ImGui::DragFloat3("Spot Direction", &selected_light_settings->light_confs_[i].spot_dir_.x, 0.01f, -1.0f, 1.0f);
-                }
-                ImGui::DragFloat3("Diffuse Color", &selected_light_settings->light_confs_[i].diff_color_.x, 0.01f, 0.0f, 1.0f);
-                ImGui::Separator();
-                ImGui::DragFloat3("Specular Color", &selected_light_settings->light_confs_[i].spec_color_.x, 0.01f, 0.0f, 1.0f);
-                ImGui::DragFloat3("Camera pos", &selected_light_settings->light_confs_[i].camera_pos_.x, 0.1f, -100.0f, 100.0f);
-                ImGui::InputFloat("Linear att", &selected_light_settings->light_confs_[i].linear_att_);
-                ImGui::InputFloat("Quadratic att", &selected_light_settings->light_confs_[i].quadratic_att_);
-                ImGui::InputFloat("Constant att", &selected_light_settings->light_confs_[i].constant_att_);
-                ImGui::InputFloat("Shininess", &selected_light_settings->light_confs_[i].shininess_);
-                ImGui::InputFloat("Strength", &selected_light_settings->light_confs_[i].strength_);
-                if (selected_light_settings->light_confs_[i].type_ == 2) {
-                    ImGui::DragFloat("Cutoff", &selected_light_settings->light_confs_[i].cutoff_,0.01f,-1.0f,1.0f);
-                    ImGui::DragFloat("Outer Cutoff", &selected_light_settings->light_confs_[i].outer_cutoff_, 0.01f, -1.0f, 1.0f);
-                }
-                ImGui::TreePop();
+            if (selected_light_settings->light_confs_[i].type_ == 0) {
+                ImGui::DragFloat3("Direction", &selected_light_settings->light_confs_[i].dir_.x, 0.1f, -1.0f, 1.0f);
             }
-            ImGui::PopID();
+            if (selected_light_settings->light_confs_[i].type_ == 2) {
+                ImGui::DragFloat3("Spot Direction", &selected_light_settings->light_confs_[i].spot_dir_.x, 0.01f, -1.0f, 1.0f);
+            }
+            ImGui::DragFloat3("Diffuse Color", &selected_light_settings->light_confs_[i].diff_color_.x, 0.01f, 0.0f, 1.0f);
+            ImGui::Separator();
+            ImGui::DragFloat3("Specular Color", &selected_light_settings->light_confs_[i].spec_color_.x, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat3("Camera pos", &selected_light_settings->light_confs_[i].camera_pos_.x, 0.1f, -100.0f, 100.0f);
+            ImGui::InputFloat("Linear att", &selected_light_settings->light_confs_[i].linear_att_);
+            ImGui::InputFloat("Quadratic att", &selected_light_settings->light_confs_[i].quadratic_att_);
+            ImGui::InputFloat("Constant att", &selected_light_settings->light_confs_[i].constant_att_);
+            ImGui::InputFloat("Shininess", &selected_light_settings->light_confs_[i].shininess_);
+            ImGui::InputFloat("Strength", &selected_light_settings->light_confs_[i].strength_);
+            if (selected_light_settings->light_confs_[i].type_ == 2) {
+                ImGui::DragFloat("Cutoff", &selected_light_settings->light_confs_[i].cutoff_,0.01f,-1.0f,1.0f);
+                ImGui::DragFloat("Outer Cutoff", &selected_light_settings->light_confs_[i].outer_cutoff_, 0.01f, -1.0f, 1.0f);
+            }
+        ImGui::TreePop();
         }
-        ImGui::End();
+        ImGui::PopID();
+    }
+    ImGui::End();
     }
 
 

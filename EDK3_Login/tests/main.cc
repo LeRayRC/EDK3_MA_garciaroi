@@ -48,6 +48,7 @@ void InitScene() {
     DemoManager* manager = DemoManager::getInstance();
     //Allocating root node:
     EDK3::Node* root = manager->root.get();
+    InitSceneTextures();
     InitSceneGeometries();
     InitSceneMaterials();
     InitSceneEntities();

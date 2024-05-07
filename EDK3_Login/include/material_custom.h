@@ -61,6 +61,7 @@ class MaterialCustom : public EDK3::Material {
     public:
       LightConf light_confs_[8];
       static Vec3 ambient_color_;
+      bool use_texture_;
       EDK3::ref_ptr<EDK3::Texture> texture_; 
 
       LightSettings() {

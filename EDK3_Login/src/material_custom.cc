@@ -277,15 +277,27 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
           //printf("Error uniform %s\n", name);
       }
 
-      //int slot = 0;
-      //light_set->texture()->bind(slot);
-      //unsigned int albedo_loc = program_->get_uniform_position("u_texture");
-      //if (loc != -1) {
-      //  program_->set_uniform_value(albedo_loc, EDK3::Type::T_INT_1, &slot);
-      //}
-      //else {
-      //  printf("Error uniform %s\n", name);
-      //}
+      sprintf(name, "u_use_texture\0");
+      int use_texture = light_set->use_texture_ ? 1 : 0;
+      loc = program_->get_uniform_position(name);
+      if (loc != -1) {
+          program_->set_uniform_value(loc, EDK3::Type::T_INT_1, &use_texture);
+      }
+      else {
+          printf("Error uniform %s\n", name);
+      }
+
+
+
+      int slot = 0;
+      light_set->texture()->bind(slot);
+      unsigned int albedo_loc = program_->get_uniform_position("u_texture");
+      if (loc != -1) {
+        program_->set_uniform_value(albedo_loc, EDK3::Type::T_INT_1, &slot);
+      }
+      else {
+        printf("Error uniform %s\n", name);
+      }
       return true;
     }
     return false;
