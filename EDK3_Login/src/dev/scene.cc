@@ -149,6 +149,16 @@ void InitSceneGeometries() {
         //"./textures/australia.png",   // heightmap path
         "./textures/island_heightmap.png",   // heightmap path
         true); // use heightmap
+
+    manager->water_terrain.alloc();
+    manager->water_terrain->init(256, 256, // cols , rows
+      2.0f, // height multiplier
+      1.0f, // quad size
+      0.05f, // smothness
+      40.0f, // heightmap multiplier
+      //"./textures/australia.png",   // heightmap path
+      "./textures/island_heightmap.png",   // heightmap path
+      false); // use heightmap
 }
 
 void InitSceneMaterials() {
@@ -160,6 +170,7 @@ void InitSceneMaterials() {
     manager->mat_normals->init(error_log, "./shaders/basicVertex.vs", "./shaders/basicFragment.fs");
 
     manager->mat_light_settings.alloc();
+    manager->mat_light_water_settings.alloc();
 
     manager->render_target.alloc()->init((float)kWindowWidth,
         (float)kWindowHeight, 1);
@@ -200,9 +211,10 @@ void InitSceneMaterials() {
     manager->mat_light_settings->light_confs_[2].cutoff_ = 0.960f;
     manager->mat_light_settings->light_confs_[2].cutoff_ = 0.946f;
 
-
     manager->mat_light_settings->set_texture(manager->texture_sand.get());
 
+
+    manager->mat_light_water_settings->set_texture(manager->texture_water.get());
     
     if (manager->show_normals) {
         manager->mat_selected = manager->mat_normals;
@@ -221,6 +233,18 @@ void InitSceneEntities() {
         obj_entity->set_position({ 0.0f, -100.0f, 0.0f });
         obj_entity->attachDrawable(DrawableAttached_Terrain);
         manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+
+    obj_entity = new Entity(true, "Water");
+    if (obj_entity != nullptr) {
+      obj_entity->init();
+      obj_entity->set_position({ 0.0f, -98.0f, 0.0f });
+      obj_entity->attachDrawable(DrawableAttached_Water);
+      obj_entity->drawable_->set_material_settings(manager->mat_light_water_settings.get());
+      
+      manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
 
@@ -308,5 +332,11 @@ void InitSceneTextures() {
     if (!manager->texture_sand) {
         printf("Error loading sand texture\n");
         exit(-2);
+    }
+
+    EDK3::Texture::Load("./textures/water.png", &manager->texture_water);
+    if (!manager->texture_water) {
+      printf("Error loading water texture\n");
+      exit(-2);
     }
 }

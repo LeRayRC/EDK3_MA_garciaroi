@@ -82,8 +82,14 @@ void TerrainCustom::init(const int num_cols, const int num_rows,
   MeshVtx* mesh_elements_pointer = mesh_elements.get();
   for (int i = 0; i < (num_rows+1); i++) {
     for (int j = 0; j < (num_cols+1); j++){
-        float texel_value = GetTexelValue(data, heightmap_nChannels, heightmap_width, heightmap_height, j, i, num_cols, num_rows);
-        if (texel_value > 1.0f) texel_value = 1.0f;
+        float texel_value;
+        if (use_heightmap) {
+          texel_value = GetTexelValue(data, heightmap_nChannels, heightmap_width, heightmap_height, j, i, num_cols, num_rows);
+          if (texel_value > 1.0f) texel_value = 1.0f;
+        }
+        else {
+          texel_value = 0.0f;
+        }
         if (is_centered) {
             mesh_elements_pointer[j + i * (num_cols + 1)].pos = Vec3(size * j - ((size * num_cols) / 2),
                                                                      texel_value * heightmap_mult +  SimplexNoise::noise(size * j * smoothness ,size * i * smoothness) * height_mult,

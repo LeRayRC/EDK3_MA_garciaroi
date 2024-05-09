@@ -49,6 +49,7 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_basic;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_normals;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings;
+    EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_water_settings;
 
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
 
@@ -65,11 +66,14 @@ class DemoManager{
     EDK3::scoped_array<char> animation_configs_names_;
     
     EDK3::ref_ptr<EDK3::TerrainCustom> terrain_custom;
+    EDK3::ref_ptr<EDK3::TerrainCustom> water_terrain;
+
     EDK3::ref_ptr<EDK3::RenderTarget> render_target;
     EDK3::ref_ptr<EDK3::PostprocessBasic> mat_postprocess;
     EDK3::ref_ptr<EDK3::PostprocessBasic::PostprocessBasicSettings> mat_postprocess_settings;
 
     EDK3::ref_ptr<EDK3::Texture> texture_sand;
+    EDK3::ref_ptr<EDK3::Texture> texture_water;
 
     float dt;
     bool enable_postprocess;

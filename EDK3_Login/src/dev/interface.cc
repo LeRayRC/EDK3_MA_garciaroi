@@ -316,7 +316,7 @@ void ControlWindow() {
 }
 
 void EntitiesManagerWindow() {
-  static const char drawable_types[60] = { "Cube\0Quad\0Sphere\0Terrain\0Donut\0Tree\0House\0Boat" };
+  static const char drawable_types[60] = { "Cube\0Quad\0Sphere\0Terrain\0Donut\0Tree\0House\0Boat\0Water" };
   DemoManager* manager = DemoManager::getInstance();
   SetFlags(&manager->entities_window);
   ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);

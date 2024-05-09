@@ -188,6 +188,9 @@ void Entity::attachDrawable(DrawableAttached drawableAttached) {
     case DrawableAttached_Boat:
         drawable_->set_geometry(manager->boat_geometry[0].get());
         break;
+    case DrawableAttached_Water:
+        drawable_->set_geometry(manager->water_terrain.get());
+        break;
     }
     drawable_->set_material(manager->mat_selected.get());
     drawable_->set_material_settings(manager->mat_light_settings.get());
