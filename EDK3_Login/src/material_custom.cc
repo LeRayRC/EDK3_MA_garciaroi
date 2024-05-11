@@ -284,7 +284,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
           program_->set_uniform_value(loc, EDK3::Type::T_INT_1, &use_texture);
       }
       else {
-          printf("Error uniform %s\n", name);
+          //printf("Error uniform %s\n", name);
       }
 
 
@@ -296,7 +296,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
         program_->set_uniform_value(albedo_loc, EDK3::Type::T_INT_1, &slot);
       }
       else {
-        printf("Error uniform %s\n", name);
+        //printf("Error uniform %s\n", name);
       }
       return true;
     }

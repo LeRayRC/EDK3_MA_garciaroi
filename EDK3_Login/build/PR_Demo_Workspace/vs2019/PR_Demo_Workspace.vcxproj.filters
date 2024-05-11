@@ -201,6 +201,24 @@
     <ClInclude Include="..\..\..\include\camera_custom.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\dev\custom_gpu_buffer.h">
+      <Filter>include\dev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\dev\custom_gpu_camera.h">
+      <Filter>include\dev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\dev\custom_gpu_manager.h">
+      <Filter>include\dev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\dev\custom_gpu_program.h">
+      <Filter>include\dev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\dev\custom_gpu_shader.h">
+      <Filter>include\dev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\dev\custom_gpu_texture.h">
+      <Filter>include\dev</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\dev\demo_manager.h">
       <Filter>include\dev</Filter>
     </ClInclude>
@@ -280,6 +298,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\anim_library\transform.cc">
       <Filter>src\anim_library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dev\custom_gpu_buffer.cc">
+      <Filter>src\dev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dev\custom_gpu_manager.cc">
+      <Filter>src\dev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dev\custom_gpu_program.cc">
+      <Filter>src\dev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dev\custom_gpu_shader.cc">
+      <Filter>src\dev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dev\custom_gpu_texture.cc">
+      <Filter>src\dev</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\dev\demo_manager.cc">
       <Filter>src\dev</Filter>

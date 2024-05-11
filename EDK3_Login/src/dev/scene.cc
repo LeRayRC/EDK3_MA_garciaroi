@@ -167,10 +167,10 @@ void InitSceneMaterials() {
 
     //Initializing the material and its settings:
     manager->mat_basic->init(error_log, "./shaders/basicVertex.vs", "./shaders/light_shader.fs");
-    manager->mat_normals->init(error_log, "./shaders/basicVertex.vs", "./shaders/basicFragment.fs");
+    manager->mat_normals->init(error_log, "./shaders/basicVertex.vs", "./shaders/normalFragment.fs");
 
-    manager->mat_light_settings.alloc();
-    manager->mat_light_water_settings.alloc();
+    //manager->mat_light_settings.alloc();
+    //manager->mat_light_water_settings.alloc();
 
     manager->render_target.alloc()->init((float)kWindowWidth,
         (float)kWindowHeight, 1);
@@ -186,30 +186,30 @@ void InitSceneMaterials() {
 
 
     for (int i = 0; i < 3; i++) {
-        manager->mat_light_settings->light_confs_[i].enabled_ = true;
+        manager->mat_light_settings_general->light_confs_[i].enabled_ = true;
     }
 
-    manager->mat_light_settings->light_confs_[0].type_ = 0;
-    manager->mat_light_settings->light_confs_[0].dir_ = Vec3(0.0f, 0.6f, 0.9f);
-    manager->mat_light_settings->light_confs_[0].diff_color_ = Vec3(0.24f, 0.37f, 0.32f);
+    manager->mat_light_settings_general->light_confs_[0].type_ = 0;
+    manager->mat_light_settings_general->light_confs_[0].dir_ = Vec3(0.0f, 0.6f, 0.9f);
+    manager->mat_light_settings_general->light_confs_[0].diff_color_ = Vec3(0.24f, 0.37f, 0.32f);
 
-    manager->mat_light_settings->light_confs_[1].type_ = 1;
-    manager->mat_light_settings->light_confs_[1].pos_ = Vec3(17.0f, -63.0f, -24.0f);
-    manager->mat_light_settings->light_confs_[1].dir_ = Vec3(0.0f, 0.0f, 0.0f);
-    manager->mat_light_settings->light_confs_[1].diff_color_ = Vec3(1.0f, 1.0f, 0.0f);
-    manager->mat_light_settings->light_confs_[1].linear_att_ = 0.0027f;
-    manager->mat_light_settings->light_confs_[1].quadratic_att_ = 0.0028f;
-    manager->mat_light_settings->light_confs_[1].shininess_ = 45.0f;
+    manager->mat_light_settings_general->light_confs_[1].type_ = 1;
+    manager->mat_light_settings_general->light_confs_[1].pos_ = Vec3(17.0f, -63.0f, -24.0f);
+    manager->mat_light_settings_general->light_confs_[1].dir_ = Vec3(0.0f, 0.0f, 0.0f);
+    manager->mat_light_settings_general->light_confs_[1].diff_color_ = Vec3(1.0f, 1.0f, 0.0f);
+    manager->mat_light_settings_general->light_confs_[1].linear_att_ = 0.0027f;
+    manager->mat_light_settings_general->light_confs_[1].quadratic_att_ = 0.0028f;
+    manager->mat_light_settings_general->light_confs_[1].shininess_ = 45.0f;
 
-    manager->mat_light_settings->light_confs_[2].type_ = 2;
-    manager->mat_light_settings->light_confs_[2].pos_ = Vec3(33.0f, -55.0f, -23.0f);
-    manager->mat_light_settings->light_confs_[2].spot_dir_ = Vec3(-0.57f, -1.0f, 0.53f);
-    manager->mat_light_settings->light_confs_[2].diff_color_ = Vec3(1.0f, 0.0f, 0.0f);
-    manager->mat_light_settings->light_confs_[2].linear_att_ = 0.014f;
-    manager->mat_light_settings->light_confs_[2].quadratic_att_ = 0.0007f;
-    manager->mat_light_settings->light_confs_[2].shininess_ = 90.0f;
-    manager->mat_light_settings->light_confs_[2].cutoff_ = 0.960f;
-    manager->mat_light_settings->light_confs_[2].cutoff_ = 0.946f;
+    manager->mat_light_settings_general->light_confs_[2].type_ = 2;
+    manager->mat_light_settings_general->light_confs_[2].pos_ = Vec3(33.0f, -55.0f, -23.0f);
+    manager->mat_light_settings_general->light_confs_[2].spot_dir_ = Vec3(-0.57f, -1.0f, 0.53f);
+    manager->mat_light_settings_general->light_confs_[2].diff_color_ = Vec3(1.0f, 0.0f, 0.0f);
+    manager->mat_light_settings_general->light_confs_[2].linear_att_ = 0.014f;
+    manager->mat_light_settings_general->light_confs_[2].quadratic_att_ = 0.0007f;
+    manager->mat_light_settings_general->light_confs_[2].shininess_ = 90.0f;
+    manager->mat_light_settings_general->light_confs_[2].cutoff_ = 0.960f;
+    manager->mat_light_settings_general->light_confs_[2].cutoff_ = 0.946f;
 
     manager->mat_light_settings->set_texture(manager->texture_sand.get());
 
@@ -281,15 +281,6 @@ void InitSceneEntities() {
         obj_entity->init();
         obj_entity->set_position({ 26.0f, -30.0f, -28.0f });
         obj_entity->attachDrawable(DrawableAttached_Donut);
-        manager->entities_.push_back(obj_entity);
-    }
-    obj_entity = nullptr;
-
-    obj_entity = new Entity(true, "Quad");
-    if (obj_entity != nullptr) {
-        obj_entity->init();
-        obj_entity->set_position({ 80.0f, -15.0f, 0.0f });
-        obj_entity->attachDrawable(DrawableAttached_Quad);
         manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;

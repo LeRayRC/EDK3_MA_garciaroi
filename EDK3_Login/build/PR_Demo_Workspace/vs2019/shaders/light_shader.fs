@@ -114,10 +114,10 @@ void main(){
             }
         }
     }
-    // FragColor = vec4(final_color, 1.0);
-    // if(1 == u_use_texture){
-    //   FragColor *= texture(u_texture,uv);
-    // }
+    FragColor = vec4(final_color, 1.0);
+    if(1 == u_use_texture){
+      FragColor *= texture(u_texture,uv);
+    }
 
-    FragColor = texture(u_texture,uv);
+    //FragColor = texture(u_texture,uv);
 }

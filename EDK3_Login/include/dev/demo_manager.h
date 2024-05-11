@@ -48,8 +48,11 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::Node> root;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_basic;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_normals;
+    EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings_general;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_water_settings;
+
+    EDK3::scoped_array<EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings>> light_materials_settings;
 
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
 

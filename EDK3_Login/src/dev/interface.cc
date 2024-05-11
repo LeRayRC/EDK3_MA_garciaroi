@@ -192,7 +192,7 @@ void LightsWindow() {
     ImGui::Begin("Lights Config", &manager->lights_window.popen, manager->lights_window.window_flags);
     WindowMenu(&manager->lights_window);
 
-    EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> selected_light_settings = manager->mat_light_settings.get();
+    EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> selected_light_settings = manager->mat_light_settings_general;
     char name[10];
     ImGui::DragFloat3("Ambient Color", &EDK3::MaterialCustom::LightSettings::ambient_color_.x, 0.01f, 0.0f, 1.0f);
     ImGui::Checkbox("Use Texture", &selected_light_settings->use_texture_);

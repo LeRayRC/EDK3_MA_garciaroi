@@ -212,6 +212,12 @@
     <ClInclude Include="..\..\..\include\anim_library\math_utils.h" />
     <ClInclude Include="..\..\..\include\anim_library\transform.h" />
     <ClInclude Include="..\..\..\include\camera_custom.h" />
+    <ClInclude Include="..\..\..\include\dev\custom_gpu_buffer.h" />
+    <ClInclude Include="..\..\..\include\dev\custom_gpu_camera.h" />
+    <ClInclude Include="..\..\..\include\dev\custom_gpu_manager.h" />
+    <ClInclude Include="..\..\..\include\dev\custom_gpu_program.h" />
+    <ClInclude Include="..\..\..\include\dev\custom_gpu_shader.h" />
+    <ClInclude Include="..\..\..\include\dev\custom_gpu_texture.h" />
     <ClInclude Include="..\..\..\include\dev\demo_manager.h" />
     <ClInclude Include="..\..\..\include\dev\interface.h" />
     <ClInclude Include="..\..\..\include\dev\scene.h" />
@@ -240,6 +246,11 @@
     <ClCompile Include="..\..\..\src\anim_library\entity.cc" />
     <ClCompile Include="..\..\..\src\anim_library\interpolate.cc" />
     <ClCompile Include="..\..\..\src\anim_library\transform.cc" />
+    <ClCompile Include="..\..\..\src\dev\custom_gpu_buffer.cc" />
+    <ClCompile Include="..\..\..\src\dev\custom_gpu_manager.cc" />
+    <ClCompile Include="..\..\..\src\dev\custom_gpu_program.cc" />
+    <ClCompile Include="..\..\..\src\dev\custom_gpu_shader.cc" />
+    <ClCompile Include="..\..\..\src\dev\custom_gpu_texture.cc" />
     <ClCompile Include="..\..\..\src\dev\demo_manager.cc" />
     <ClCompile Include="..\..\..\src\dev\interface.cc" />
     <ClCompile Include="..\..\..\src\dev\scene.cc" />

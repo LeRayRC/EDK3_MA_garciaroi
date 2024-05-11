@@ -21,7 +21,11 @@ void DemoManager::init() {
 
   manager->mat_basic.alloc();
   manager->mat_normals.alloc();
-  manager->mat_light_settings.alloc();
+  manager->light_materials_settings.alloc(2);
+  manager->mat_light_settings_general.alloc();
+  manager->mat_light_settings = manager->light_materials_settings[0].alloc();
+  manager->mat_light_water_settings = manager->light_materials_settings[1].alloc();
+
 
   manager->dt = 0.0f;
   manager->show_normals = false;

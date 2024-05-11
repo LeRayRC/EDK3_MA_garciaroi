@@ -36,6 +36,7 @@
 #include "interface.h"
 #include "scene.h"
 #include "anim_library/entity.h"
+#include "dev/custom_gpu_manager.h"
 
 Vec3 EDK3::MaterialCustom::LightSettings::ambient_color_ = Vec3(0.0f, 0.0f, 0.0f);
 
@@ -100,6 +101,18 @@ void UpdateFn() {
         manager->entities_[i]->update();
     }
 
+    //Update lights scoped array
+    for (int i = 0; i < manager->light_materials_settings.size(); i++) {
+        manager->light_materials_settings[i]->ambient_color_ =
+            manager->mat_light_settings_general->ambient_color_;
+        for (int j = 0; j < 8; j++) {
+            manager->light_materials_settings[i]->light_confs_[j] =
+                manager->mat_light_settings_general->light_confs_[j];
+        }
+        manager->light_materials_settings[i]->use_texture_ =
+            manager->mat_light_settings_general->use_texture_;
+    }
+
     /*EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
     if (manager->show_normals) {
       mat_selected = manager->mat_normals;
@@ -145,6 +158,8 @@ void RenderFn() {
 
 
 int ESAT::main(int argc, char** argv) {
+    EDK3::dev::CustomGPUManager GPU;
+    EDK3::dev::GPUManager::ReplaceGPUManagerImplementation(&GPU);
     DemoManager* manager = DemoManager::getInstance();
     ESAT::WindowInit(kWindowWidth, kWindowHeight);
     manager->init();
@@ -152,6 +167,7 @@ int ESAT::main(int argc, char** argv) {
     double last_time = ESAT::Time();
     while (!ESAT::IsSpecialKeyDown(ESAT::kSpecialKey_Escape) &&
         ESAT::WindowIsOpened()) {
+        GPU.enableCullFaces(EDK3::dev::GPUManager::FaceType::kFace_Back);
         UpdateFn();
         RenderFn();
         manager->dt = ESAT::Time() - last_time;
