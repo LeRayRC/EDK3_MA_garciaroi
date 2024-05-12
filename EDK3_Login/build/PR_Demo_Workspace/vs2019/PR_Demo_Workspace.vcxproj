@@ -247,6 +247,7 @@
     <ClCompile Include="..\..\..\src\anim_library\interpolate.cc" />
     <ClCompile Include="..\..\..\src\anim_library\transform.cc" />
     <ClCompile Include="..\..\..\src\dev\custom_gpu_buffer.cc" />
+    <ClCompile Include="..\..\..\src\dev\custom_gpu_camera.cc" />
     <ClCompile Include="..\..\..\src\dev\custom_gpu_manager.cc" />
     <ClCompile Include="..\..\..\src\dev\custom_gpu_program.cc" />
     <ClCompile Include="..\..\..\src\dev\custom_gpu_shader.cc" />

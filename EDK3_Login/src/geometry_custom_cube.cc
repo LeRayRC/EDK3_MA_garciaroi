@@ -8,8 +8,7 @@
 
 #include "geometry_custom_cube.h"
 #include "ESAT/math.h"
-#include "EDK3/dev/gpumanager.h"
-#include "EDK3/dev/gpumanager.h"
+#include "dev/custom_gpu_manager.h"
 
 namespace EDK3 {
 
@@ -328,7 +327,8 @@ namespace EDK3 {
     void CubeCustom::render() const {
         //TODO
         EDK3::dev::GPUManager::Instance()->drawElements
-        (draw_mode_, order_buffer->size(), order_buffer.get(), EDK3::Type::T_UINT, 0);
+        (EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Triangles, 
+            order_buffer->size(), order_buffer.get(), EDK3::Type::T_UINT, 0);
     }
 
 } //EDK3

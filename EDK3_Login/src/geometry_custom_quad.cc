@@ -8,8 +8,8 @@
 
 #include "geometry_custom_quad.h"
 #include "ESAT/math.h"
-#include "EDK3/dev/gpumanager.h"
-#include "EDK3/dev/gpumanager.h"
+#include "dev/custom_gpu_manager.h"
+
 
 namespace EDK3 {
 
@@ -126,7 +126,8 @@ bool QuadCustom::bindAttribute(const Attribute a,
 void QuadCustom::render() const {
   //TODO
     EDK3::dev::GPUManager::Instance()->drawElements
-    (draw_mode_, 6, order_buffer.get(), EDK3::Type::T_UINT, 0);
+    (EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Triangles,
+        6, order_buffer.get(), EDK3::Type::T_UINT, 0);
 }
 
 } //EDK3

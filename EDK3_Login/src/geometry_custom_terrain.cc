@@ -9,7 +9,7 @@
 #include "geometry_custom_terrain.h"
 
 #include "ESAT/math.h"
-#include "EDK3/dev/gpumanager.h"
+#include "dev/custom_gpu_manager.h"
 #include "Perlin/SimplexNoise.h"
 #include "math_helpers.h"
 #include "math_library/vector_3.h"
@@ -238,7 +238,7 @@ bool TerrainCustom::bindAttribute(const Attribute a,
 void TerrainCustom::render() const {
   //TODO
     EDK3::dev::GPUManager::Instance()->drawElements
-    (draw_mode_, num_cols_ * num_rows_ * 6, order_buffer.get(), EDK3::Type::T_UINT, 0);
+    (EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Triangles, num_cols_ * num_rows_ * 6, order_buffer.get(), EDK3::Type::T_UINT, 0);
 }
 
 } //EDK3

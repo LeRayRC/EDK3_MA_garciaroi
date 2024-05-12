@@ -138,6 +138,7 @@ void UpdateFn() {
 
 void RenderFn() {
     DemoManager* manager = DemoManager::getInstance();
+    
     //For every frame... determine what's visible:
     manager->camera->doCull(manager->root.get());
 
@@ -146,6 +147,8 @@ void RenderFn() {
     }
     //Rendering the scene:
     EDK3::dev::GPUManager::CheckGLError("begin Render-->");
+    
+    manager->GPU.clearFrameBuffer(manager->clear_rgba);
     manager->camera->doRender();
     EDK3::dev::GPUManager::CheckGLError("end Render-->");
     if (manager->enable_postprocess) {
@@ -158,20 +161,28 @@ void RenderFn() {
 
 
 int ESAT::main(int argc, char** argv) {
-    EDK3::dev::CustomGPUManager GPU;
-    EDK3::dev::GPUManager::ReplaceGPUManagerImplementation(&GPU);
+    //EDK3::dev::CustomGPUManager GPU;
     DemoManager* manager = DemoManager::getInstance();
+    EDK3::dev::GPUManager::ReplaceGPUManagerImplementation(&manager->GPU);
     ESAT::WindowInit(kWindowWidth, kWindowHeight);
     manager->init();
     InitScene();
     double last_time = ESAT::Time();
     while (!ESAT::IsSpecialKeyDown(ESAT::kSpecialKey_Escape) &&
         ESAT::WindowIsOpened()) {
-        GPU.enableCullFaces(EDK3::dev::GPUManager::FaceType::kFace_Back);
+        manager->GPU.enableCullFaces(EDK3::dev::GPUManager::FaceType::kFace_Back);
+        manager->GPU.enableDepthTest(EDK3::dev::GPUManager::CompareFunc::kCompareFunc_LessOrEqual);
         UpdateFn();
+        if (manager->enable_wireframe) {
+            manager->GPU.draw_mode_ = EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Lines;
+        }
+        else {
+            manager->GPU.draw_mode_ = EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Triangles;
+        }
         RenderFn();
         manager->dt = ESAT::Time() - last_time;
         last_time = ESAT::Time();
+        manager->GPU.draw_mode_ = EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Triangles;
         WindowsController();
         ImGui::Render();
         ESAT::WindowFrame();

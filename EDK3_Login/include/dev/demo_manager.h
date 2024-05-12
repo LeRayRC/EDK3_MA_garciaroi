@@ -28,6 +28,8 @@
 #include "geometry_custom_quad.h"
 #include "geometry_custom_surface.h"
 #include "geometry_custom_obj.h"
+#include "dev/custom_gpu_camera.h"
+#include "dev/custom_gpu_manager.h"
 
 const int kWindowWidth = 1280;
 const int kWindowHeight = 768;
@@ -44,10 +46,15 @@ class DemoManager{
     static DemoManager* instance;
   public:
 
-    EDK3::ref_ptr<EDK3::CameraCustom> camera;
+    //EDK3::ref_ptr<EDK3::CameraCustom> camera;
+    EDK3::dev::CustomGPUManager GPU;
+    float clear_rgba[4] = { 1.0f,1.0f,1.0f,1.0f };
+
+    EDK3::ref_ptr<EDK3::dev::CustomGPUCamera> camera;
     EDK3::ref_ptr<EDK3::Node> root;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_basic;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_normals;
+    EDK3::ref_ptr<EDK3::MaterialCustom> mat_wireframe;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings_general;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_water_settings;

@@ -33,14 +33,14 @@ namespace EDK3 {
     void set_name(const char *name) { name_.copy(name, name+strlen(name)+1); }
     const char* name() const { return name_.get(); }
 
-	void setDrawMode(EDK3::dev::GPUManager::DrawMode mode) {
+	/*void setDrawMode(EDK3::dev::GPUManager::DrawMode mode) {
 		draw_mode_ = mode;
-	}
+	}*/
 
   protected:
     Geometry() {}
     virtual ~Geometry() {}
-	EDK3::dev::GPUManager::DrawMode draw_mode_ = EDK3::dev::GPUManager::DrawMode::kDrawMode_Triangles;
+	//EDK3::dev::GPUManager::DrawMode draw_mode_ = EDK3::dev::GPUManager::DrawMode::kDrawMode_Triangles;
 
   private:
     scoped_array<char> name_;

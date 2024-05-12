@@ -25,6 +25,7 @@ void DemoManager::init() {
   manager->mat_light_settings_general.alloc();
   manager->mat_light_settings = manager->light_materials_settings[0].alloc();
   manager->mat_light_water_settings = manager->light_materials_settings[1].alloc();
+  manager->mat_wireframe.alloc();
 
 
   manager->dt = 0.0f;

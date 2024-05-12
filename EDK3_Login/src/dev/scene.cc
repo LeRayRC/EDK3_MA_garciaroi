@@ -168,7 +168,7 @@ void InitSceneMaterials() {
     //Initializing the material and its settings:
     manager->mat_basic->init(error_log, "./shaders/basicVertex.vs", "./shaders/light_shader.fs");
     manager->mat_normals->init(error_log, "./shaders/basicVertex.vs", "./shaders/normalFragment.fs");
-
+    manager->mat_wireframe->init(error_log, "./shaders/basicVertex.vs", "./shaders/wireframeFragment.fs");
     //manager->mat_light_settings.alloc();
     //manager->mat_light_water_settings.alloc();
 

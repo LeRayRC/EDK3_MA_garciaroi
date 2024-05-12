@@ -51,9 +51,47 @@ namespace EDK3{
         width, height, depth
       );
     }
-    /*
     
-    */
+    void CustomGPUManager::enableDepthTest(const CompareFunc f) {
+        glEnable(GL_DEPTH_TEST);
+        switch (f) {
+        case kCompareFunc_Never:
+            glDepthFunc(GL_NEVER);
+            break;
+        case kCompareFunc_Less:
+            glDepthFunc(GL_LESS);
+            break;
+        case kCompareFunc_LessOrEqual:
+            glDepthFunc(GL_LEQUAL);
+            break;
+        case kCompareFunc_Equal:
+            glDepthFunc(GL_EQUAL);
+            break;
+        case kCompareFunc_NotEqual:
+            glDepthFunc(GL_NOTEQUAL);
+            break;
+        case kCompareFunc_GreaterOrEqual:
+            glDepthFunc(GL_GEQUAL);
+            break;
+        case kCompareFunc_Greater:
+            glDepthFunc(GL_GREATER);
+            break;
+        case kCompareFunc_Always:
+            glDepthFunc(GL_ALWAYS);
+            break;
+        }
+
+    }
+    void CustomGPUManager::disableDepthTest() {
+        glDisable(GL_DEPTH_TEST);
+    }
+
+    void CustomGPUManager::clearFrameBuffer(const float rgba[4],
+        const unsigned int FrameBufferOrMask) {
+        glClearColor(rgba[0], rgba[1], rgba[2], rgba[3]);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //glClear(FrameBufferOrMask);
+    }
 
     void CustomGPUManager::enableCullFaces(const FaceType f) {
         glEnable(GL_CULL_FACE);
@@ -227,7 +265,7 @@ namespace EDK3{
       const unsigned int offset) const {
 
       GLenum m = GL_TRIANGLES;
-      switch (mode){
+      switch (draw_mode_){
         case DrawMode::kDrawMode_TriangleStrip:
           m = GL_TRIANGLE_STRIP;
           break;

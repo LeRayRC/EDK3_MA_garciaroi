@@ -21,6 +21,9 @@ namespace dev {
 
 class CustomGPUManager : public EDK3::dev::GPUManager {
  public:
+
+     DrawMode draw_mode_;
+
   virtual void newShader(EDK3::ref_ptr<EDK3::dev::Shader> *output) override;
   virtual void newProgram(EDK3::ref_ptr<EDK3::dev::Program> *output) override;
   virtual void newBuffer(EDK3::ref_ptr<EDK3::dev::Buffer> *output) override;
@@ -41,13 +44,13 @@ class CustomGPUManager : public EDK3::dev::GPUManager {
    */
   /*
   virtual void newFramebuffer(EDK3::ref_ptr<Framebuffer>* output) override;
+  */
   virtual void clearFrameBuffer(const float rgba[4],
                                 const unsigned int FrameBufferOrMask =
                                 kFrameBufferColor | kFrameBufferDepth) override;
-  */
-   /*
   virtual void enableDepthTest(const CompareFunc f) override;
   virtual void disableDepthTest() override;
+   /*
    */
 
    /*

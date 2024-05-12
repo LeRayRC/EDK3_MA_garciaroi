@@ -8,8 +8,7 @@
 
 #include "geometry_custom_surface.h"
 #include "ESAT/math.h"
-#include "EDK3/dev/gpumanager.h"
-#include "EDK3/dev/gpumanager.h"
+#include "dev/custom_gpu_manager.h"
 #include "math_helpers.h"
 #include "math_library/vector_3.h"
 #include "math_library/vector_2.h"
@@ -203,7 +202,7 @@ bool SurfaceCustom::bindAttribute(const Attribute a,
 void SurfaceCustom::render() const {
   //TODO
     EDK3::dev::GPUManager::Instance()->drawElements
-    (draw_mode_, order_buffer->size(), order_buffer.get(), EDK3::Type::T_UINT, 0);
+    (EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Triangles, num_heights_ * num_revs_ * 6, order_buffer.get(), EDK3::Type::T_UINT, 0);
 }
 
 } //EDK3

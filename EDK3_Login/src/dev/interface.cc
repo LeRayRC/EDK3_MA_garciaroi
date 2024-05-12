@@ -281,8 +281,9 @@ void ControlWindow() {
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
     ImGui::Begin("Control Window", &manager->control_window.popen, manager->control_window.window_flags);
     WindowMenu(&manager->control_window);
-
-    ImGui::Checkbox("Enable Postprocess", &manager->enable_postprocess);
+    if (!manager->enable_wireframe) {
+        ImGui::Checkbox("Enable Postprocess", &manager->enable_postprocess);
+    }
     if (ImGui::Checkbox("Show normals", &manager->show_normals)) {
         EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
         if (manager->show_normals) {
@@ -296,21 +297,22 @@ void ControlWindow() {
             drawable->set_material(mat_selected.get());
         }
     }
-    if(ImGui::Checkbox("Wireframe mode", &manager->enable_wireframe)) {
-        EDK3::Node* root = manager->root.get();
-        for (int i = 0; i < root->num_children(); i++) {
-            EDK3::Geometry* geometry = dynamic_cast<EDK3::Drawable*>(root->child(i))->geometry();
-            if (geometry) {
-                if (manager->enable_wireframe) {
-                    geometry->setDrawMode(EDK3::dev::GPUManager::DrawMode::kDrawMode_Lines);
-                }
-                else {
-                    geometry->setDrawMode(EDK3::dev::GPUManager::DrawMode::kDrawMode_Triangles);
-                }
+    if (!manager->enable_postprocess) {
+        if(ImGui::Checkbox("Wireframe mode", &manager->enable_wireframe)){
+            EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
+            if (manager->enable_wireframe) {
+                mat_selected = manager->mat_wireframe;
+            }
+            else {
+                mat_selected = manager->mat_basic;
+            }
+            for (int i = 0; i < manager->root->num_children(); i++) {
+                EDK3::Drawable* drawable = dynamic_cast<EDK3::Drawable*>(manager->root->child(i));
+                drawable->set_material(mat_selected.get());
             }
         }
-        
     }
+    ImGui::DragFloat4("Framebuffer color", manager->clear_rgba, 0.01f, 0.0f, 1.0f);
                 
     ImGui::End();
 }
