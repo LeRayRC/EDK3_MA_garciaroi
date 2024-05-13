@@ -24,6 +24,7 @@ uniform vec3 u_ambient;
 uniform Light u_lights[kMaxLights];
 uniform sampler2D u_texture;
 uniform int u_use_texture;
+uniform float u_alpha;
 
 out vec4 FragColor;
 in vec2 uv;
@@ -114,8 +115,10 @@ void main(){
             }
         }
     }
-    FragColor = vec4(final_color, 1.0);
+    FragColor = vec4(final_color, u_alpha);
     if(1 == u_use_texture){
       FragColor *= texture(u_texture,uv);
     }
+
+    //FragColor = texture(u_texture,uv);
 }
