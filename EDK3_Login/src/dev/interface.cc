@@ -105,7 +105,8 @@ void WindowSettings() {
         if (ImGui::Button("New Empty Entity")) {
             Entity* new_entity = new Entity(true,"EmptyObj");
             new_entity->init();
-            manager->entities_.push_back(new_entity);
+            auto it = manager->entities_.begin();
+            manager->entities_.insert(it,new_entity);
         }
         if (ImGui::Button("New Terrain")) {
             //Entity* new_entity = new Entity(true, "TerrainObj");
@@ -196,6 +197,7 @@ void LightsWindow() {
     char name[10];
     ImGui::DragFloat3("Ambient Color", &EDK3::MaterialCustom::LightSettings::ambient_color_.x, 0.01f, 0.0f, 1.0f);
     ImGui::Checkbox("Use Texture", &selected_light_settings->use_texture_);
+    ImGui::DragFloat("Water Transparency", &manager->mat_light_water_settings->alpha_, 0.01f, 0.0f, 1.0f);
     for (int i = 0; i < 8; i++) {
         bool deletable = true;
         ImGui::PushID(i);

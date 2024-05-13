@@ -50,6 +50,13 @@ class DemoManager{
     EDK3::dev::CustomGPUManager GPU;
     float clear_rgba[4] = { 1.0f,1.0f,1.0f,1.0f };
 
+    EDK3::dev::GPUManager::BlendParam blend_src = EDK3::dev::GPUManager::BlendParam::kBlendParam_SourceAlpha;
+    EDK3::dev::GPUManager::BlendParam blend_dst = EDK3::dev::GPUManager::BlendParam::kBlendParam_OneMinusSourceAlpha;
+    EDK3::dev::GPUManager::BlendOp blend_op = EDK3::dev::GPUManager::BlendOp::kBlendOp_Add;
+    float blend_white[4] = { 1.0f,1.0f,1.0f,1.0f };
+    float blend_black[4] = { 0.0f,0.0f,0.0f,0.0f };
+    
+
     EDK3::ref_ptr<EDK3::dev::CustomGPUCamera> camera;
     EDK3::ref_ptr<EDK3::Node> root;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_basic;

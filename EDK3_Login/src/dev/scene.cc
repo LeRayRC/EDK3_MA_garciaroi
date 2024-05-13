@@ -190,8 +190,8 @@ void InitSceneMaterials() {
     }
 
     manager->mat_light_settings_general->light_confs_[0].type_ = 0;
-    manager->mat_light_settings_general->light_confs_[0].dir_ = Vec3(0.0f, 0.6f, 0.9f);
-    manager->mat_light_settings_general->light_confs_[0].diff_color_ = Vec3(0.24f, 0.37f, 0.32f);
+    manager->mat_light_settings_general->light_confs_[0].dir_ = Vec3(0.0f, 1.0f, 0.0f);
+    manager->mat_light_settings_general->light_confs_[0].diff_color_ = Vec3(0.5f, 0.8f, 0.8f);
 
     manager->mat_light_settings_general->light_confs_[1].type_ = 1;
     manager->mat_light_settings_general->light_confs_[1].pos_ = Vec3(17.0f, -63.0f, -24.0f);
@@ -233,18 +233,6 @@ void InitSceneEntities() {
         obj_entity->set_position({ 0.0f, -100.0f, 0.0f });
         obj_entity->attachDrawable(DrawableAttached_Terrain);
         manager->entities_.push_back(obj_entity);
-    }
-    obj_entity = nullptr;
-
-
-    obj_entity = new Entity(true, "Water");
-    if (obj_entity != nullptr) {
-      obj_entity->init();
-      obj_entity->set_position({ 0.0f, -98.0f, 0.0f });
-      obj_entity->attachDrawable(DrawableAttached_Water);
-      obj_entity->drawable_->set_material_settings(manager->mat_light_water_settings.get());
-      
-      manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
 
@@ -311,6 +299,18 @@ void InitSceneEntities() {
         obj_entity->set_scale({ 4.5f, 4.5f, 4.5f });
         obj_entity->attachDrawable(DrawableAttached_Boat);
         manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+
+    obj_entity = new Entity(true, "Water");
+    if (obj_entity != nullptr) {
+      obj_entity->init();
+      obj_entity->set_position({ 0.0f, -98.0f, 0.0f });
+      obj_entity->attachDrawable(DrawableAttached_Water);
+      obj_entity->drawable_->set_material_settings(manager->mat_light_water_settings.get());
+
+      manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
 

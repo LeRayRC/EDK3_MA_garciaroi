@@ -62,7 +62,8 @@ class MaterialCustom : public EDK3::Material {
       LightConf light_confs_[8];
       static Vec3 ambient_color_;
       bool use_texture_;
-      EDK3::ref_ptr<EDK3::Texture> texture_; 
+      EDK3::ref_ptr<EDK3::Texture> texture_;
+      float alpha_;
 
       LightSettings() {
         memset(light_confs_, 0, sizeof(light_confs_));
@@ -83,6 +84,7 @@ class MaterialCustom : public EDK3::Material {
             light_confs_[i].camera_pos_ = Vec3(0.0f, 0.0f, 0.0f);
             light_confs_[i].enabled_ = false;
         }
+        alpha_ = 1.0f;
       }
       void set_texture(EDK3::ref_ptr<EDK3::Texture> t) { texture_ = t; }
       EDK3::ref_ptr<EDK3::Texture> texture() const { return texture_; }
@@ -91,17 +93,26 @@ class MaterialCustom : public EDK3::Material {
     private:
         LightSettings(const LightSettings& other) {
           memcpy(light_confs_, other.light_confs_, sizeof(light_confs_));
+          ambient_color_ = other.ambient_color_;
+          use_texture_ = other.use_texture_;
+          alpha_ = other.alpha_;
           texture_ = other.texture_;
       }
         LightSettings(LightSettings&& other) {
           memcpy(light_confs_, other.light_confs_, sizeof(light_confs_));
           memset(other.light_confs_, 0, sizeof(light_confs_));
           texture_ = other.texture_;
+          ambient_color_ = other.ambient_color_;
+          use_texture_ = other.use_texture_;
+          alpha_ = other.alpha_;
           other.texture_.release();
       }
         LightSettings& operator=(const LightSettings& other) {
           memcpy(light_confs_, other.light_confs_, sizeof(light_confs_));
           texture_ = other.texture_;
+          ambient_color_ = other.ambient_color_;
+          use_texture_ = other.use_texture_;
+          alpha_ = other.alpha_;
           return *this;
       }
   };

@@ -54,24 +54,6 @@ void InitScene() {
     InitSceneMaterials();
     InitSceneEntities();
 
-    /*AnimationConfig anim1;
-    snprintf(anim1.name, 16, "Test1");
-    snprintf(anim1.temp_name, 16, "%s", anim1.name);
-    anim1.is_moving = true;
-    anim1.move_from = { 0.0f,0.0f,0.0f };
-    anim1.move_to = { 0.0, 100.0f, 0.0f };
-    anim1.move_duration = 10000.0f;
-    anim1.is_rotating = false;
-    anim1.is_scaling = false;
-    AnimationConfig anim2;
-    snprintf(anim2.name, 16, "Test2");
-    snprintf(anim2.temp_name, 16, "%s", anim2.name);
-    manager->animation_configs_.push_back(anim1);
-    manager->animation_configs_counter++;
-    manager->animation_configs_.push_back(anim2);
-    manager->animation_configs_counter++;
-    UpdateAnimationConfigsString();*/
-
     //Allocating and initializing the camera:
     manager->camera.alloc();
 
@@ -112,28 +94,6 @@ void UpdateFn() {
         manager->light_materials_settings[i]->use_texture_ =
             manager->mat_light_settings_general->use_texture_;
     }
-
-    /*EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
-    if (manager->show_normals) {
-      mat_selected = manager->mat_normals;
-    }
-    else {
-      mat_selected = manager->mat_basic;
-    }*/
-    //for (int i = 0; i < root->num_children(); i++) {
-    //  EDK3::Drawable* drawable = dynamic_cast<EDK3::Drawable*>(root->child(i));
-    //  //root->child(i)->
-    //  const float* drawable_position = drawable->position();
-    //  Vec3 position = { drawable_position[0],drawable_position[1],drawable_position[2] };
-    //  UpdateDrawable(drawable, mat_selected.get(), manager->mat_light_settings.get(),position );
-
-    //}
-
-
-    //EDK3::Node* drawable = root->child(6);
-    //drawable->set_rotation_y(180.0f);
-
-    //manager->entity_boat_->update();
 }
 
 void RenderFn() {
@@ -172,6 +132,7 @@ int ESAT::main(int argc, char** argv) {
         ESAT::WindowIsOpened()) {
         manager->GPU.enableCullFaces(EDK3::dev::GPUManager::FaceType::kFace_Back);
         manager->GPU.enableDepthTest(EDK3::dev::GPUManager::CompareFunc::kCompareFunc_LessOrEqual);
+        manager->GPU.enableBlend(manager->blend_src, manager->blend_dst, manager->blend_op, manager->blend_black);
         UpdateFn();
         if (manager->enable_wireframe) {
             manager->GPU.draw_mode_ = EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Lines;

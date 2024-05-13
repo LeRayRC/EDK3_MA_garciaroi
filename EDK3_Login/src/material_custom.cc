@@ -293,6 +293,16 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
           //printf("Error uniform %s\n", name);
       }
 
+      sprintf(name, "u_alpha\0");
+      loc = program_->get_uniform_position(name);
+      if (loc != -1) {
+        program_->set_uniform_value(loc, EDK3::Type::T_FLOAT, &light_set->alpha_);
+      }
+      else {
+        //printf("Error uniform %s\n", name);
+
+      }
+
 
 
       int slot = 0;
