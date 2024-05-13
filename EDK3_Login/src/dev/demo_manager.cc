@@ -23,6 +23,7 @@ void DemoManager::init() {
   manager->mat_normals.alloc();
   manager->light_materials_settings.alloc(2);
   manager->mat_light_settings_general.alloc();
+  manager->mat_light_settings_general->use_texture_ = true;
   manager->mat_light_settings = manager->light_materials_settings[0].alloc();
   manager->mat_light_water_settings = manager->light_materials_settings[1].alloc();
   manager->mat_wireframe.alloc();
@@ -40,6 +41,8 @@ void DemoManager::init() {
   InitDefaultWindowFlags(&manager->control_window);
   InitDefaultWindowFlags(&manager->entities_window);
   InitDefaultWindowFlags(&manager->animationconfigs_window);
+
+
   performance_window.popen = false;
   camera_window.popen = false;
 

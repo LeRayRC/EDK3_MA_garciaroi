@@ -13,27 +13,27 @@
 #include "interpolate.h"
 
 struct AnimationConfig{
-  int id;
-  char name[16];
-  char temp_name[16];
+  int id = 0;
+  char name[16] = {"\0"};
+  char temp_name[16] = { "\0" };
   // Flags
-  bool is_moving;
-  bool is_rotating;
-  bool is_scaling;
+  bool is_moving = false;
+  bool is_rotating = false;
+  bool is_scaling = false;
   // Move
-  Vec3 move_from;
-  Vec3 move_to;
-  float move_duration;
+  Vec3 move_from = {0.0f,0.0f,0.0f};
+  Vec3 move_to = { 0.0f,0.0f,0.0f };
+  float move_duration = 0.0f;
   // Rotation --> radians
-  Vec3 rotate_from;
-  Vec3 rotate_to;
-  float rotate_duration;
+  Vec3 rotate_from = { 0.0f,0.0f,0.0f };
+  Vec3 rotate_to = { 0.0f,0.0f,0.0f };
+  float rotate_duration = 0.0f;
   // Scale
-  Vec3 scale_from;
-  Vec3 scale_to;
-  float scale_duration;
+  Vec3 scale_from = { 1.0f,1.0f,1.0f };
+  Vec3 scale_to = { 1.0f,1.0f,1.0f };
+  float scale_duration = 0.0f;
 
-  InterpolationType type_;
+  InterpolationType type_ = InterpolationType::InterpolationType_Linear;
   float total_delay=0.0f;
   float current_delay=0.0f;
 };

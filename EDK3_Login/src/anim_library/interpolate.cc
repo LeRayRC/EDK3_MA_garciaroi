@@ -5,36 +5,36 @@
 
 const char* Interpolate::GetInterpolationTypeName(InterpolationType type){
     switch (type){
-      case InterpolationType_Linear:
+    case InterpolationType::InterpolationType_Linear:
         return "Linear";
         break;
-      case InterpolationType_ExpoEaseIn:
+    case InterpolationType::InterpolationType_ExpoEaseIn:
         return "Ease In";
         break;
-      case InterpolationType_ExpoEaseOut:
+    case InterpolationType::InterpolationType_ExpoEaseOut:
         return "Ease Out";
         break;
-      case InterpolationType_ExpoEaseInOut:
+    case InterpolationType::InterpolationType_ExpoEaseInOut:
         return "Ease InOut";
         break;
-      case InterpolationType_CubicEaseIn:
+      case InterpolationType::InterpolationType_CubicEaseIn:
         return "Cubic Ease In";
         break;
-      case InterpolationType_CubicEaseOut:
+      case InterpolationType::InterpolationType_CubicEaseOut:
         return "Cubic Ease Out";
         break;
-      case InterpolationType_CubicEaseInOut:
+      case InterpolationType::InterpolationType_CubicEaseInOut:
         return "Cubic Ease InOut";
         break;
-      case InterpolationType_ElasticEaseIn:
+      case InterpolationType::InterpolationType_ElasticEaseIn:
         return "Elastic Ease In";
-      case InterpolationType_ElasticEaseOut:
+      case InterpolationType::InterpolationType_ElasticEaseOut:
         return "Elastic Ease Out";
-      case InterpolationType_BounceEaseIn:
+      case InterpolationType::InterpolationType_BounceEaseIn:
         return "Bounce Ease In";
-      case InterpolationType_BounceEaseOut:
+      case InterpolationType::InterpolationType_BounceEaseOut:
         return "Bounce Ease Out";
-      case InterpolationType_None:
+      case InterpolationType::InterpolationType_None:
         return "None";
         break;
       default:
@@ -89,39 +89,39 @@ float Interpolate::Linear(float percentage, float initial, float final){
   return initial + (( final - initial ) * percentage);
 }
 
-float Interpolate::ExpoEaseIn(float percentage, float initial, float final){
-  return (percentage == 0) ? 0 : (float)pow(2, 10 * percentage - 10);
+float Interpolate::ExpoEaseIn(float percentage){
+  return (percentage == 0) ? 0 : powf(2, 10 * percentage - 10);
 }
 
-float Interpolate::ExpoEaseOut(float percentage, float initial, float final){
-  return (percentage == 1.0f) ? 1.0f : 1.0f - (float)pow(2, -10 * percentage);
+float Interpolate::ExpoEaseOut(float percentage){
+  return (percentage == 1.0f) ? 1.0f : 1.0f - powf(2, -10 * percentage);
 }
 
-float Interpolate::ExpoEaseInOut(float percentage, float initial, float final) {
+float Interpolate::ExpoEaseInOut(float percentage) {
   if (0 == percentage) {
     return 0;
   } else if (1 == percentage) {
     return 1;
   } else if (percentage < 0.5) {
-    return (float)pow(2, 20 * percentage - 10) / 2;
+    return powf(2, 20 * percentage - 10) / 2;
   } else {
-    return (2 - (float)pow(2, -20 * percentage + 10)) / 2;
+    return (2 - powf(2, -20 * percentage + 10)) / 2;
   }
 }
 
-float Interpolate::CubicEaseIn(float percentage, float initial, float final){
+float Interpolate::CubicEaseIn(float percentage){
   return percentage * percentage * percentage;
 }
 
-float Interpolate::CubicEaseOut(float percentage, float initial, float final){
-  return 1 - (float)pow(1 - percentage, 3);
+float Interpolate::CubicEaseOut(float percentage){
+  return 1 - powf(1 - percentage, 3);
 }
 
-float Interpolate::CubicEaseInOut(float percentage, float initial, float final){
-  return (percentage < 0.5) ? 4 * percentage * percentage * percentage : 1 - (float)pow(-2 * percentage + 2, 3) / 2;
+float Interpolate::CubicEaseInOut(float percentage){
+  return (percentage < 0.5) ? 4 * percentage * percentage * percentage : 1 - powf(-2 * percentage + 2, 3) / 2;
 }
 
-float Interpolate::BounceEaseOut(float percentage, float initial, float final){
+float Interpolate::BounceEaseOut(float percentage){
   const float n1 = 7.5625f;
   const float d1 = 2.75f;
 
@@ -139,61 +139,61 @@ float Interpolate::BounceEaseOut(float percentage, float initial, float final){
   }
 }
 
-float Interpolate::BounceEaseIn(float percentage, float initial, float final){
-  return 1 - Interpolate::BounceEaseOut(1 - percentage,initial,final);
+float Interpolate::BounceEaseIn(float percentage){
+  return 1 - Interpolate::BounceEaseOut(1 - percentage);
 }
 
-float Interpolate::ElasticEaseIn(float percentage, float initial, float final){
+float Interpolate::ElasticEaseIn(float percentage){
   const float c4 = (2 * PI) / 3;
 
   return (percentage == 0) ? 
           0.0f : (percentage == 1) ? 
-          1.0f : (float)-pow(2, 10 * percentage - 10) * (float)sin((percentage * 10 - 10.75f) * c4);
+          1.0f : -powf(2, 10 * percentage - 10) * sinf((percentage * 10 - 10.75f) * c4);
 }
 
-float Interpolate::ElasticEaseOut(float percentage, float initial, float final){
+float Interpolate::ElasticEaseOut(float percentage){
   const float c4 = (2 * PI) / 3;
 
   return (percentage == 0) ?
           0.0f : (percentage == 1) ? 
-          1.0f : (float)pow(2, -10 * percentage) * (float)sin((percentage * 10 - 0.75f) * c4) + 1;
+          1.0f : powf(2, -10 * percentage) * sinf((percentage * 10 - 0.75f) * c4) + 1;
 }
 
 float Interpolate::Easing(InterpolationType type, float percentage, float initial, float final){
   float temp_percentage;
   switch (type) {
-  case InterpolationType_Linear:
+  case InterpolationType::InterpolationType_Linear:
     temp_percentage = percentage;
     break;
-  case InterpolationType_ExpoEaseIn:
-    temp_percentage = Interpolate::ExpoEaseIn(percentage, initial, final);
+  case InterpolationType::InterpolationType_ExpoEaseIn:
+    temp_percentage = Interpolate::ExpoEaseIn(percentage);
     break;
-  case InterpolationType_ExpoEaseOut:
-    temp_percentage = Interpolate::ExpoEaseOut(percentage, initial, final);
+  case InterpolationType::InterpolationType_ExpoEaseOut:
+    temp_percentage = Interpolate::ExpoEaseOut(percentage);
     break;
-  case InterpolationType_ExpoEaseInOut:
-    temp_percentage = Interpolate::ExpoEaseInOut(percentage, initial, final);
+  case InterpolationType::InterpolationType_ExpoEaseInOut:
+    temp_percentage = Interpolate::ExpoEaseInOut(percentage);
     break;
-  case InterpolationType_CubicEaseIn:
-    temp_percentage = Interpolate::CubicEaseIn(percentage, initial, final);
+  case InterpolationType::InterpolationType_CubicEaseIn:
+    temp_percentage = Interpolate::CubicEaseIn(percentage);
     break;
-  case InterpolationType_CubicEaseOut:
-    temp_percentage = Interpolate::CubicEaseOut(percentage, initial, final);
+  case InterpolationType::InterpolationType_CubicEaseOut:
+    temp_percentage = Interpolate::CubicEaseOut(percentage);
     break;
-  case InterpolationType_CubicEaseInOut:
-    temp_percentage = Interpolate::CubicEaseInOut(percentage, initial, final);
+  case InterpolationType::InterpolationType_CubicEaseInOut:
+    temp_percentage = Interpolate::CubicEaseInOut(percentage);
     break;
-  case InterpolationType_BounceEaseOut:
-    temp_percentage = Interpolate::BounceEaseOut(percentage, initial, final);
+  case InterpolationType::InterpolationType_BounceEaseOut:
+    temp_percentage = Interpolate::BounceEaseOut(percentage);
     break;
-  case InterpolationType_BounceEaseIn:
-    temp_percentage = Interpolate::BounceEaseIn(percentage, initial, final);
+  case InterpolationType::InterpolationType_BounceEaseIn:
+    temp_percentage = Interpolate::BounceEaseIn(percentage);
     break;
-  case InterpolationType_ElasticEaseIn:
-    temp_percentage = Interpolate::ElasticEaseIn(percentage, initial, final);
+  case InterpolationType::InterpolationType_ElasticEaseIn:
+    temp_percentage = Interpolate::ElasticEaseIn(percentage);
     break;
-  case InterpolationType_ElasticEaseOut:
-    temp_percentage = Interpolate::ElasticEaseOut(percentage, initial, final);
+  case InterpolationType::InterpolationType_ElasticEaseOut:
+    temp_percentage = Interpolate::ElasticEaseOut(percentage);
     break;
   default:
     temp_percentage = percentage;

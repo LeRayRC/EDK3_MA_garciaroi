@@ -31,8 +31,8 @@
 #include "dev/custom_gpu_camera.h"
 #include "dev/custom_gpu_manager.h"
 
-const int kWindowWidth = 1280;
-const int kWindowHeight = 768;
+const unsigned int kWindowWidth = 1280;
+const unsigned int kWindowHeight = 768;
 const int kNTorusPoints = 10;
 const int kNTreePoints = 16;
 
@@ -92,7 +92,7 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::Texture> texture_sand;
     EDK3::ref_ptr<EDK3::Texture> texture_water;
 
-    float dt;
+    double dt;
     bool enable_postprocess;
     bool enable_wireframe;
 
@@ -107,7 +107,7 @@ class DemoManager{
     ImGuiWindow animationconfigs_window;
 
     float kMaxAnimationDuration = 60.0f;
-    int animation_configs_counter;
+    int animation_configs_counter = 0;
   //Methods
   private:
     // Constructor

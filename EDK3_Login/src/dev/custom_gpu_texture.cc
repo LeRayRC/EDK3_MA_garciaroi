@@ -10,6 +10,7 @@ namespace EDK3 {
     unsigned int height, unsigned int depth) {
     //Llamar a la textura base para que la informacion se vaya guardando
     Texture::init(t, internal_format, width, height, depth);
+      internal_id_ = 0;
   }
 
   GLenum CustomGPUTexture::getOpenGLDataPixelType(EDK3::Type t) {

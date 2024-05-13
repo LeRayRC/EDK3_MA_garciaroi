@@ -41,7 +41,7 @@ namespace EDK3 {
          */
 
          //****** Positions:
-        float size = cube_size * 0.5f;
+        //float size = cube_size * 0.5f;
 
         ESAT::Vec3 pos[8] = {
                                cube_size, -cube_size,  cube_size,
@@ -158,7 +158,7 @@ namespace EDK3 {
          */
 
          //****** Positions:
-        float size = cube_size * 0.5f;
+        //float size = cube_size * 0.5f;
 
         ESAT::Vec3 pos[24] = {
             +cube_size, +cube_size, +cube_size, // 0

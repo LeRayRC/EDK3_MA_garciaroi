@@ -199,7 +199,6 @@ void LightsWindow() {
     ImGui::Checkbox("Use Texture", &selected_light_settings->use_texture_);
     ImGui::DragFloat("Water Transparency", &manager->mat_light_water_settings->alpha_, 0.01f, 0.0f, 1.0f);
     for (int i = 0; i < 8; i++) {
-        bool deletable = true;
         ImGui::PushID(i);
         sprintf(name, "Light %d\0", i + 1);
         if (ImGui::TreeNode(name)) {
@@ -294,7 +293,7 @@ void ControlWindow() {
         else {
             mat_selected = manager->mat_basic;
         }
-        for (int i = 0; i < manager->root->num_children(); i++) {
+        for (unsigned int i = 0; i < manager->root->num_children(); i++) {
             EDK3::Drawable* drawable = dynamic_cast<EDK3::Drawable*>(manager->root->child(i));
             drawable->set_material(mat_selected.get());
         }
@@ -308,7 +307,7 @@ void ControlWindow() {
             else {
                 mat_selected = manager->mat_basic;
             }
-            for (int i = 0; i < manager->root->num_children(); i++) {
+            for (unsigned int i = 0; i < manager->root->num_children(); i++) {
                 EDK3::Drawable* drawable = dynamic_cast<EDK3::Drawable*>(manager->root->child(i));
                 drawable->set_material(mat_selected.get());
             }
@@ -328,7 +327,7 @@ void EntitiesManagerWindow() {
   ImGui::Begin("Entities Manager", &manager->entities_window.popen, manager->entities_window.window_flags);
   WindowMenu(&manager->entities_window);
   // ImGui::Text("There will be entities here");
-  for (int i = 0; i < manager->entities_.size(); i++) {
+  for (unsigned int i = 0; i < manager->entities_.size(); i++) {
     ImGui::PushID(i);
     if (ImGui::TreeNode(manager->entities_[i]->name_)) {
        if(ImGui::Checkbox("Enable", &manager->entities_[i]->enabled_)){
@@ -436,7 +435,7 @@ void EntitiesManagerWindow() {
       if (nullptr == manager->entities_[i]->anim_instance_){
         if (ImGui::Button("Delete Entity")) {
             //Clear from vector and then delete
-            for (int j = 0; j < manager->root->num_children(); j++) {
+            for (unsigned int j = 0; j < manager->root->num_children(); j++) {
                 EDK3::Node* node = manager->root->child(j);
                 if (node == manager->entities_[i]->drawable_.get()) {
                     manager->root->removeChild(node);
@@ -467,7 +466,7 @@ void AnimationConfigsManagerWindow() {
   ImGui::Begin("Animations Config Manager", &manager->animationconfigs_window.popen, manager->animationconfigs_window.window_flags);
   WindowMenu(&manager->animationconfigs_window);
 
-  for (int i = 0; i < manager->animation_configs_.size(); i++) {
+  for (unsigned int i = 0; i < manager->animation_configs_.size(); i++) {
     bool deletable=true;
     ImGui::PushID(i);
     if (ImGui::TreeNode(manager->animation_configs_[i].name)) {
@@ -519,7 +518,7 @@ void AnimationConfigsManagerWindow() {
           snprintf(manager->animation_configs_[i].name,16, "%s", manager->animation_configs_[i].temp_name);
       }
 
-      for(int j=0;j<manager->entities_.size() && deletable;j++){
+      for(unsigned int j=0;j<manager->entities_.size() && deletable;j++){
         deletable = strcmp(manager->animation_configs_[manager->entities_[j]->animation_config_selected].name, manager->animation_configs_[i].name);
       }
 
@@ -529,7 +528,7 @@ void AnimationConfigsManagerWindow() {
           //game->animation_configs_.erase(game->animation_configs_.begin() + i);
           //if(manager->db_.deleteAnimation(&manager->animation_configs_[i], &manager->animation_configs_db_[i])){
             manager->animation_configs_.erase(manager->animation_configs_.begin() + i);
-            for(int j = 0; j < manager->entities_.size(); j++){
+            for(unsigned int j = 0; j < manager->entities_.size(); j++){
               if (manager->entities_[j]->animation_config_selected > i) {
                 manager->entities_[j]->animation_config_selected--;
               }

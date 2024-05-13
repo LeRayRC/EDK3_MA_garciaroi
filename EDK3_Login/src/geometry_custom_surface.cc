@@ -53,9 +53,7 @@ namespace EDK3 {
   mesh_order.alloc(num_heights_ * num_revs_ * 6);
 
   MeshVtx* mesh_elements_pointer = mesh_elements.get();
-  float alpha = 6.28f / num_heights_;
   float omega = 6.28f / num_revs_;
-  float offset = 3.0f;
 
   for (int i=0; i <= num_heights_; i++) {
       for (int j = 0; j <= num_revs_; j++) {

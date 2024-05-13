@@ -68,7 +68,7 @@ void TerrainCustom::init(const int num_cols, const int num_rows,
   Vec3 cross_left_bottom;
   Vec3 cross_bottom_right;
 
-  unsigned char* data;
+  unsigned char* data = nullptr;
   int heightmap_width, heightmap_height, heightmap_nChannels;
   
   if (use_heightmap) {

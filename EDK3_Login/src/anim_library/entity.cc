@@ -148,7 +148,7 @@ Vec3 Entity::scale() const {
 void Entity::setupDrawable(EDK3::Geometry* geo,
     EDK3::MaterialCustom* mat,
     EDK3::MaterialSettings* mat_settings,
-    Vec3& pos, Vec3& scale, Vec3& rot) {
+    Vec3 pos, Vec3 scale, Vec3 rot) {
         DemoManager* manager = DemoManager::getInstance();
         drawable_->set_geometry(geo);
         drawable_->set_material(mat);

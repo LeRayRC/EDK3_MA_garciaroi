@@ -5,7 +5,8 @@
 #include "demo_manager.h"
 #include "math_library/vector_3.h"
 
-AnimationInstance::AnimationInstance() {}
+AnimationInstance::AnimationInstance() {
+}
 
 bool AnimationInstance::isEnded() {
   return ((position_status_.ended_ || !config_.is_moving) && (rotation_status_.ended_ || !config_.is_rotating) && (scale_status_.ended_ || !config_.is_scaling));
@@ -241,7 +242,7 @@ void AnimationInstance::update() {
       }
       // Update rotation if animation is rotating and not ended
       if (config_.is_rotating && !rotation_status_.ended_) {
-        Vec3 new_rotation;
+        
         // increase elapsed time
         rotation_status_.elapsed_time_ += dt;
         if (rotation_status_.elapsed_time_ >= config_.rotate_duration) {
@@ -330,13 +331,13 @@ void UpdateAnimationConfigsString() {
     DemoManager* manager = DemoManager::getInstance();
     int size = 0;
     int pos = 0;
-    for (int i = 0; i < manager->animation_configs_.size(); i++) {
+    for (unsigned int i = 0; i < manager->animation_configs_.size(); i++) {
         size += (strlen(manager->animation_configs_[i].name)+1);
     }
     manager->animation_configs_names_.alloc(size);
     char* names = manager->animation_configs_names_.get();
     memset(names, 0, size);
-    for (int i = 0; i < manager->animation_configs_.size(); i++) {
+    for (unsigned int i = 0; i < manager->animation_configs_.size(); i++) {
         strcpy(names + pos, manager->animation_configs_[i].name);
         pos += (strlen(manager->animation_configs_[i].name)+1);
     }
@@ -360,7 +361,7 @@ void ResetAnimationConfig(AnimationConfig& config) {
     config.scale_to = { 0.0f,0.0f,0.0f };
     config.scale_from = { 0.0f,0.0f,0.0f };
 
-    config.type_ = InterpolationType_Linear;
+    config.type_ = InterpolationType::InterpolationType_Linear;
     config.total_delay = 0.0f;
     config.current_delay = 0.0f;
 }

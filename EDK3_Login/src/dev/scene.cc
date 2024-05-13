@@ -51,7 +51,7 @@ void InitDemoGeometries(){
 void SetupDrawable(EDK3::Geometry *geo, 
                    EDK3::MaterialCustom *mat, 
                    EDK3::MaterialSettings *mat_settings,
-                   Vec3& pos, Vec3& scale, Vec3& rot) {
+                   Vec3 pos, Vec3 scale, Vec3 rot) {
     DemoManager* manager = DemoManager::getInstance();
     EDK3::ref_ptr<EDK3::Drawable> drawable;
     drawable.alloc();
@@ -172,8 +172,8 @@ void InitSceneMaterials() {
     //manager->mat_light_settings.alloc();
     //manager->mat_light_water_settings.alloc();
 
-    manager->render_target.alloc()->init((float)kWindowWidth,
-        (float)kWindowHeight, 1);
+    manager->render_target.alloc()->init(kWindowWidth,
+        kWindowHeight, 1);
     manager->mat_postprocess.alloc();
     manager->mat_postprocess_settings.alloc();
 

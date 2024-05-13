@@ -9,7 +9,7 @@
 
 #define PI 3.14f
 
-enum InterpolationType {
+enum class InterpolationType {
   InterpolationType_Linear,
   InterpolationType_ExpoEaseIn,
   InterpolationType_ExpoEaseOut,
@@ -83,7 +83,7 @@ class Interpolate{
      *       Ensure that the input values and percentage are appropriate for exponential ease-in interpolation.
      *       If the percentage is 0, the result is 0; otherwise, the result is calculated using the specified formula.
      */
-    static float ExpoEaseIn(float percentage, float initial, float final);
+    static float ExpoEaseIn(float percentage);
 
     /**
      * @brief Exponential ease-out interpolation.
@@ -101,7 +101,7 @@ class Interpolate{
      *       Ensure that the input values and percentage are appropriate for exponential ease-out interpolation.
      *       If the percentage is 1.0f, the result is 1.0f; otherwise, the result is calculated using the specified formula.
      */
-    static float ExpoEaseOut(float percentage, float initial, float final);
+    static float ExpoEaseOut(float percentage);
     
     /**
      * @brief Exponential ease-in-out interpolation.
@@ -122,7 +122,7 @@ class Interpolate{
      * @note The function assumes that the percentage is within the valid range [0, 1].
      *       Ensure that the input values and percentage are appropriate for exponential ease-in-out interpolation.
      */
-    static float ExpoEaseInOut(float percentage, float initial, float final);
+    static float ExpoEaseInOut(float percentage);
     
     /**
      * @brief Cubic ease-in interpolation.
@@ -139,7 +139,7 @@ class Interpolate{
      * @note The function assumes that the percentage is within the valid range [0, 1].
      *       Ensure that the input values and percentage are appropriate for cubic ease-in interpolation.
      */
-    static float CubicEaseIn(float percentage, float initial, float final);
+    static float CubicEaseIn(float percentage);
 
     /**
      * @brief Cubic ease-out interpolation.
@@ -156,7 +156,7 @@ class Interpolate{
      * @note The function assumes that the percentage is within the valid range [0, 1].
      *       Ensure that the input values and percentage are appropriate for cubic ease-out interpolation.
      */
-    static float CubicEaseOut(float percentage, float initial, float final);
+    static float CubicEaseOut(float percentage);
 
     /**
      * @brief Cubic ease-in-out interpolation.
@@ -175,7 +175,7 @@ class Interpolate{
      * @note The function assumes that the percentage is within the valid range [0, 1].
      *       Ensure that the input values and percentage are appropriate for cubic ease-in-out interpolation.
      */
-    static float CubicEaseInOut(float percentage, float initial, float final);
+    static float CubicEaseInOut(float percentage);
     
     // static float QuarticEaseIn(float percentage, float initial, float final);
     // static float QuarticEaseOut(float percentage, float initial, float final);
@@ -214,7 +214,7 @@ class Interpolate{
      * @note The function assumes that the percentage is within the valid range [0, 1].
      *       Ensure that the input values and percentage are appropriate for elastic ease-in interpolation.
      */
-    static float ElasticEaseIn(float percentage, float initial, float final);
+    static float ElasticEaseIn(float percentage);
 
     /**
      * @brief Elastic ease-out interpolation.
@@ -234,7 +234,7 @@ class Interpolate{
      * @note The function assumes that the percentage is within the valid range [0, 1].
      *       Ensure that the input values and percentage are appropriate for elastic ease-out interpolation.
      */
-    static float ElasticEaseOut(float percentage, float initial, float final);
+    static float ElasticEaseOut(float percentage);
 
     /**
      * @brief Bounce ease-in interpolation.
@@ -251,7 +251,7 @@ class Interpolate{
      * @note The function assumes that the percentage is within the valid range [0, 1].
      *       Ensure that the input values and percentage are appropriate for bounce ease-in interpolation.
      */
-    static float BounceEaseIn(float percentage, float initial, float final);
+    static float BounceEaseIn(float percentage);
 
     /**
      * @brief Bounce ease-out interpolation.
@@ -268,7 +268,7 @@ class Interpolate{
      * @note The function assumes that the percentage is within the valid range [0, 1].
      *       Ensure that the input values and percentage are appropriate for bounce ease-out interpolation.
      */
-    static float BounceEaseOut(float percentage, float initial, float final);
+    static float BounceEaseOut(float percentage);
     // static float ElasticEaseInOut(float percentage, float initial, float final);
 
   public:

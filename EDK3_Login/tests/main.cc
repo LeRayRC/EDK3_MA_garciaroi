@@ -47,8 +47,6 @@ Vec3 EDK3::MaterialCustom::LightSettings::ambient_color_ = Vec3(0.0f, 0.0f, 0.0f
 
 void InitScene() {
     DemoManager* manager = DemoManager::getInstance();
-    //Allocating root node:
-    EDK3::Node* root = manager->root.get();
     InitSceneTextures();
     InitSceneGeometries();
     InitSceneMaterials();
@@ -79,12 +77,12 @@ void UpdateFn() {
         manager->camera->window_size().y);
     EDK3::Node* root = manager->root.get();
 
-    for (int i = 0; i < manager->entities_.size(); i++) {
+    for (unsigned int i = 0; i < manager->entities_.size(); i++) {
         manager->entities_[i]->update();
     }
 
     //Update lights scoped array
-    for (int i = 0; i < manager->light_materials_settings.size(); i++) {
+    for (unsigned int i = 0; i < manager->light_materials_settings.size(); i++) {
         manager->light_materials_settings[i]->ambient_color_ =
             manager->mat_light_settings_general->ambient_color_;
         for (int j = 0; j < 8; j++) {

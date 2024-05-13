@@ -42,11 +42,15 @@ void PostprocessBasic::init(const char* vertex_path, const char* fragment_path) 
   GPU.newProgram(&program_);
 
 
-  char* vertex_shader_source = ReadFile(vertex_path);
-  char* fragment_shader_source = ReadFile(fragment_path);
+  EDK3::scoped_array<char> vertex_shader_source;
+  EDK3::scoped_array<char> fragment_shader_source;
 
-  vertex_vertex->loadSource(EDK3::dev::Shader::Type::kType_Vertex, vertex_shader_source, strlen(vertex_shader_source));
-  fragment_shader->loadSource(EDK3::dev::Shader::Type::kType_Fragment, fragment_shader_source, strlen(fragment_shader_source));
+  //2: Load the source code to the requested shaders.
+  ReadFile(vertex_path, vertex_shader_source);
+  ReadFile(fragment_path, fragment_shader_source);
+
+  vertex_vertex->loadSource(EDK3::dev::Shader::Type::kType_Vertex, vertex_shader_source.get(), strlen(vertex_shader_source.get()));
+  fragment_shader->loadSource(EDK3::dev::Shader::Type::kType_Fragment, fragment_shader_source.get(), strlen(fragment_shader_source.get()));
   //2: Load the source code to the requested shaders.
   /*vertex_vertex->loadSource(EDK3::dev::Shader::Type::kType_Vertex, kVertexShader, strlen(kVertexShader));
   fragment_shader->loadSource(EDK3::dev::Shader::Type::kType_Fragment, kFragmentShader, strlen(kFragmentShader));*/

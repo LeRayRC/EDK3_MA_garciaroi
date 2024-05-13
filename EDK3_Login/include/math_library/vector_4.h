@@ -52,12 +52,12 @@ public:
 };
 
 inline float Vec4::Magnitude() const{
-  return (float)sqrt((x * x) + (y * y) + (z * z) + (w * w));
+  return sqrtf((x * x) + (y * y) + (z * z) + (w * w));
 }
 
 inline void Vec4::Normalize()
 {
-  float magnitude = (float)sqrt((x * x) + (y * y) + (z * z) + (w * w));
+  float magnitude = sqrtf((x * x) + (y * y) + (z * z) + (w * w));
   if (magnitude != 0.0f)
   {
     x /= magnitude;
@@ -70,7 +70,7 @@ inline void Vec4::Normalize()
 inline Vec4 Vec4::Normalized() const
 {
   Vec4 aux;
-  float magnitude = (float)sqrt((x * x) + (y * y) + (z * z) + (w * w));
+  float magnitude = sqrtf((x * x) + (y * y) + (z * z) + (w * w));
   if (magnitude != 0.0f)
   {
     aux.x = x / magnitude;
@@ -96,7 +96,7 @@ inline float Vec4::SqrMagnitude() const
 
 inline float Vec4::Distance(const Vec4 &a, const Vec4 &b)
 {
-  return (float)sqrt(((a.x - b.x) * (a.x - b.x)) +
+  return sqrtf(((a.x - b.x) * (a.x - b.x)) +
                      ((a.y - b.y) * (a.y - b.y)) + 
                      ((a.z - b.z) * (a.z - b.z)) +
                       (a.w - b.w) * (a.w - b.w));

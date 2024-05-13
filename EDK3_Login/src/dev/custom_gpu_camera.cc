@@ -52,7 +52,7 @@ namespace EDK3 {
 				node_data.model = model;
 				data_->data.push_back(node_data);
 			}
-			for (int i = 0; i < node->num_children(); i++) {
+			for (unsigned int i = 0; i < node->num_children(); i++) {
 				doCullRecursively(node->child(i), model);
 			}
 		}
@@ -70,7 +70,7 @@ namespace EDK3 {
 			/*glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
 
-			for (int i = 0; i < data_->data.size(); i++) {
+			for (unsigned int i = 0; i < data_->data.size(); i++) {
 				data_->data[i].material->enable(data_->data[i].mat_settings);
 				data_->data[i].material->setupCamera(projection, view);
 				data_->data[i].material->setupModel(data_->data[i].model.d);

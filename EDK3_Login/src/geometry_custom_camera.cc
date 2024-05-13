@@ -71,7 +71,7 @@ namespace EDK3 {
     if (alpha < 0.0f) alpha = 0.0f;
 
     Vec3 camera_pos = {
-      cosf(omega) * cosf(alpha - 1.57) * sensitivity_,
+      cosf(omega) * cosf(alpha - 1.57f) * sensitivity_,
       sinf(alpha - 1.57f) ,
       sinf(omega) * cosf(alpha - 1.57f) * sensitivity_
     };
@@ -91,7 +91,7 @@ namespace EDK3 {
     }else if(ESAT::MouseWheelY() < last_wheel_value_){
       speed_ -= speed_modifier_;
     }
-    speed_ = speed_ < 0.0 ? 0.0 : speed_;
+    speed_ = speed_ < 0.0f ? 0.0f : speed_;
     last_wheel_value_ = ESAT::MouseWheelY();
 
     if (ESAT::MouseButtonDown(1)) {
@@ -105,7 +105,7 @@ namespace EDK3 {
       Vec3 current_position = Vec3(position_[0], position_[1], position_[2]);
       Vec3 new_position;
       if (ESAT::IsKeyPressed('W')) {
-        new_position = current_position + view_dir_ * (speed_ * dt);
+        new_position = current_position + view_dir_ * (speed_ * (float)dt);
         set_position(&new_position.x);
         position_ = position();
         current_position = Vec3(position_[0], position_[1], position_[2]);
@@ -113,33 +113,33 @@ namespace EDK3 {
 
 
       if (ESAT::IsKeyPressed('S')) {
-        new_position = current_position - (view_dir_ * (speed_ * dt));
+        new_position = current_position - (view_dir_ * (speed_ * (float)dt));
         set_position(&new_position.x);
         position_ = position();
         current_position = Vec3(position_[0], position_[1], position_[2]);
       }
       if (ESAT::IsKeyPressed('A')) {
         Vec3 right = Vec3::CrossProduct(view_dir_,Vec3(0.0f,1.0f,0.0f));
-        new_position = current_position - (right.Normalized() * (speed_ * dt));
+        new_position = current_position - (right.Normalized() * (speed_ * (float)dt));
         set_position(&new_position.x);
         position_ = position();
         current_position = Vec3(position_[0], position_[1], position_[2]);
       }
       if (ESAT::IsKeyPressed('D')) {
         Vec3 right = Vec3::CrossProduct(view_dir_, Vec3(0.0f, 1.0f, 0.0f));
-        new_position = current_position + (right.Normalized() * (speed_ * dt));
+        new_position = current_position + (right.Normalized() * (speed_ * (float)dt));
         set_position(&new_position.x);
         position_ = position();
         current_position = Vec3(position_[0], position_[1], position_[2]);
       }
 
       if (ESAT::IsKeyPressed('E')) {
-          new_position = current_position + (Vec3(0.0, 1.0f, 0.0f) * (speed_ * dt));
+          new_position = current_position + (Vec3(0.0, 1.0f, 0.0f) * (speed_ * (float)dt));
           set_position(&new_position.x);
       }
 
       if (ESAT::IsKeyPressed('Q')) {
-          new_position = current_position + (Vec3(0.0,-1.0f,0.0f) * (speed_ * dt));
+          new_position = current_position + (Vec3(0.0,-1.0f,0.0f) * (speed_ * (float)dt));
           set_position(&new_position.x);
       }
 
@@ -155,7 +155,7 @@ namespace EDK3 {
       if (alpha < 0.0f) alpha = 0.0f;
 
       Vec3 camera_pos = {
-        cosf(omega) * cosf(alpha - 1.57) * sensitivity_,
+        cosf(omega) * cosf(alpha - 1.57f) * sensitivity_,
         sinf(alpha - 1.57f) ,
         sinf(omega) * cosf(alpha - 1.57f) * sensitivity_
       };

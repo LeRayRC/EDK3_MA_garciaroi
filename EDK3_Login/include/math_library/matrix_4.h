@@ -344,17 +344,17 @@ inline Vec4 Mat4::GetLine(int line) const {
   return aux;
 }
 
-inline Mat4 Mat4::PerspectiveMatrix(float fov, float aspect,
-	float near, float far) const {
-	
-	return Mat4();
-}
-
-inline Mat4 Mat4::OrthoMatrix(float right, float left, float top, float valueottom,
-	float near, float far) const {
-
-	return Mat4();
-}
+//inline Mat4 Mat4::PerspectiveMatrix(float fov, float aspect,
+//	float near, float far) const {
+//	
+//	return Mat4();
+//}
+//
+//inline Mat4 Mat4::OrthoMatrix(float right, float left, float top, float valueottom,
+//	float near, float far) const {
+//
+//	return Mat4();
+//}
 
 inline Mat4 Mat4::operator+(const Mat4& other) const {
   Mat4 aux;

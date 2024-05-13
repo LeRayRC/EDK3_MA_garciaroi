@@ -61,13 +61,13 @@ public:
 
 inline float Vec3::Magnitude() const
 {
-  return (float)sqrt((x * x) + (y * y) + (z * z));
+  return sqrtf((x * x) + (y * y) + (z * z));
 }
 
 inline void Vec3::Normalize()
 {
 
-  float Magnitude = (float)sqrt((x * x) + (y * y) + (z * z));
+  float Magnitude = sqrtf((x * x) + (y * y) + (z * z));
   if (Magnitude != 0)
   {
     x /= Magnitude;
@@ -79,7 +79,7 @@ inline void Vec3::Normalize()
 inline Vec3 Vec3::Normalized() const
 {
   Vec3 aux;
-  float Magnitude = (float)sqrt((x * x) + (y * y) + (z * z));
+  float Magnitude = sqrtf((x * x) + (y * y) + (z * z));
   if (Magnitude != 0)
   {
     aux.x = x / Magnitude;
@@ -94,8 +94,8 @@ inline float Vec3::DotProduct(const Vec3 &a, const Vec3 &other){
 }
 
 inline float Vec3::Angle(const Vec3 &a, const Vec3 &other){
-  float MagnitudeA = (float)sqrt((a.x * a.x) + (a.y * a.y) + (a.z * a.z));
-  float MagnitudeB = (float)sqrt((other.x * other.x) + (other.y * other.y) + (other.z * other.z));
+  float MagnitudeA = sqrtf((a.x * a.x) + (a.y * a.y) + (a.z * a.z));
+  float MagnitudeB = sqrtf((other.x * other.x) + (other.y * other.y) + (other.z * other.z));
   float MagnitudeTotal = MagnitudeA * MagnitudeB;
   if ( MagnitudeTotal == 0){
     return 0.0f;
@@ -160,9 +160,9 @@ inline Vec3 Vec3::LerpUnclamped(const Vec3 &a, const Vec3 &b, float t)
 inline float Vec3::Distance(const Vec3 &a, const Vec3 &b)
 {
 
-  return (float)sqrt(((a.x - b.x) * (a.x - b.x)) +
-                     ((a.y - b.y) * (a.y - b.y)) + 
-                     ((a.z - b.z) * (a.z - b.z)));
+  return sqrtf(((a.x - b.x) * (a.x - b.x)) +
+               ((a.y - b.y) * (a.y - b.y)) + 
+               ((a.z - b.z) * (a.z - b.z)));
 }
 
 inline Vec3 Vec3::Reflect(const Vec3 &direction, const Vec3 &normal)
