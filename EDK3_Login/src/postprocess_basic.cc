@@ -11,67 +11,11 @@
 #include "ESAT/time.h"
 #include "EDK3/dev/gpumanager.h"
 #include "ESAT/math.h"
+#include "tools.h"
 
 
 
 namespace EDK3 {
-  
-  static const char kVertexShader[] =
-    "#version 330\n"
-    "uniform mat4 u_m_matrix;"
-    "uniform mat4 u_vp_matrix;"
-
-    "layout(location = 0) in vec3 a_position;"
-    "layout(location = 1) in vec3 a_normal;"
-    "layout(location = 2) in vec2 a_uv;"
-    "out vec2 uv;"
-    "out vec2 coord;"
-    "void main() {"
-    "    gl_Position = u_vp_matrix * u_m_matrix * vec4(a_position, 1.0);"
-    "    uv = a_uv;"
-    "    coord = gl_Position.xy;"
-    "}";
-
-//#define GLSL(x) "#version 330\n"#x
-//static const char* kFragmentShader = GLSL(
-//  //The shader itself.
-//);
-
-//static const char kFragmentShader[] =
-//"#version 330\n"
-//"uniform sampler2D u_texture;\n"
-//"uniform int u_use_texture;\n"
-//"uniform vec4 u_color;\n"
-//"out vec4 fragColor;\n"
-//"in vec2 uv;\n"
-//"void main() {\n"
-//"   if(0 == u_use_texture){"
-//"    fragColor = u_color;\n"
-//"   }else{\n"
-//"    fragColor = u_color * texture(u_texture,uv);\n"
-//"   }\n"
-//"}\n";
-
-
-
-  static const char kFragmentShader[] =
-      "#version 330\n"
-      "uniform sampler2D u_texture;\n"
-      "uniform int u_use_texture;\n"
-      "uniform vec4 u_color;\n"
-      "out vec4 fragColor;\n"
-      "in vec2 uv;\n"
-      "void main() {\n"
-      "    float pixel_size = 0.01; \n"
-      "    vec2 pixel_coord;\n"
-      "    vec2 pixelated_uv = floor(uv / pixel_size) * pixel_size;\n"
-      "    fragColor = texture(u_texture,pixelated_uv);\n"
-      "   }\n";
-
-
-
-
-
 
 PostprocessBasic::PostprocessBasic() { }
 PostprocessBasic::~PostprocessBasic() { }
@@ -87,7 +31,7 @@ PostprocessBasic& PostprocessBasic::operator=(const PostprocessBasic& other) {
   return *this;
 }
 
-void PostprocessBasic::init() {
+void PostprocessBasic::init(const char* vertex_path, const char* fragment_path) {
   //TODO
   //1: Request at least two shaders and one program to the GPU Manager.
   EDK3::dev::GPUManager& GPU = *EDK3::dev::GPUManager::Instance();
@@ -98,9 +42,14 @@ void PostprocessBasic::init() {
   GPU.newProgram(&program_);
 
 
+  char* vertex_shader_source = ReadFile(vertex_path);
+  char* fragment_shader_source = ReadFile(fragment_path);
+
+  vertex_vertex->loadSource(EDK3::dev::Shader::Type::kType_Vertex, vertex_shader_source, strlen(vertex_shader_source));
+  fragment_shader->loadSource(EDK3::dev::Shader::Type::kType_Fragment, fragment_shader_source, strlen(fragment_shader_source));
   //2: Load the source code to the requested shaders.
-  vertex_vertex->loadSource(EDK3::dev::Shader::Type::kType_Vertex, kVertexShader, strlen(kVertexShader));
-  fragment_shader->loadSource(EDK3::dev::Shader::Type::kType_Fragment, kFragmentShader, strlen(kFragmentShader));
+  /*vertex_vertex->loadSource(EDK3::dev::Shader::Type::kType_Vertex, kVertexShader, strlen(kVertexShader));
+  fragment_shader->loadSource(EDK3::dev::Shader::Type::kType_Fragment, kFragmentShader, strlen(kFragmentShader));*/
 
   EDK3::scoped_array<char> error_log;
   //3: Compile both shaders.

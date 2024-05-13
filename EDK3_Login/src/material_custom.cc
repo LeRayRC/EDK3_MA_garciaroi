@@ -9,6 +9,7 @@
 
 #include "material_custom.h"
 #include "EDK3/dev/gpumanager.h"
+#include "tools.h"
 
 namespace EDK3 {
 
@@ -36,8 +37,13 @@ void MaterialCustom::init(EDK3::scoped_array<char> &error_log,
     
 
   //2: Load the source code to the requested shaders.
-  if(!loadVertexShaderFile(&vertex_vertex, vertex_path)) printf("Error loading vertex shader path: %s\n", vertex_path);
-  if(!loadFragmentShaderFile(&fragment_shader, fragment_path)) printf("Error loading fragment shader path: %s\n", fragment_path);
+    char* vertex_shader_source = ReadFile(vertex_path);
+    char* fragment_shader_source = ReadFile(fragment_path);
+
+    vertex_vertex->loadSource(EDK3::dev::Shader::Type::kType_Vertex, vertex_shader_source, strlen(vertex_shader_source));
+    fragment_shader->loadSource(EDK3::dev::Shader::Type::kType_Fragment, fragment_shader_source, strlen(fragment_shader_source));
+  //if(!loadVertexShaderFile(&vertex_vertex, vertex_path)) printf("Error loading vertex shader path: %s\n", vertex_path);
+  //if(!loadFragmentShaderFile(&fragment_shader, fragment_path)) printf("Error loading fragment shader path: %s\n", fragment_path);
 	// bool loadFragmentShaderFile(ref_ptr<dev::Shader> *output, const char* file_path);
 
   //3: Compile both shaders.

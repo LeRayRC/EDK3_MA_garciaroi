@@ -177,7 +177,7 @@ void InitSceneMaterials() {
     manager->mat_postprocess.alloc();
     manager->mat_postprocess_settings.alloc();
 
-    manager->mat_postprocess->init();
+    manager->mat_postprocess->init("./shaders/postprocessVertex.vs", "./shaders/postprocessFragment.fs");
     float green[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
     manager->mat_postprocess->set_use_texture(true);
     //Aqui le asociamos la textura del render target y se la asociamos al material de postproceso
@@ -325,7 +325,7 @@ void InitSceneTextures() {
         exit(-2);
     }
 
-    EDK3::Texture::Load("./textures/water.png", &manager->texture_water);
+    EDK3::Texture::Load("./textures/clear_water.png", &manager->texture_water);
     if (!manager->texture_water) {
       printf("Error loading water texture\n");
       exit(-2);

@@ -228,6 +228,9 @@
     <ClInclude Include="..\..\..\include\dev\scene.h">
       <Filter>include\dev</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\dev\tools.h">
+      <Filter>include\dev</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\geometry_custom_cube.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -324,6 +327,9 @@
       <Filter>src\dev</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\dev\scene.cc">
+      <Filter>src\dev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dev\tools.cc">
       <Filter>src\dev</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\geometry_custom_camera.cc">

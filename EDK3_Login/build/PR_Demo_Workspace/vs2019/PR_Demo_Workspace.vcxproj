@@ -221,6 +221,7 @@
     <ClInclude Include="..\..\..\include\dev\demo_manager.h" />
     <ClInclude Include="..\..\..\include\dev\interface.h" />
     <ClInclude Include="..\..\..\include\dev\scene.h" />
+    <ClInclude Include="..\..\..\include\dev\tools.h" />
     <ClInclude Include="..\..\..\include\geometry_custom_cube.h" />
     <ClInclude Include="..\..\..\include\geometry_custom_obj.h" />
     <ClInclude Include="..\..\..\include\geometry_custom_quad.h" />
@@ -255,6 +256,7 @@
     <ClCompile Include="..\..\..\src\dev\demo_manager.cc" />
     <ClCompile Include="..\..\..\src\dev\interface.cc" />
     <ClCompile Include="..\..\..\src\dev\scene.cc" />
+    <ClCompile Include="..\..\..\src\dev\tools.cc" />
     <ClCompile Include="..\..\..\src\geometry_custom_camera.cc" />
     <ClCompile Include="..\..\..\src\geometry_custom_cube.cc" />
     <ClCompile Include="..\..\..\src\geometry_custom_obj.cc" />
