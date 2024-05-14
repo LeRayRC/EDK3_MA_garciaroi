@@ -11,7 +11,7 @@ layout(location = 2) in vec2 a_uv;
 out vec3 pos;
 
 void main() {
-    gl_Position = (u_vp_matrix * vec4(a_position, 1.0)).xyww;
+    gl_Position = (u_vp_matrix * u_m_matrix * vec4(a_position, 1.0)).xyww;
     //uv = a_uv;
     //normal = (u_m_matrix * vec4(a_normal,0.0)).xyz;
     pos = a_position;

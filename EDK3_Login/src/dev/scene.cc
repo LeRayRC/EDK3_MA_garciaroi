@@ -55,7 +55,7 @@ void SetupDrawable(EDK3::Geometry *geo,
     DemoManager* manager = DemoManager::getInstance();
     EDK3::ref_ptr<EDK3::Drawable> drawable;
     drawable.alloc();
-    drawable->set_geometry(geo);
+    drawable->set_geometry(geo); 
     drawable->set_material(mat);
     drawable->set_material_settings(mat_settings);
     drawable->set_rotation_xyz(rot.x, rot.y, rot.z);
