@@ -8,8 +8,7 @@
 
 #include "geometry_custom_surface.h"
 #include "ESAT/math.h"
-#include "EDK3/dev/gpumanager.h"
-#include "EDK3/dev/gpumanager.h"
+#include "dev/custom_gpu_manager.h"
 #include "math_helpers.h"
 #include "math_library/vector_3.h"
 #include "math_library/vector_2.h"
@@ -54,9 +53,7 @@ namespace EDK3 {
   mesh_order.alloc(num_heights_ * num_revs_ * 6);
 
   MeshVtx* mesh_elements_pointer = mesh_elements.get();
-  float alpha = 6.28f / num_heights_;
   float omega = 6.28f / num_revs_;
-  float offset = 3.0f;
 
   for (int i=0; i <= num_heights_; i++) {
       for (int j = 0; j <= num_revs_; j++) {
@@ -203,7 +200,7 @@ bool SurfaceCustom::bindAttribute(const Attribute a,
 void SurfaceCustom::render() const {
   //TODO
     EDK3::dev::GPUManager::Instance()->drawElements
-    (EDK3::dev::GPUManager::DrawMode::kDrawMode_Triangles, order_buffer->size(), order_buffer.get(), EDK3::Type::T_UINT, 0);
+    (EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Triangles, num_heights_ * num_revs_ * 6, order_buffer.get(), EDK3::Type::T_UINT, 0);
 }
 
 } //EDK3

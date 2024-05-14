@@ -198,12 +198,12 @@ inline Vec2 &Vec2::operator/=(float value)
 
 inline float Vec2::Magnitude() const
 {
-  return (float)sqrt((x * x) + (y * y));
+  return sqrtf((x * x) + (y * y));
 }
 
 inline void Vec2::Normalize()
 {
-  float magnitude = (float)sqrt((x * x) + (y * y));
+  float magnitude = sqrtf((x * x) + (y * y));
   if (magnitude != 0)
   {
     x /= magnitude;
@@ -214,7 +214,7 @@ inline void Vec2::Normalize()
 inline Vec2 Vec2::Normalized() const
 {
   Vec2 aux;
-  float magnitude = (float)sqrt((x * x) + (y * y));
+  float magnitude = sqrtf((x * x) + (y * y));
   if (magnitude != 0)
   {
     aux.x = x / magnitude;
@@ -239,7 +239,7 @@ inline float Vec2::Distance(const Vec2 a, const Vec2 b)
   Vec2 aux;
   aux.x = b.x - a.x;
   aux.y = b.y - a.y;
-  return (float)sqrt((aux.x * aux.x) + (aux.y * aux.y));
+  return sqrtf((aux.x * aux.x) + (aux.y * aux.y));
 }
 
 inline Vec2 Vec2::Lerp(const Vec2 a, const Vec2 b, float t)

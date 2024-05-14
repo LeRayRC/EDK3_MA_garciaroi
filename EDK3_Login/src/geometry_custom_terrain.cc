@@ -9,8 +9,7 @@
 #include "geometry_custom_terrain.h"
 
 #include "ESAT/math.h"
-#include "EDK3/dev/gpumanager.h"
-#include "EDK3/dev/gpumanager.h"
+#include "dev/custom_gpu_manager.h"
 #include "Perlin/SimplexNoise.h"
 #include "math_helpers.h"
 #include "math_library/vector_3.h"
@@ -43,6 +42,10 @@ void TerrainCustom::init(const int num_cols, const int num_rows,
       //ESAT::Vec3 normal;
       //ESAT::Vec2 uv;
   };
+
+  //draw_mode_ = EDK3::dev::GPUManager::DrawMode::kDrawMode_Triangles;
+  num_cols_ = num_cols;
+  num_rows_ = num_rows;
               
   EDK3::scoped_array<MeshVtx> mesh_elements;
   EDK3::scoped_array<unsigned int> mesh_order;
@@ -65,7 +68,7 @@ void TerrainCustom::init(const int num_cols, const int num_rows,
   Vec3 cross_left_bottom;
   Vec3 cross_bottom_right;
 
-  unsigned char* data;
+  unsigned char* data = nullptr;
   int heightmap_width, heightmap_height, heightmap_nChannels;
   
   if (use_heightmap) {
@@ -79,8 +82,14 @@ void TerrainCustom::init(const int num_cols, const int num_rows,
   MeshVtx* mesh_elements_pointer = mesh_elements.get();
   for (int i = 0; i < (num_rows+1); i++) {
     for (int j = 0; j < (num_cols+1); j++){
-        float texel_value = GetTexelValue(data, heightmap_nChannels, heightmap_width, heightmap_height, j, i, num_cols, num_rows);
-        if (texel_value > 1.0f) texel_value = 1.0f;
+        float texel_value;
+        if (use_heightmap) {
+          texel_value = GetTexelValue(data, heightmap_nChannels, heightmap_width, heightmap_height, j, i, num_cols, num_rows);
+          if (texel_value > 1.0f) texel_value = 1.0f;
+        }
+        else {
+          texel_value = 0.0f;
+        }
         if (is_centered) {
             mesh_elements_pointer[j + i * (num_cols + 1)].pos = Vec3(size * j - ((size * num_cols) / 2),
                                                                      texel_value * heightmap_mult +  SimplexNoise::noise(size * j * smoothness ,size * i * smoothness) * height_mult,
@@ -199,6 +208,8 @@ void TerrainCustom::init(const int num_cols, const int num_rows,
 
   order_buffer->init(mesh_order.sizeInBytes());
   order_buffer->uploadData(mesh_order.get(), mesh_order.sizeInBytes(),0);
+
+  
 }
 
 bool TerrainCustom::bindAttribute(const Attribute a,
@@ -227,7 +238,7 @@ bool TerrainCustom::bindAttribute(const Attribute a,
 void TerrainCustom::render() const {
   //TODO
     EDK3::dev::GPUManager::Instance()->drawElements
-    (EDK3::dev::GPUManager::DrawMode::kDrawMode_Triangles, order_buffer->size(), order_buffer.get(), EDK3::Type::T_UINT, 0);
+    (EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Triangles, num_cols_ * num_rows_ * 6, order_buffer.get(), EDK3::Type::T_UINT, 0);
 }
 
 } //EDK3

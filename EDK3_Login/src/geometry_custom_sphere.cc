@@ -9,8 +9,8 @@
 #include "geometry_custom_sphere.h"
 #include "ESAT/math.h"
 #include "EDK3/dev/gpumanager.h"
-#include "EDK3/dev/gpumanager.h"
 #include "math_helpers.h"
+#include "dev/custom_gpu_manager.h"
 
 namespace EDK3 {
 
@@ -124,7 +124,7 @@ bool SphereCustom::bindAttribute(const Attribute a,
 void SphereCustom::render() const {
   //TODO
     EDK3::dev::GPUManager::Instance()->drawElements
-    (EDK3::dev::GPUManager::DrawMode::kDrawMode_Triangles, order_buffer->size(), order_buffer.get(), EDK3::Type::T_UINT, 0);
+    (EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Triangles, num_heights_ * num_revs_ * 6, order_buffer.get(), EDK3::Type::T_UINT, 0);
 }
 
 } //EDK3

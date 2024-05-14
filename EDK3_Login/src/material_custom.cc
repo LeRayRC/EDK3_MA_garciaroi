@@ -9,6 +9,7 @@
 
 #include "material_custom.h"
 #include "EDK3/dev/gpumanager.h"
+#include "tools.h"
 
 namespace EDK3 {
 
@@ -33,11 +34,18 @@ void MaterialCustom::init(EDK3::scoped_array<char> &error_log,
     EDK3::ref_ptr<EDK3::dev::Shader> vertex_vertex;
     GPU.newShader(&vertex_vertex);
     GPU.newProgram(&program_);
-    
+
+    EDK3::scoped_array<char> vertex_shader_source;
+    EDK3::scoped_array<char> fragment_shader_source;
 
   //2: Load the source code to the requested shaders.
-  if(!loadVertexShaderFile(&vertex_vertex, vertex_path)) printf("Error loading vertex shader path: %s\n", vertex_path);
-  if(!loadFragmentShaderFile(&fragment_shader, fragment_path)) printf("Error loading fragment shader path: %s\n", fragment_path);
+    ReadFile(vertex_path, vertex_shader_source);
+    ReadFile(fragment_path, fragment_shader_source);
+
+    vertex_vertex->loadSource(EDK3::dev::Shader::Type::kType_Vertex, vertex_shader_source.get(), strlen(vertex_shader_source.get()));
+    fragment_shader->loadSource(EDK3::dev::Shader::Type::kType_Fragment, fragment_shader_source.get(), strlen(fragment_shader_source.get()));
+  //if(!loadVertexShaderFile(&vertex_vertex, vertex_path)) printf("Error loading vertex shader path: %s\n", vertex_path);
+  //if(!loadFragmentShaderFile(&fragment_shader, fragment_path)) printf("Error loading fragment shader path: %s\n", fragment_path);
 	// bool loadFragmentShaderFile(ref_ptr<dev::Shader> *output, const char* file_path);
 
   //3: Compile both shaders.
@@ -92,14 +100,34 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
     const LightSettings* light_set = dynamic_cast<const LightSettings*>(mat);
     if(light_set){
       program_->use();
-      int lights_counter = 0;
       char name[60] = {'\0'};
       int loc;
-      
+      int enabled;
       for(int i=0; i < 8; i++){
         if(light_set->light_confs_[i].enabled_){
-          lights_counter++;
           
+          //Position
+          sprintf(name, "u_lights[%d].enabled\0", i);
+          loc = program_->get_uniform_position(name);
+          if (loc != -1) {
+              enabled = 1;
+              program_->set_uniform_value(loc, EDK3::Type::T_INT_1, &enabled);
+          }
+          else {
+              //printf("Error uniform %s\n", name);
+          }
+
+
+          //Position
+          sprintf(name, "u_lights[%d].type\0", i);
+          loc = program_->get_uniform_position(name);
+          if (loc != -1) {
+              program_->set_uniform_value(loc, EDK3::Type::T_INT_1, &light_set->light_confs_[i].type_);
+          }
+          else {
+              //printf("Error uniform %s\n", name);
+          }
+
 
           //Position
           sprintf(name, "u_lights[%d].pos\0", i);
@@ -107,7 +135,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
           if(loc != -1){
             program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_3, &light_set->light_confs_[i].pos_.x);
           }else{
-            printf("Error uniform %s\n", name);
+            //printf("Error uniform %s\n", name);
           }
           //Direction
           sprintf(name, "u_lights[%d].dir\0",i);
@@ -116,7 +144,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_3, &light_set->light_confs_[i].dir_.x);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
           //Diffuse color
@@ -126,9 +154,10 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_3, &light_set->light_confs_[i].diff_color_.x);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
-          /*
+
+          
 
           //Specular color
           sprintf(name, "u_lights[%d].spec_color\0", i);
@@ -137,17 +166,17 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_3, &light_set->light_confs_[i].spec_color_.x);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
           
           //Linear attenuation
-          sprintf(name, "u_lights[%d].spec_color\0", i);
+          sprintf(name, "u_lights[%d].linear_att\0", i);
           loc = program_->get_uniform_position(name);
           if (loc != -1) {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_1, &light_set->light_confs_[i].linear_att_);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
           //Quadratic attenuation
@@ -157,7 +186,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_1, &light_set->light_confs_[i].quadratic_att_);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
           //Constant attenuation
@@ -167,7 +196,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_1, &light_set->light_confs_[i].constant_att_);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
           //Shininess attenuation
@@ -177,7 +206,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_1, &light_set->light_confs_[i].shininess_);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
           //Strength 
@@ -187,7 +216,7 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_1, &light_set->light_confs_[i].strength_);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
 
           //Camera position
@@ -197,9 +226,52 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
               program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_3, &light_set->light_confs_[i].camera_pos_.x);
           }
           else {
-              printf("Error uniform %s\n", name);
+              //printf("Error uniform %s\n", name);
           }
-          */
+
+          //Spot Direction
+          sprintf(name, "u_lights[%d].spot_dir\0", i);
+          loc = program_->get_uniform_position(name);
+          if (loc != -1) {
+              program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_3, &light_set->light_confs_[i].spot_dir_.x);
+          }
+          else {
+              //printf("Error uniform %s\n", name);
+          }
+
+          //cutoff 
+          sprintf(name, "u_lights[%d].cutoff\0", i);
+          loc = program_->get_uniform_position(name);
+          if (loc != -1) {
+              program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_1, &light_set->light_confs_[i].cutoff_);
+          }
+          else {
+              //printf("Error uniform %s\n", name);
+          }
+
+          //Outer cutoff 
+          sprintf(name, "u_lights[%d].outer_cutoff\0", i);
+          loc = program_->get_uniform_position(name);
+          if (loc != -1) {
+              program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_1, &light_set->light_confs_[i].outer_cutoff_);
+          }
+          else {
+              //printf("Error uniform %s\n", name);
+          }
+
+          EDK3::dev::GPUManager::CheckGLError("Light uniforms");
+        }
+        else {
+            //Position
+            sprintf(name, "u_lights[%d].enabled\0", i);
+            loc = program_->get_uniform_position(name);
+            if (loc != -1) {
+                enabled = 0;
+                program_->set_uniform_value(loc, EDK3::Type::T_INT_1, &enabled);
+            }
+            else {
+                //printf("Error uniform %s\n", name);
+            }
         }
       }
       
@@ -210,30 +282,40 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
           program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_3, &light_set->ambient_color_.x);
       }
       else {
-          printf("Error uniform %s\n", name);
+          //printf("Error uniform %s\n", name);
       }
 
-      //Number lights
-      sprintf(name, "u_number_lights\0");
+      sprintf(name, "u_use_texture\0");
+      int use_texture = light_set->use_texture_ ? 1 : 0;
       loc = program_->get_uniform_position(name);
       if (loc != -1) {
-          program_->set_uniform_value(loc, EDK3::Type::T_INT, &lights_counter);
+          program_->set_uniform_value(loc, EDK3::Type::T_INT_1, &use_texture);
       }
       else {
-          printf("Error uniform %s\n", name);
+          //printf("Error uniform %s\n", name);
       }
 
-      
+      sprintf(name, "u_alpha\0");
+      loc = program_->get_uniform_position(name);
+      if (loc != -1) {
+        program_->set_uniform_value(loc, EDK3::Type::T_FLOAT, &light_set->alpha_);
+      }
+      else {
+        //printf("Error uniform %s\n", name);
 
-      //int slot = 0;
-      //light_set->texture()->bind(slot);
-      //unsigned int albedo_loc = program_->get_uniform_position("u_texture");
-      //if (loc != -1) {
-      //  program_->set_uniform_value(albedo_loc, EDK3::Type::T_INT_1, &slot);
-      //}
-      //else {
-      //  printf("Error uniform %s\n", name);
-      //}
+      }
+
+
+
+      int slot = 0;
+      light_set->texture()->bind(slot);
+      unsigned int albedo_loc = program_->get_uniform_position("u_texture");
+      if (loc != -1) {
+        program_->set_uniform_value(albedo_loc, EDK3::Type::T_INT_1, &slot);
+      }
+      else {
+        //printf("Error uniform %s\n", name);
+      }
       return true;
     }
     return false;

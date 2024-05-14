@@ -11,6 +11,9 @@
 #include "scoped_array.h"
 #include "constants.h"
 #include <EDK3/dev/buffer.h>
+#include "dev/gpumanager.h"
+
+
 
 namespace EDK3 {
   
@@ -29,14 +32,22 @@ namespace EDK3 {
 
     void set_name(const char *name) { name_.copy(name, name+strlen(name)+1); }
     const char* name() const { return name_.get(); }
+
+	/*void setDrawMode(EDK3::dev::GPUManager::DrawMode mode) {
+		draw_mode_ = mode;
+	}*/
+
   protected:
     Geometry() {}
     virtual ~Geometry() {}
+	//EDK3::dev::GPUManager::DrawMode draw_mode_ = EDK3::dev::GPUManager::DrawMode::kDrawMode_Triangles;
 
   private:
     scoped_array<char> name_;
-    Geometry(const Geometry&);
+	Geometry(const Geometry&);
     Geometry& operator=(const Geometry &);
+
+	
   };
 
   class CustomGeometry : public EDK3::Geometry {
@@ -58,14 +69,16 @@ namespace EDK3 {
 
 	  void createIndices(unsigned int num_faces);
 	  void uploadIndices(unsigned int* faces, unsigned int size);
+	  
+	  
 
-
-  private:
 	  ref_ptr<dev::Buffer> vertices_;
 	  ref_ptr<dev::Buffer> faces_;
+  private:
 	  unsigned int normal_offset_;
 	  unsigned int num_elements_;
 	  Type elements_type_;
+	  
   };
 
   void CreateCube(
@@ -90,7 +103,7 @@ namespace EDK3 {
 
   bool LoadObj(
       const char *filename,
-      scoped_array<ref_ptr<Geometry> > *geometries,
+      scoped_array<ref_ptr<Geometry>> *geometries,
       scoped_array<char> *error_log );
 
 } /* end of EDK Namespace */

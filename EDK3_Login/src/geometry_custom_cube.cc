@@ -8,8 +8,7 @@
 
 #include "geometry_custom_cube.h"
 #include "ESAT/math.h"
-#include "EDK3/dev/gpumanager.h"
-#include "EDK3/dev/gpumanager.h"
+#include "dev/custom_gpu_manager.h"
 
 namespace EDK3 {
 
@@ -42,7 +41,7 @@ namespace EDK3 {
          */
 
          //****** Positions:
-        float size = cube_size * 0.5f;
+        //float size = cube_size * 0.5f;
 
         ESAT::Vec3 pos[8] = {
                                cube_size, -cube_size,  cube_size,
@@ -159,7 +158,7 @@ namespace EDK3 {
          */
 
          //****** Positions:
-        float size = cube_size * 0.5f;
+        //float size = cube_size * 0.5f;
 
         ESAT::Vec3 pos[24] = {
             +cube_size, +cube_size, +cube_size, // 0
@@ -328,7 +327,8 @@ namespace EDK3 {
     void CubeCustom::render() const {
         //TODO
         EDK3::dev::GPUManager::Instance()->drawElements
-        (EDK3::dev::GPUManager::DrawMode::kDrawMode_Triangles, order_buffer->size(), order_buffer.get(), EDK3::Type::T_UINT, 0);
+        (EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Triangles, 
+            order_buffer->size(), order_buffer.get(), EDK3::Type::T_UINT, 0);
     }
 
 } //EDK3

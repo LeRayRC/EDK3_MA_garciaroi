@@ -24,7 +24,7 @@ namespace EDK3 {
 class PostprocessBasic : public EDK3::Material {
  public:
   PostprocessBasic();
-  void init();
+  void init(const char* vertex_path,const char* fragment_path);
 
   virtual bool enable(const EDK3::MaterialSettings *mat) const override;
   virtual void setupCamera(const float projection[16], const float view[16]) const override;
