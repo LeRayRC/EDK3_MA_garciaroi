@@ -169,8 +169,11 @@ void InitSceneMaterials() {
     manager->mat_basic->init(error_log, "./shaders/basicVertex.vs", "./shaders/light_shader.fs");
     manager->mat_normals->init(error_log, "./shaders/basicVertex.vs", "./shaders/normalFragment.fs");
     manager->mat_wireframe->init(error_log, "./shaders/basicVertex.vs", "./shaders/wireframeFragment.fs");
+    manager->mat_panoramic->init(error_log, "./shaders/panoramicVertex.vs", "./shaders/panoramicFragment.fs");
     //manager->mat_light_settings.alloc();
     //manager->mat_light_water_settings.alloc();
+
+
 
     manager->render_target.alloc()->init(kWindowWidth,
         kWindowHeight, 1);
@@ -215,6 +218,7 @@ void InitSceneMaterials() {
 
 
     manager->mat_light_water_settings->set_texture(manager->texture_water.get());
+    manager->mat_panoramic_settings->set_texture(manager->texture_skybox.get());
     
     if (manager->show_normals) {
         manager->mat_selected = manager->mat_normals;
@@ -231,7 +235,7 @@ void InitSceneEntities() {
     if (obj_entity != nullptr) {
         obj_entity->init();
         obj_entity->set_position({ 0.0f, -100.0f, 0.0f });
-        obj_entity->attachDrawable(DrawableAttached_Terrain);
+        obj_entity->attachDrawable(DrawableAttached_Terrain, manager->root.get());
         manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
@@ -240,7 +244,7 @@ void InitSceneEntities() {
     if (obj_entity != nullptr) {
         obj_entity->init();
         obj_entity->set_position({ 0.97f, -90.0f, -5.0f });
-        obj_entity->attachDrawable(DrawableAttached_Tree);
+        obj_entity->attachDrawable(DrawableAttached_Tree, manager->root.get());
         manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
@@ -249,7 +253,7 @@ void InitSceneEntities() {
     if (obj_entity != nullptr) {
         obj_entity->init();
         obj_entity->set_position({ -12.0f, -42.0f, 100.0f });
-        obj_entity->attachDrawable(DrawableAttached_Sphere);
+        obj_entity->attachDrawable(DrawableAttached_Sphere, manager->root.get());
         manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
@@ -258,7 +262,7 @@ void InitSceneEntities() {
     if (obj_entity != nullptr) {
         obj_entity->init();
         obj_entity->set_position({ -95.0f, -40.0f, -88.0f });
-        obj_entity->attachDrawable(DrawableAttached_Cube);
+        obj_entity->attachDrawable(DrawableAttached_Cube, manager->root.get());
         manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
@@ -268,7 +272,7 @@ void InitSceneEntities() {
     if (obj_entity != nullptr) {
         obj_entity->init();
         obj_entity->set_position({ 26.0f, -30.0f, -28.0f });
-        obj_entity->attachDrawable(DrawableAttached_Donut);
+        obj_entity->attachDrawable(DrawableAttached_Donut, manager->root.get());
         manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
@@ -277,7 +281,7 @@ void InitSceneEntities() {
     if (obj_entity != nullptr) {
         obj_entity->init();
         obj_entity->set_position({ 80.0f, -15.0f, 0.0f });
-        obj_entity->attachDrawable(DrawableAttached_Quad);
+        obj_entity->attachDrawable(DrawableAttached_Quad, manager->root.get());
         manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
@@ -287,7 +291,7 @@ void InitSceneEntities() {
         obj_entity->init();
         obj_entity->set_position({ 18.0f, -85.0f, -9.0f });
         obj_entity->set_scale({ 0.5f, 0.5f, 0.5f });
-        obj_entity->attachDrawable(DrawableAttached_House);
+        obj_entity->attachDrawable(DrawableAttached_House, manager->root.get());
         manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
@@ -297,8 +301,22 @@ void InitSceneEntities() {
         obj_entity->init();
         obj_entity->set_position({ 40.0f, -98.0f, 100.0f });
         obj_entity->set_scale({ 4.5f, 4.5f, 4.5f });
-        obj_entity->attachDrawable(DrawableAttached_Boat);
+        obj_entity->attachDrawable(DrawableAttached_Boat, manager->root.get());
         manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    /*
+    */
+    obj_entity = new Entity(true, "Skybox");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 0.0f, 0.0f, 0.0f });
+        obj_entity->attachDrawable(DrawableAttached_Cube, manager->skybox_root.get());
+        obj_entity->drawable_->set_material(manager->mat_panoramic.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_panoramic_settings.get());
+        manager->skybox_entity_ = obj_entity;
+        //manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
 
@@ -307,7 +325,7 @@ void InitSceneEntities() {
     if (obj_entity != nullptr) {
       obj_entity->init();
       obj_entity->set_position({ 0.0f, -98.0f, 0.0f });
-      obj_entity->attachDrawable(DrawableAttached_Water);
+      obj_entity->attachDrawable(DrawableAttached_Water, manager->root.get());
       obj_entity->drawable_->set_material_settings(manager->mat_light_water_settings.get());
 
       manager->entities_.push_back(obj_entity);
@@ -329,5 +347,11 @@ void InitSceneTextures() {
     if (!manager->texture_water) {
       printf("Error loading water texture\n");
       exit(-2);
+    }
+
+    EDK3::Texture::Load("./textures/texture_skybox.png", &manager->texture_skybox);
+    if (!manager->texture_skybox) {
+        printf("Error loading skybox texture\n");
+        exit(-2);
     }
 }

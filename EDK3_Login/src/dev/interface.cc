@@ -343,7 +343,7 @@ void EntitiesManagerWindow() {
       }
       
       if (ImGui::Combo("Mesh", &manager->entities_[i]->drawableAttached_,drawable_types, 10)) {
-          manager->entities_[i]->attachDrawable((DrawableAttached)manager->entities_[i]->drawableAttached_);
+          manager->entities_[i]->attachDrawable((DrawableAttached)manager->entities_[i]->drawableAttached_, manager->root.get());
       }
       
       ImGui::DragFloat3("Position", &manager->entities_[i]->position_.x, 0.1f, -500.0f, 500.0f);

@@ -7,6 +7,7 @@
 
 #include "anim_library/animationinstance.h"
 #include "demo_manager.h"
+#include "EDK3/node.h"
 
 int Entity::next_entity_id = 0;
 
@@ -159,7 +160,7 @@ void Entity::setupDrawable(EDK3::Geometry* geo,
         manager->root->addChild(drawable_.get());
 }
 
-void Entity::attachDrawable(DrawableAttached drawableAttached) {
+void Entity::attachDrawable(DrawableAttached drawableAttached, EDK3::Node* root) {
     DemoManager* manager = DemoManager::getInstance();
     drawableAttached_ = drawableAttached;
     switch (drawableAttached)
@@ -195,7 +196,7 @@ void Entity::attachDrawable(DrawableAttached drawableAttached) {
     drawable_->set_material(manager->mat_selected.get());
     drawable_->set_material_settings(manager->mat_light_settings.get());
     if (!attached_) {
-        manager->root->addChild(drawable_.get());
+        root->addChild(drawable_.get());
         attached_ = true;
     }
 }

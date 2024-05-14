@@ -77,9 +77,15 @@ void UpdateFn() {
         manager->camera->window_size().y);
     EDK3::Node* root = manager->root.get();
 
+    const float* camera_pos = manager->camera->position();
+    manager->skybox_entity_->set_position({ camera_pos[0], camera_pos[1], camera_pos[2] });
+    manager->skybox_entity_->drawable_->set_position(camera_pos);
+
     for (unsigned int i = 0; i < manager->entities_.size(); i++) {
         manager->entities_[i]->update();
     }
+
+
 
     //Update lights scoped array
     for (unsigned int i = 0; i < manager->light_materials_settings.size(); i++) {
@@ -97,6 +103,10 @@ void UpdateFn() {
 void RenderFn() {
     DemoManager* manager = DemoManager::getInstance();
     
+    manager->GPU.enableCullFaces(EDK3::dev::GPUManager::FaceType::kFace_Back);
+    manager->GPU.enableDepthTest(EDK3::dev::GPUManager::CompareFunc::kCompareFunc_Less);
+
+
     //For every frame... determine what's visible:
     manager->camera->doCull(manager->root.get());
 
@@ -106,7 +116,7 @@ void RenderFn() {
     //Rendering the scene:
     EDK3::dev::GPUManager::CheckGLError("begin Render-->");
     
-    manager->GPU.clearFrameBuffer(manager->clear_rgba);
+    
     manager->camera->doRender();
     EDK3::dev::GPUManager::CheckGLError("end Render-->");
     if (manager->enable_postprocess) {
@@ -115,6 +125,19 @@ void RenderFn() {
     }
 }
 
+void RenderSkybox() {
+    DemoManager* manager = DemoManager::getInstance();
+
+    manager->GPU.disableCullFaces();
+    manager->GPU.enableDepthTest(EDK3::dev::GPUManager::CompareFunc::kCompareFunc_LessOrEqual);
+
+    //For every frame... determine what's visible:
+    manager->camera->doCull(manager->skybox_root.get());
+    manager->camera->doRender();
+
+    manager->GPU.enableDepthTest(EDK3::dev::GPUManager::CompareFunc::kCompareFunc_Less);
+
+}
 
 
 
@@ -128,17 +151,22 @@ int ESAT::main(int argc, char** argv) {
     double last_time = ESAT::Time();
     while (!ESAT::IsSpecialKeyDown(ESAT::kSpecialKey_Escape) &&
         ESAT::WindowIsOpened()) {
-        manager->GPU.enableCullFaces(EDK3::dev::GPUManager::FaceType::kFace_Back);
-        manager->GPU.enableDepthTest(EDK3::dev::GPUManager::CompareFunc::kCompareFunc_LessOrEqual);
-        manager->GPU.enableBlend(manager->blend_src, manager->blend_dst, manager->blend_op, manager->blend_black);
+        //manager->GPU.enableCullFaces(EDK3::dev::GPUManager::FaceType::kFace_Back);
         UpdateFn();
+        manager->GPU.enableBlend(manager->blend_src, manager->blend_dst, manager->blend_op, manager->blend_black);
+        manager->GPU.clearFrameBuffer(manager->clear_rgba);
         if (manager->enable_wireframe) {
             manager->GPU.draw_mode_ = EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Lines;
         }
         else {
             manager->GPU.draw_mode_ = EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Triangles;
         }
+        RenderSkybox();
         RenderFn();
+
+        //RenderSkybox
+
+
         manager->dt = ESAT::Time() - last_time;
         last_time = ESAT::Time();
         manager->GPU.draw_mode_ = EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Triangles;
