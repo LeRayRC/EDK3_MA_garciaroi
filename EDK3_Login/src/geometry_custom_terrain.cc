@@ -83,7 +83,7 @@ void TerrainCustom::init(const int num_cols, const int num_rows,
   for (int i = 0; i < (num_rows+1); i++) {
     for (int j = 0; j < (num_cols+1); j++){
         float texel_value;
-        if (use_heightmap) {
+        if (use_heightmap && nullptr != data) {
           texel_value = GetTexelValue(data, heightmap_nChannels, heightmap_width, heightmap_height, j, i, num_cols, num_rows);
           if (texel_value > 1.0f) texel_value = 1.0f;
         }

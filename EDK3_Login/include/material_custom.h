@@ -61,6 +61,8 @@ class MaterialCustom : public EDK3::Material {
     public:
       LightConf light_confs_[8];
       static Vec3 ambient_color_;
+      Vec2 water_speed_;
+      float time_;
       bool use_texture_;
       EDK3::ref_ptr<EDK3::Texture> texture_;
       float alpha_;
@@ -85,6 +87,7 @@ class MaterialCustom : public EDK3::Material {
             light_confs_[i].enabled_ = false;
         }
         alpha_ = 1.0f;
+        water_speed_ = { 0.0f, 0.0f };
       }
       void set_texture(EDK3::ref_ptr<EDK3::Texture> t) { texture_ = t; }
       EDK3::ref_ptr<EDK3::Texture> texture() const { return texture_; }

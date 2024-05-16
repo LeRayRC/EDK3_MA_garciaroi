@@ -192,6 +192,9 @@ void Entity::attachDrawable(DrawableAttached drawableAttached, EDK3::Node* root)
     case DrawableAttached_Water:
         drawable_->set_geometry(manager->water_terrain.get());
         break;
+    case DrawableAttached_Cube8v:
+        drawable_->set_geometry(manager->water_terrain.get());
+      break;
     }
     drawable_->set_material(manager->mat_selected.get());
     drawable_->set_material_settings(manager->mat_light_settings.get());

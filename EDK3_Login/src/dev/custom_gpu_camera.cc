@@ -66,9 +66,11 @@ namespace EDK3 {
 			const float* view = view_matrix();
 			const float* projection = projection_matrix();
 
-			
-			/*glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
+			float rgba[4] = { 1.0f,1.0f,1.0f,1.0f };
+			EDK3::dev::GPUManager& GPU = *EDK3::dev::GPUManager::Instance();
+			GPU.clearFrameBuffer(rgba);
+			GPU.enableDepthTest(EDK3::dev::GPUManager::CompareFunc::kCompareFunc_LessOrEqual);
+
 
 			for (unsigned int i = 0; i < data_->data.size(); i++) {
 				data_->data[i].material->enable(data_->data[i].mat_settings);

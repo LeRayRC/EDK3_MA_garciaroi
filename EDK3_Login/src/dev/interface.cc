@@ -198,6 +198,7 @@ void LightsWindow() {
     ImGui::DragFloat3("Ambient Color", &EDK3::MaterialCustom::LightSettings::ambient_color_.x, 0.01f, 0.0f, 1.0f);
     ImGui::Checkbox("Use Texture", &selected_light_settings->use_texture_);
     ImGui::DragFloat("Water Transparency", &manager->mat_light_water_settings->alpha_, 0.01f, 0.0f, 1.0f);
+    ImGui::DragFloat2("Water Speed", &manager->mat_light_water_settings->water_speed_.x, 0.01f, 0.0f, 5.0f);
     for (int i = 0; i < 8; i++) {
         ImGui::PushID(i);
         sprintf(name, "Light %d\0", i + 1);
@@ -297,6 +298,10 @@ void ControlWindow() {
             EDK3::Drawable* drawable = dynamic_cast<EDK3::Drawable*>(manager->root->child(i));
             drawable->set_material(mat_selected.get());
         }
+        if (!manager->show_normals) {
+          manager->water_entity_->drawable_->set_material(manager->mat_water.get());
+        }
+        
     }
     if (!manager->enable_postprocess) {
         if(ImGui::Checkbox("Wireframe mode", &manager->enable_wireframe)){
@@ -306,11 +311,13 @@ void ControlWindow() {
             }
             else {
                 mat_selected = manager->mat_basic;
+                
             }
             for (unsigned int i = 0; i < manager->root->num_children(); i++) {
                 EDK3::Drawable* drawable = dynamic_cast<EDK3::Drawable*>(manager->root->child(i));
                 drawable->set_material(mat_selected.get());
             }
+            manager->water_entity_->drawable_->set_material(manager->mat_water.get());
         }
     }
     ImGui::DragFloat4("Framebuffer color", manager->clear_rgba, 0.01f, 0.0f, 1.0f);

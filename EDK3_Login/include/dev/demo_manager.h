@@ -58,12 +58,14 @@ class DemoManager{
     
 
     EDK3::ref_ptr<EDK3::dev::CustomGPUCamera> camera;
+    //EDK3::ref_ptr<EDK3::CameraCustom> camera;
     EDK3::ref_ptr<EDK3::Node> root;
     EDK3::ref_ptr<EDK3::Node> skybox_root;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_basic;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_normals;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_wireframe;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_panoramic;
+    EDK3::ref_ptr<EDK3::MaterialCustom> mat_water;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings_general;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_water_settings;
@@ -76,12 +78,14 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::QuadCustom> custom_quad;
     EDK3::ref_ptr<EDK3::SphereCustom> custom_sphere;
     EDK3::ref_ptr<EDK3::CubeCustom> custom_cube;
+    EDK3::ref_ptr<EDK3::CubeCustom> custom_cube_8v;
     EDK3::ref_ptr<EDK3::SurfaceCustom> custom_tree;
     EDK3::ref_ptr<EDK3::SurfaceCustom> custom_torus;
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> house_geometry;
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> boat_geometry;
 
     Entity* skybox_entity_;
+    Entity* water_entity_;
     std::vector<Entity*> entities_;
     std::vector<AnimationConfig> animation_configs_;
     EDK3::scoped_array<char> animation_configs_names_;
@@ -98,6 +102,7 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::Texture> texture_skybox;
 
     double dt;
+    float time_;
     bool enable_postprocess;
     bool enable_wireframe;
 

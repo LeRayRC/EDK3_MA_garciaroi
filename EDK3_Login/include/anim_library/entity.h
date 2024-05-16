@@ -29,6 +29,7 @@ enum DrawableAttached {
     DrawableAttached_House,
     DrawableAttached_Boat,
     DrawableAttached_Water,
+    DrawableAttached_Cube8v,
 };
 
 /**

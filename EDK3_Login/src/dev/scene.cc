@@ -135,6 +135,9 @@ void InitSceneGeometries() {
     manager->custom_cube.alloc();
     manager->custom_cube->init24v(8.0f);
 
+    manager->custom_cube_8v.alloc();
+    manager->custom_cube_8v->init8v(8.0f);
+
     manager->custom_tree.alloc();
     manager->custom_torus.alloc();
     manager->custom_torus->init(points, kNTorusPoints, 40, 2.0f, 2.0f);
@@ -151,10 +154,10 @@ void InitSceneGeometries() {
         true); // use heightmap
 
     manager->water_terrain.alloc();
-    manager->water_terrain->init(256, 256, // cols , rows
-      2.0f, // height multiplier
-      1.0f, // quad size
-      0.05f, // smothness
+    manager->water_terrain->init(64, 64, // cols , rows
+      20.0f, // height multiplier
+      24.0f, // quad size
+      0.25f, // smothness
       40.0f, // heightmap multiplier
       //"./textures/australia.png",   // heightmap path
       "./textures/island_heightmap.png",   // heightmap path
@@ -170,6 +173,7 @@ void InitSceneMaterials() {
     manager->mat_normals->init(error_log, "./shaders/basicVertex.vs", "./shaders/normalFragment.fs");
     manager->mat_wireframe->init(error_log, "./shaders/basicVertex.vs", "./shaders/wireframeFragment.fs");
     manager->mat_panoramic->init(error_log, "./shaders/panoramicVertex.vs", "./shaders/panoramicFragment.fs");
+    manager->mat_water->init(error_log, "./shaders/waterVertex.vs", "./shaders/water_light_shader.fs");
     //manager->mat_light_settings.alloc();
     //manager->mat_light_water_settings.alloc();
 
@@ -215,7 +219,6 @@ void InitSceneMaterials() {
     manager->mat_light_settings_general->light_confs_[2].cutoff_ = 0.946f;
 
     manager->mat_light_settings->set_texture(manager->texture_sand.get());
-
 
     manager->mat_light_water_settings->set_texture(manager->texture_water.get());
     manager->mat_panoramic_settings->set_texture(manager->texture_skybox.get());
@@ -316,7 +319,6 @@ void InitSceneEntities() {
         obj_entity->drawable_->set_material(manager->mat_panoramic.get());
         obj_entity->drawable_->set_material_settings(manager->mat_panoramic_settings.get());
         manager->skybox_entity_ = obj_entity;
-        //manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
 
@@ -327,8 +329,9 @@ void InitSceneEntities() {
       obj_entity->set_position({ 0.0f, -98.0f, 0.0f });
       obj_entity->attachDrawable(DrawableAttached_Water, manager->root.get());
       obj_entity->drawable_->set_material_settings(manager->mat_light_water_settings.get());
-
+      obj_entity->drawable_->set_material(manager->mat_water.get());
       manager->entities_.push_back(obj_entity);
+      manager->water_entity_ = obj_entity;
     }
     obj_entity = nullptr;
 

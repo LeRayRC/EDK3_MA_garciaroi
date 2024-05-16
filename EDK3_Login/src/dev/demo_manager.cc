@@ -24,6 +24,7 @@ void DemoManager::init() {
   manager->mat_normals.alloc();
   manager->mat_panoramic.alloc();
   manager->mat_wireframe.alloc();
+  manager->mat_water.alloc();
 
 
   manager->light_materials_settings.alloc(2);
@@ -38,6 +39,8 @@ void DemoManager::init() {
   manager->show_normals = false;
   manager->enable_postprocess = false;
   manager->enable_wireframe = false;
+
+
 
   InitDefaultWindowFlags(&manager->settings_window);
   InitDefaultWindowFlags(&manager->lights_window);

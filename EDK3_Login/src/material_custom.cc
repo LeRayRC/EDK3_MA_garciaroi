@@ -285,6 +285,27 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
           //printf("Error uniform %s\n", name);
       }
 
+      //Speed
+      sprintf(name, "u_water_speed\0");
+      loc = program_->get_uniform_position(name);
+      if (loc != -1) {
+        program_->set_uniform_value(loc, EDK3::Type::T_FLOAT_2, &light_set->water_speed_.x);
+      }
+      else {
+        //printf("Error uniform %s\n", name);
+      }
+
+      sprintf(name, "u_time\0");
+      loc = program_->get_uniform_position(name);
+      if (loc != -1) {
+        program_->set_uniform_value(loc, EDK3::Type::T_FLOAT, &light_set->time_);
+      }
+      else {
+        //printf("Error uniform %s\n", name);
+      }
+
+
+
       sprintf(name, "u_use_texture\0");
       int use_texture = light_set->use_texture_ ? 1 : 0;
       loc = program_->get_uniform_position(name);

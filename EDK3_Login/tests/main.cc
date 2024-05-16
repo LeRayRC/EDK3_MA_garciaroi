@@ -72,20 +72,26 @@ void InitScene() {
 
 void UpdateFn() {
     DemoManager* manager = DemoManager::getInstance();
-    manager->camera->set_clear_color(0.94f, 1.0f, 0.94f, 1.0f);
+
+    manager->time_ = (float)ESAT::Time() / 1000.0f;
+
+    manager->camera->set_clear_color(manager->clear_rgba[0], manager->clear_rgba[1], manager->clear_rgba[2], manager->clear_rgba[3]);
     manager->camera->update(manager->dt, manager->camera->window_size().x,
         manager->camera->window_size().y);
     EDK3::Node* root = manager->root.get();
 
-    const float* camera_pos = manager->camera->position();
-    manager->skybox_entity_->set_position({ camera_pos[0], camera_pos[1], camera_pos[2] });
-    manager->skybox_entity_->drawable_->set_position(camera_pos);
+    //const float* camera_pos = manager->camera->position();
+    //manager->skybox_entity_->set_position({ camera_pos[0], camera_pos[1], camera_pos[2] });
+    //manager->skybox_entity_->drawable_->set_position(camera_pos);
+    //manager->skybox_entity_->set_position({ 0.0f,0.0f,0.0f });
+    //manager->skybox_entity_->drawable_->set_position(0.0f, 0.0f, 0.0f);
+    //manager->skybox_entity_->drawable_->set_rotation_xyz(0.0f, 0.0f, 0.0f);
+    //manager->skybox_entity_->update();
+    //manager->skybox_entity_->drawable_->set_position(camera_pos);
 
     for (unsigned int i = 0; i < manager->entities_.size(); i++) {
         manager->entities_[i]->update();
     }
-
-
 
     //Update lights scoped array
     for (unsigned int i = 0; i < manager->light_materials_settings.size(); i++) {
@@ -98,6 +104,8 @@ void UpdateFn() {
         manager->light_materials_settings[i]->use_texture_ =
             manager->mat_light_settings_general->use_texture_;
     }
+
+    manager->mat_light_water_settings->time_ = manager->time_;
 }
 
 void RenderFn() {
@@ -118,6 +126,7 @@ void RenderFn() {
     
     
     manager->camera->doRender();
+
     EDK3::dev::GPUManager::CheckGLError("end Render-->");
     if (manager->enable_postprocess) {
         manager->render_target->end();
@@ -161,7 +170,9 @@ int ESAT::main(int argc, char** argv) {
         else {
             manager->GPU.draw_mode_ = EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Triangles;
         }
-        RenderSkybox();
+        if (!manager->enable_postprocess) {
+          RenderSkybox();
+        }
         RenderFn();
 
         //RenderSkybox
