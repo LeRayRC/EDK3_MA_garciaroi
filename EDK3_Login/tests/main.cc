@@ -112,26 +112,17 @@ void RenderFn() {
     DemoManager* manager = DemoManager::getInstance();
     
     manager->GPU.enableCullFaces(EDK3::dev::GPUManager::FaceType::kFace_Back);
+    //manager->GPU.disableCullFaces();
     manager->GPU.enableDepthTest(EDK3::dev::GPUManager::CompareFunc::kCompareFunc_Less);
-
 
     //For every frame... determine what's visible:
     manager->camera->doCull(manager->root.get());
 
-    if (manager->enable_postprocess) {
-        manager->render_target->begin();
-    }
-    //Rendering the scene:
-    EDK3::dev::GPUManager::CheckGLError("begin Render-->");
-    
+    //EDK3::dev::GPUManager::CheckGLError("begin Render-->");
     
     manager->camera->doRender();
-
-    EDK3::dev::GPUManager::CheckGLError("end Render-->");
-    if (manager->enable_postprocess) {
-        manager->render_target->end();
-        manager->mat_postprocess->drawFullScreenQuad(manager->mat_postprocess_settings.get());
-    }
+    //EDK3::dev::GPUManager::CheckGLError("end Render-->");
+    
 }
 
 void RenderSkybox() {
@@ -143,8 +134,6 @@ void RenderSkybox() {
     //For every frame... determine what's visible:
     manager->camera->doCull(manager->skybox_root.get());
     manager->camera->doRender();
-
-    manager->GPU.enableDepthTest(EDK3::dev::GPUManager::CompareFunc::kCompareFunc_Less);
 
 }
 
@@ -170,12 +159,19 @@ int ESAT::main(int argc, char** argv) {
         else {
             manager->GPU.draw_mode_ = EDK3::dev::CustomGPUManager::DrawMode::kDrawMode_Triangles;
         }
-        if (!manager->enable_postprocess) {
-          RenderSkybox();
+        if (manager->enable_postprocess) {
+            manager->render_target->begin();
+            manager->GPU.clearFrameBuffer(manager->clear_rgba);
         }
+
+        RenderSkybox();
         RenderFn();
 
-        //RenderSkybox
+        if (manager->enable_postprocess) {
+            manager->render_target->end();
+            manager->mat_postprocess->drawFullScreenQuad(manager->mat_postprocess_settings.get());
+        }
+
 
 
         manager->dt = ESAT::Time() - last_time;

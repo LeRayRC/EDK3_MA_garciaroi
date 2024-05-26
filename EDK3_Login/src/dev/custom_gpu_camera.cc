@@ -68,8 +68,8 @@ namespace EDK3 {
 
 			float rgba[4] = { 1.0f,1.0f,1.0f,1.0f };
 			EDK3::dev::GPUManager& GPU = *EDK3::dev::GPUManager::Instance();
-			GPU.clearFrameBuffer(rgba);
-			GPU.enableDepthTest(EDK3::dev::GPUManager::CompareFunc::kCompareFunc_LessOrEqual);
+			//GPU.clearFrameBuffer(rgba);
+			//GPU.enableDepthTest(EDK3::dev::GPUManager::CompareFunc::kCompareFunc_LessOrEqual);
 
 
 			for (unsigned int i = 0; i < data_->data.size(); i++) {

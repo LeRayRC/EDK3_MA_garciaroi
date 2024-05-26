@@ -151,7 +151,7 @@ void InitSceneGeometries() {
         40.0f, // heightmap multiplier
         //"./textures/australia.png",   // heightmap path
         "./textures/island_heightmap.png",   // heightmap path
-        true); // use heightmap
+        true, true, {16.0f,16.0f}); // use heightmap
 
     manager->water_terrain.alloc();
     manager->water_terrain->init(64, 64, // cols , rows
@@ -161,7 +161,7 @@ void InitSceneGeometries() {
       40.0f, // heightmap multiplier
       //"./textures/australia.png",   // heightmap path
       "./textures/island_heightmap.png",   // heightmap path
-      false); // use heightmap
+        false, true, { 64.0f, 64.0f }); // use heightmap
 }
 
 void InitSceneMaterials() {

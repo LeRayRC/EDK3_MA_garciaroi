@@ -27,7 +27,7 @@ namespace EDK3 {
 void TerrainCustom::init(const int num_cols, const int num_rows,
     const float height_mult, const float size,const float smoothness,
     const float heightmap_mult, const char* heightmap_path, const bool use_heightmap,
-    const bool is_centered){
+    const bool is_centered, const Vec2 tilling) {
   //TODO demand graphic resources to the GPUManager.
   EDK3::dev::GPUManager& GPU = *EDK3::dev::GPUManager::Instance();
   GPU.newBuffer(&elements_buffer);
@@ -100,8 +100,8 @@ void TerrainCustom::init(const int num_cols, const int num_rows,
                                                                       SimplexNoise::noise(size * j * smoothness ,size * i * smoothness) * height_mult,
                                                                       size * i);
         }
-     
-      mesh_elements_pointer[j + i * (num_cols+1)].uv = Vec2((float)j,(float)i);
+        //printf("%f,%f\n", (float)(j / num_cols_)* tilling.x, (i / num_rows_)* tilling.y);
+      mesh_elements_pointer[j + i * (num_cols+1)].uv = Vec2(((float)j/num_cols_)*tilling.x ,((float)i/num_rows_)*tilling.y);
       /*printf("%f %f %f \n ", mesh_elements_pointer[j + i * (num_cols + 1)].pos.x,
         mesh_elements_pointer[j + i * (num_cols + 1)].pos.y,
         mesh_elements_pointer[j + i * (num_cols + 1)].pos.z);*/
