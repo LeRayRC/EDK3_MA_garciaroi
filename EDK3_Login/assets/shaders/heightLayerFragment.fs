@@ -23,6 +23,8 @@ uniform int u_number_lights;
 uniform vec3 u_ambient;
 uniform Light u_lights[kMaxLights];
 uniform sampler2D u_texture_1;
+uniform sampler2D u_texture_2;
+uniform sampler2D u_texture_3;
 uniform int u_use_texture;
 uniform float u_alpha;
 
@@ -30,6 +32,7 @@ out vec4 FragColor;
 in vec2 uv;
 in vec3 normal;
 in vec3 position;
+in float height;
 
 vec3 final_color = vec3(0.0, 0.0, 0.0);
 

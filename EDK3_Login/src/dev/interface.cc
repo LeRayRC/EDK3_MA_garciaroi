@@ -287,8 +287,9 @@ void ControlWindow() {
         ImGui::Checkbox("Enable Postprocess", &manager->enable_postprocess);
     }
     if (ImGui::Checkbox("Show normals", &manager->show_normals)) {
-        EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
-        if (manager->show_normals) {
+        EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> selected_light_settings = manager->mat_light_settings_general;
+        //EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
+        /*if (manager->show_normals) {
             mat_selected = manager->mat_normals;
         }
         else {
@@ -300,7 +301,8 @@ void ControlWindow() {
         }
         if (!manager->show_normals) {
           manager->water_entity_->drawable_->set_material(manager->mat_water.get());
-        }
+        }*/
+        selected_light_settings->show_normal_ = !selected_light_settings->show_normal_;
         
     }
     if (!manager->enable_postprocess) {

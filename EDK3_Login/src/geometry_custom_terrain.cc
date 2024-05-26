@@ -37,6 +37,7 @@ void TerrainCustom::init(const int num_cols, const int num_rows,
       Vec3 pos;
       Vec3 normal;
       Vec2 uv;
+      float height_value;
 
       //ESAT::Vec3 pos;
       //ESAT::Vec3 normal;
@@ -102,6 +103,8 @@ void TerrainCustom::init(const int num_cols, const int num_rows,
         }
         //printf("%f,%f\n", (float)(j / num_cols_)* tilling.x, (i / num_rows_)* tilling.y);
       mesh_elements_pointer[j + i * (num_cols+1)].uv = Vec2(((float)j/num_cols_)*tilling.x ,((float)i/num_rows_)*tilling.y);
+      mesh_elements_pointer[j + i * (num_cols + 1)].height_value = texel_value;
+  
       /*printf("%f %f %f \n ", mesh_elements_pointer[j + i * (num_cols + 1)].pos.x,
         mesh_elements_pointer[j + i * (num_cols + 1)].pos.y,
         mesh_elements_pointer[j + i * (num_cols + 1)].pos.z);*/
@@ -219,15 +222,19 @@ bool TerrainCustom::bindAttribute(const Attribute a,
   switch (a){
     case Attribute::A_POSITION:
         EDK3::dev::GPUManager::Instance()->enableVertexAttribute(elements_buffer.get(),
-            0, EDK3::T_FLOAT_3, false, 0, 8 * sizeof(float));
+            0, EDK3::T_FLOAT_3, false, 0, 9 * sizeof(float));
         break;
     case Attribute::A_NORMAL:
         EDK3::dev::GPUManager::Instance()->enableVertexAttribute(elements_buffer.get(),
-            1, EDK3::T_FLOAT_3, false, 3 * sizeof(float), 8 * sizeof(float));
+            1, EDK3::T_FLOAT_3, false, 3 * sizeof(float), 9 * sizeof(float));
         break;
     case Attribute::A_UV:
         EDK3::dev::GPUManager::Instance()->enableVertexAttribute(elements_buffer.get(),
-            2, EDK3::T_FLOAT_2, false, 6 * sizeof(float), 8 * sizeof(float));
+            2, EDK3::T_FLOAT_2, false, 6 * sizeof(float), 9 * sizeof(float));
+        break;
+    case Attribute::A_WEIGHT0:
+        EDK3::dev::GPUManager::Instance()->enableVertexAttribute(elements_buffer.get(),
+            3, EDK3::T_FLOAT, false, 8 * sizeof(float), 9 * sizeof(float));
         break;
     default:
         break;

@@ -25,15 +25,22 @@ void DemoManager::init() {
   manager->mat_panoramic.alloc();
   manager->mat_wireframe.alloc();
   manager->mat_water.alloc();
+  manager->mat_heightlayer.alloc();
+  
 
-
-  manager->light_materials_settings.alloc(2);
+  manager->light_materials_settings.alloc(3);
   manager->mat_light_settings_general.alloc();
   manager->mat_light_settings_general->use_texture_ = true;
   manager->mat_light_settings = manager->light_materials_settings[0].alloc();
   manager->mat_light_water_settings = manager->light_materials_settings[1].alloc();
+  manager->mat_heightlayer_settings = manager->light_materials_settings[2].alloc();
   manager->mat_panoramic_settings.alloc();
 
+  //Postprocess
+  manager->render_target.alloc()->init(kWindowWidth,
+      kWindowHeight, 1);
+  manager->mat_postprocess.alloc();
+  manager->mat_postprocess_settings.alloc();
 
   manager->dt = 0.0f;
   manager->show_normals = false;

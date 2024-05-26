@@ -28,7 +28,8 @@ class MaterialCustom : public EDK3::Material {
   MaterialCustom();
   void init(EDK3::scoped_array<char>& error_log,
             const char* vertex_path,
-            const char* fragment_path);
+            const char* fragment_path,
+            int attribs_required = 3);
 
   //Indica el uso del material, se llamara frame a frame cada que queramos pintar algo
   virtual bool enable(const EDK3::MaterialSettings *mat) const override;
@@ -64,9 +65,10 @@ class MaterialCustom : public EDK3::Material {
       Vec2 water_speed_;
       float time_;
       bool use_texture_;
-      EDK3::ref_ptr<EDK3::Texture> texture_;
+      bool show_normal_;
+      EDK3::ref_ptr<EDK3::Texture> texture_[3];
       float alpha_;
-
+        
       LightSettings() {
         memset(light_confs_, 0, sizeof(light_confs_));
         for (int i = 0; i < 8; i++) {
@@ -89,8 +91,8 @@ class MaterialCustom : public EDK3::Material {
         alpha_ = 1.0f;
         water_speed_ = { 0.0f, 0.0f };
       }
-      void set_texture(EDK3::ref_ptr<EDK3::Texture> t) { texture_ = t; }
-      EDK3::ref_ptr<EDK3::Texture> texture() const { return texture_; }
+      void set_texture(EDK3::ref_ptr<EDK3::Texture> t, int index = 0) { texture_[index] = t; }
+      EDK3::ref_ptr<EDK3::Texture> texture(int index=0) const { return texture_[index]; }
     protected:
       virtual ~LightSettings() {}
     private:
@@ -99,20 +101,28 @@ class MaterialCustom : public EDK3::Material {
           ambient_color_ = other.ambient_color_;
           use_texture_ = other.use_texture_;
           alpha_ = other.alpha_;
-          texture_ = other.texture_;
+          for (int i = 0; i < 3; i++) {
+              texture_[i] = other.texture_[i];
+          }
       }
         LightSettings(LightSettings&& other) {
           memcpy(light_confs_, other.light_confs_, sizeof(light_confs_));
           memset(other.light_confs_, 0, sizeof(light_confs_));
-          texture_ = other.texture_;
+          for (int i = 0; i < 3; i++) {
+              texture_[i] = other.texture_[i];
+          }
           ambient_color_ = other.ambient_color_;
           use_texture_ = other.use_texture_;
           alpha_ = other.alpha_;
-          other.texture_.release();
+          for (int i = 0; i < 3; i++) {
+              other.texture_[i].release();
+          }
       }
         LightSettings& operator=(const LightSettings& other) {
           memcpy(light_confs_, other.light_confs_, sizeof(light_confs_));
-          texture_ = other.texture_;
+          for (int i = 0; i < 3; i++) {
+              texture_[i] = other.texture_[i];
+          }
           ambient_color_ = other.ambient_color_;
           use_texture_ = other.use_texture_;
           alpha_ = other.alpha_;
@@ -185,7 +195,7 @@ class MaterialCustom : public EDK3::Material {
 
  private:
   EDK3::ref_ptr<EDK3::dev::Program> program_;
-  
+  int attribs_required_;
   MaterialCustom(const MaterialCustom&);
   //MaterialCustom(MaterialCustom&&);
   MaterialCustom& operator=(const MaterialCustom&);

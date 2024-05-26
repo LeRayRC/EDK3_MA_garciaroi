@@ -26,7 +26,8 @@ MaterialCustom& MaterialCustom::operator=(const MaterialCustom& mat) {
 
 void MaterialCustom::init(EDK3::scoped_array<char> &error_log, 
                           const char* vertex_path,
-                          const char* fragment_path){
+                          const char* fragment_path,
+                          int attribs_required){
   //1: Request at least two shaders and one program to the GPU Manager.
     EDK3::dev::GPUManager& GPU = *EDK3::dev::GPUManager::Instance();
     EDK3::ref_ptr<EDK3::dev::Shader> fragment_shader;
@@ -35,6 +36,7 @@ void MaterialCustom::init(EDK3::scoped_array<char> &error_log,
     GPU.newShader(&vertex_vertex);
     GPU.newProgram(&program_);
 
+    attribs_required_ = attribs_required;
     EDK3::scoped_array<char> vertex_shader_source;
     EDK3::scoped_array<char> fragment_shader_source;
 
@@ -316,6 +318,16 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
           //printf("Error uniform %s\n", name);
       }
 
+      sprintf(name, "u_show_normal\0");
+      int show_normal = light_set->show_normal_ ? 1 : 0;
+      loc = program_->get_uniform_position(name);
+      if (loc != -1) {
+          program_->set_uniform_value(loc, EDK3::Type::T_INT_1, &show_normal);
+      }
+      else {
+          //printf("Error uniform %s\n", name);
+      }
+
       sprintf(name, "u_alpha\0");
       loc = program_->get_uniform_position(name);
       if (loc != -1) {
@@ -327,15 +339,20 @@ bool MaterialCustom::enable(const EDK3::MaterialSettings *mat) const {
       }
 
 
-
-      int slot = 0;
-      light_set->texture()->bind(slot);
-      unsigned int albedo_loc = program_->get_uniform_position("u_texture");
-      if (loc != -1) {
-        program_->set_uniform_value(albedo_loc, EDK3::Type::T_INT_1, &slot);
-      }
-      else {
-        //printf("Error uniform %s\n", name);
+      for (int i = 0; i < 3; i++) {
+        int slot = i;
+        EDK3::ref_ptr<EDK3::Texture> texture = light_set->texture(i);
+        if (texture != nullptr) {
+            texture->bind(slot);
+            sprintf(name, "u_texture_%d\0",i+1);
+            unsigned int albedo_loc = program_->get_uniform_position(name);
+            if (loc != -1) {
+              program_->set_uniform_value(albedo_loc, EDK3::Type::T_INT_1, &slot);
+            }
+            else {
+              //printf("Error uniform %s\n", name);
+            }
+        }
       }
       return true;
     }
@@ -359,7 +376,7 @@ void MaterialCustom::setupModel(const float model[16]) const {
 
 unsigned int MaterialCustom::num_attributes_required() const {
   //Depending on how attributes the geometry has.
-    return 3;
+    return attribs_required_;
 }
 
 EDK3::Attribute MaterialCustom::attribute_at_index(const unsigned int attrib_idx) const {
@@ -375,6 +392,9 @@ EDK3::Attribute MaterialCustom::attribute_at_index(const unsigned int attrib_idx
         break;
     case 2:
         return EDK3::Attribute::A_UV;
+        break;
+    case 3:
+        return EDK3::Attribute::A_WEIGHT0;
         break;
     default:
         return EDK3::Attribute::A_NONE;
@@ -395,6 +415,9 @@ EDK3::Type MaterialCustom::attribute_type_at_index(const unsigned int attrib_idx
         break;
     case 2:
         return EDK3::Type::T_FLOAT_2;
+        break;
+    case 3:
+        return EDK3::Type::T_FLOAT;
         break;
     default:
         return EDK3::Type::T_NONE;

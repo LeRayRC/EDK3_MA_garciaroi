@@ -66,10 +66,12 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_wireframe;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_panoramic;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_water;
+    EDK3::ref_ptr<EDK3::MaterialCustom> mat_heightlayer;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings_general;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_water_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_panoramic_settings;
+    EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_heightlayer_settings;
 
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings>> light_materials_settings;
 
@@ -97,9 +99,12 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::PostprocessBasic> mat_postprocess;
     EDK3::ref_ptr<EDK3::PostprocessBasic::PostprocessBasicSettings> mat_postprocess_settings;
 
-    EDK3::ref_ptr<EDK3::Texture> texture_sand;
     EDK3::ref_ptr<EDK3::Texture> texture_water;
     EDK3::ref_ptr<EDK3::Texture> texture_skybox;
+    EDK3::ref_ptr<EDK3::Texture> texture_sand;
+    EDK3::ref_ptr<EDK3::Texture> texture_grass;
+    EDK3::ref_ptr<EDK3::Texture> texture_forest;
+    EDK3::ref_ptr<EDK3::Texture> texture_rocks;
 
     double dt;
     float time_;

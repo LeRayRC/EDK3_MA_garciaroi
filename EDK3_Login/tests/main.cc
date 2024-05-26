@@ -103,6 +103,8 @@ void UpdateFn() {
         }
         manager->light_materials_settings[i]->use_texture_ =
             manager->mat_light_settings_general->use_texture_;
+        manager->light_materials_settings[i]->show_normal_ =
+            manager->mat_light_settings_general->show_normal_;
     }
 
     manager->mat_light_water_settings->time_ = manager->time_;

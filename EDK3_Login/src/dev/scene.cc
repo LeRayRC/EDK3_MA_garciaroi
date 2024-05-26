@@ -174,15 +174,8 @@ void InitSceneMaterials() {
     manager->mat_wireframe->init(error_log, "./shaders/basicVertex.vs", "./shaders/wireframeFragment.fs");
     manager->mat_panoramic->init(error_log, "./shaders/panoramicVertex.vs", "./shaders/panoramicFragment.fs");
     manager->mat_water->init(error_log, "./shaders/waterVertex.vs", "./shaders/water_light_shader.fs");
-    //manager->mat_light_settings.alloc();
-    //manager->mat_light_water_settings.alloc();
+    manager->mat_heightlayer->init(error_log, "./shaders/heightLayerVertex.vs", "./shaders/heightLayerFragment.fs",4);
 
-
-
-    manager->render_target.alloc()->init(kWindowWidth,
-        kWindowHeight, 1);
-    manager->mat_postprocess.alloc();
-    manager->mat_postprocess_settings.alloc();
 
     manager->mat_postprocess->init("./shaders/postprocessVertex.vs", "./shaders/postprocessFragment.fs");
     float green[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
@@ -192,6 +185,8 @@ void InitSceneMaterials() {
     manager->mat_postprocess_settings->set_color(green);
 
 
+    manager->mat_light_settings_general->use_texture_ = true;
+    manager->mat_light_settings_general->show_normal_ = false;
     for (int i = 0; i < 3; i++) {
         manager->mat_light_settings_general->light_confs_[i].enabled_ = true;
     }
@@ -219,7 +214,9 @@ void InitSceneMaterials() {
     manager->mat_light_settings_general->light_confs_[2].cutoff_ = 0.946f;
 
     manager->mat_light_settings->set_texture(manager->texture_sand.get());
-
+    manager->mat_heightlayer_settings->set_texture(manager->texture_sand.get());
+    manager->mat_heightlayer_settings->set_texture(manager->texture_rocks.get(),1);
+    manager->mat_heightlayer_settings->set_texture(manager->texture_grass.get(),2);
     manager->mat_light_water_settings->set_texture(manager->texture_water.get());
     manager->mat_panoramic_settings->set_texture(manager->texture_skybox.get());
     
@@ -239,6 +236,8 @@ void InitSceneEntities() {
         obj_entity->init();
         obj_entity->set_position({ 0.0f, -100.0f, 0.0f });
         obj_entity->attachDrawable(DrawableAttached_Terrain, manager->root.get());
+        obj_entity->drawable_->set_material(manager->mat_heightlayer.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
         manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
@@ -340,8 +339,20 @@ void InitSceneEntities() {
 void InitSceneTextures() {
     DemoManager* manager = DemoManager::getInstance();
 
-    EDK3::Texture::Load("./textures/sand_texture.png", &manager->texture_sand);
+    EDK3::Texture::Load("./textures/sand.png", &manager->texture_sand);
     if (!manager->texture_sand) {
+        printf("Error loading sand texture\n");
+        exit(-2);
+    }
+
+    EDK3::Texture::Load("./textures/grass.png", &manager->texture_grass);
+    if (!manager->texture_grass) {
+        printf("Error loading grass texture\n");
+        exit(-2);
+    }
+
+    EDK3::Texture::Load("./textures/rocks.png", &manager->texture_rocks);
+    if (!manager->texture_rocks) {
         printf("Error loading sand texture\n");
         exit(-2);
     }
@@ -357,4 +368,6 @@ void InitSceneTextures() {
         printf("Error loading skybox texture\n");
         exit(-2);
     }
+
+
 }
