@@ -194,6 +194,15 @@ void Entity::attachDrawable(DrawableAttached drawableAttached, EDK3::Node* root)
         break;
     case DrawableAttached_Cube8v:
         drawable_->set_geometry(manager->water_terrain.get());
+        break;
+    case DrawableAttached_IslandSmall:
+        drawable_->set_geometry(manager->custom_island_small.get());
+        break;
+    case DrawableAttached_IslandMedium:
+        drawable_->set_geometry(manager->custom_island_medium.get());
+        break;
+    case DrawableAttached_IslandBig:
+        drawable_->set_geometry(manager->custom_island_big.get());
       break;
     }
     drawable_->set_material(manager->mat_selected.get());

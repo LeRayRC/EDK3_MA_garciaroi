@@ -29,3 +29,9 @@ float GetTexelValue(unsigned char* data, unsigned int nchannels, unsigned int wi
     float value = (float)(*texel) / 255.0f;
     return value;
 }
+
+float ClampFloat(float value, float min, float max) {
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+}

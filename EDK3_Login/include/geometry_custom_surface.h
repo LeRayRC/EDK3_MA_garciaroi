@@ -22,7 +22,8 @@ class SurfaceCustom : public EDK3::Geometry {
 
   void init(const Vec2 *surface_points,
             const int num_heights = 4, const int num_revs = 4, 
-            float surface_size = 1.0f, float height_multiplier = 1.0f);
+            float surface_size = 1.0f, float height_multiplier = 1.0f,
+      bool apply_noise = false, float smoothness = 0.0f, const Vec2 tilling = {1.0f,1.0f});
 
   virtual bool bindAttribute(const Attribute a,
                              unsigned int where_to_bind_attribute)

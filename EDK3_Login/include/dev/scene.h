@@ -27,5 +27,6 @@ void InitSceneGeometries();
 void InitSceneMaterials();
 void InitSceneEntities();
 void InitSceneTextures();
+void InitIslandPoints(Vec2* island_points);
 
 #endif

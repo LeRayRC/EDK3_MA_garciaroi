@@ -9,9 +9,11 @@
 #include "geometry_custom_surface.h"
 #include "ESAT/math.h"
 #include "dev/custom_gpu_manager.h"
+#include "Perlin/SimplexNoise.h"
 #include "math_helpers.h"
 #include "math_library/vector_3.h"
 #include "math_library/vector_2.h"
+
 
 namespace EDK3 {
 
@@ -21,7 +23,8 @@ namespace EDK3 {
     SurfaceCustom::~SurfaceCustom(){}
 
   void SurfaceCustom::init(const Vec2 *surface_points,
-      const int num_heights, const int num_revs, float surface_size, float height_multiplier){
+      const int num_heights, const int num_revs, float surface_size, float height_multiplier,
+      bool apply_noise, float smoothness, const Vec2 tilling){
   //TODO demand graphic resources to the GPUManager.
   EDK3::dev::GPUManager& GPU = *EDK3::dev::GPUManager::Instance();
   GPU.newBuffer(&elements_buffer);
@@ -34,6 +37,7 @@ namespace EDK3 {
       Vec3 pos;
       Vec3 normal;
       Vec2 uv;
+      float height;
   };
 
   Vec3 up_vector;
@@ -58,28 +62,39 @@ namespace EDK3 {
   for (int i=0; i <= num_heights_; i++) {
       for (int j = 0; j <= num_revs_; j++) {
           if (j == num_revs_) {
-              mesh_elements_pointer[j + i * (num_revs_ + 1)].pos = 
-                Vec3(cosf(0) * surface_points[i].x * surface_size,
-                    surface_points[i].y * surface_size * height_multiplier,
-                     sinf(0) * surface_points[i].x * surface_size);
+              if (apply_noise) {
+                  mesh_elements_pointer[j + i * (num_revs_ + 1)].pos =
+                      mesh_elements_pointer[i * (num_revs_ + 1)].pos;
+                  /*Vec3(cosf(0) * surface_points[i].x * surface_size,
+                      surface_points[i].y * surface_size * height_multiplier,
+                      sinf(0) * surface_points[i].x * surface_size);*/
+              }
+              else {
+                  mesh_elements_pointer[j + i * (num_revs_ + 1)].pos =
+                      Vec3(cosf(0) * surface_points[i].x * surface_size,
+                          surface_points[i].y * surface_size * height_multiplier,
+                          sinf(0) * surface_points[i].x * surface_size);
+              }
           }
           else {
-              mesh_elements_pointer[j + i * (num_revs_ + 1)].pos = {
-                  cosf(omega * j) * surface_points[i].x * surface_size,
-                  surface_points[i].y * surface_size * height_multiplier,
-                  sinf(omega * j) * surface_points[i].x * surface_size
-              };
+              if (apply_noise) {
+                mesh_elements_pointer[j + i * (num_revs_ + 1)].pos = {
+                    (cosf(omega * j) +  ClampFloat((SimplexNoise::noise(surface_points[i].x * smoothness * surface_size, surface_points[i].y * surface_size * smoothness)), -0.3f,0.3f)) * surface_points[i].x * surface_size,
+                    surface_points[i].y * surface_size * height_multiplier,
+                    (sinf(omega * j) + ClampFloat((SimplexNoise::noise(surface_points[i].x * smoothness * surface_size, surface_points[i].y * surface_size * smoothness)), -0.3f,0.3f)) * surface_points[i].x * surface_size
+                };
+              }
+              else {
+                mesh_elements_pointer[j + i * (num_revs_ + 1)].pos = {
+                    cosf(omega * j) * surface_points[i].x * surface_size,
+                    surface_points[i].y * surface_size * height_multiplier,
+                    sinf(omega * j) * surface_points[i].x * surface_size
+                };
+              }
 
-              //mesh_elements_pointer[j + i * (num_revs_ + 1)].pos = {
-              //    cosf(omega * j) * (cosf(i * alpha - 1.57f) + offset) * surface_size,
-              //    (sinf(i * alpha - 1.57f) + offset) * surface_size,
-              //    sinf(omega * j) * (cosf(i * alpha - 1.57f) + offset) * surface_size
-              //};
           }
-            //mesh_elements_pointer[j + i * (num_revs_ + 1)].uv = { (float)j,(float)i };
-          mesh_elements_pointer[j + i * (num_revs_ + 1)].uv = { (-1.0f*j)/num_revs_,(1.0f*i)/num_heights_ };
-          //mesh_elements_pointer[j + i * (num_revs_ + 1)].normal =
-          //  Vec3Normalize(mesh_elements_pointer[j + i * (num_revs_ + 1)].pos);
+          mesh_elements_pointer[j + i * (num_revs_ + 1)].uv = { ((-1.0f*j)/num_revs_) * tilling.x,((1.0f*i)/num_heights_) * tilling.y };
+          mesh_elements_pointer[j + i * (num_revs_ + 1)].height = surface_points[i].y;
           
       }
   }
@@ -181,15 +196,19 @@ bool SurfaceCustom::bindAttribute(const Attribute a,
   switch (a){
     case Attribute::A_POSITION:
         EDK3::dev::GPUManager::Instance()->enableVertexAttribute(elements_buffer.get(),
-            0, EDK3::T_FLOAT_3, false, 0, 8 * sizeof(float));
+            0, EDK3::T_FLOAT_3, false, 0, 9 * sizeof(float));
         break;
     case Attribute::A_NORMAL:
         EDK3::dev::GPUManager::Instance()->enableVertexAttribute(elements_buffer.get(),
-            1, EDK3::T_FLOAT_3, false, 3 * sizeof(float), 8 * sizeof(float));
+            1, EDK3::T_FLOAT_3, false, 3 * sizeof(float), 9 * sizeof(float));
         break;
     case Attribute::A_UV:
         EDK3::dev::GPUManager::Instance()->enableVertexAttribute(elements_buffer.get(),
-            2, EDK3::T_FLOAT_2, false, 6 * sizeof(float), 8 * sizeof(float));
+            2, EDK3::T_FLOAT_2, false, 6 * sizeof(float), 9 * sizeof(float));
+        break;
+    case Attribute::A_WEIGHT0:
+        EDK3::dev::GPUManager::Instance()->enableVertexAttribute(elements_buffer.get(),
+            3, EDK3::T_FLOAT, false, 8 * sizeof(float), 9 * sizeof(float));
         break;
     default:
         break;

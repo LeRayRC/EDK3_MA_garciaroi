@@ -307,7 +307,7 @@ void ControlWindow() {
     }
     if (!manager->enable_postprocess) {
         if(ImGui::Checkbox("Wireframe mode", &manager->enable_wireframe)){
-            EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
+            /*EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
             if (manager->enable_wireframe) {
                 mat_selected = manager->mat_wireframe;
             }
@@ -319,7 +319,7 @@ void ControlWindow() {
                 EDK3::Drawable* drawable = dynamic_cast<EDK3::Drawable*>(manager->root->child(i));
                 drawable->set_material(mat_selected.get());
             }
-            manager->water_entity_->drawable_->set_material(manager->mat_water.get());
+            manager->water_entity_->drawable_->set_material(manager->mat_water.get());*/
         }
     }
     ImGui::DragFloat4("Framebuffer color", manager->clear_rgba, 0.01f, 0.0f, 1.0f);
@@ -328,7 +328,7 @@ void ControlWindow() {
 }
 
 void EntitiesManagerWindow() {
-  static const char drawable_types[60] = { "Cube\0Quad\0Sphere\0Terrain\0Donut\0Tree\0House\0Boat\0Water" };
+  static const char drawable_types[200] = { "Cube\0Quad\0Sphere\0Terrain\0Donut\0Tree\0House\0Boat\0Water\0Cube8v\0Island Small\0Island Medium\0Island Big\0"};
   DemoManager* manager = DemoManager::getInstance();
   SetFlags(&manager->entities_window);
   ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);

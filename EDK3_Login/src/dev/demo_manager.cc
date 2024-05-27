@@ -28,12 +28,13 @@ void DemoManager::init() {
   manager->mat_heightlayer.alloc();
   
 
-  manager->light_materials_settings.alloc(3);
+  manager->light_materials_settings.alloc(4);
   manager->mat_light_settings_general.alloc();
   manager->mat_light_settings_general->use_texture_ = true;
   manager->mat_light_settings = manager->light_materials_settings[0].alloc();
   manager->mat_light_water_settings = manager->light_materials_settings[1].alloc();
   manager->mat_heightlayer_settings = manager->light_materials_settings[2].alloc();
+  manager->mat_house_settings = manager->light_materials_settings[3].alloc();
   manager->mat_panoramic_settings.alloc();
 
   //Postprocess

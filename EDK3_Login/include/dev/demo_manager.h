@@ -35,6 +35,7 @@ const unsigned int kWindowWidth = 1280;
 const unsigned int kWindowHeight = 768;
 const int kNTorusPoints = 10;
 const int kNTreePoints = 16;
+const int kNIslandPoints = 33;
 
 /**
  * @brief Class the represents the singleton that manages the game
@@ -72,6 +73,7 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_water_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_panoramic_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_heightlayer_settings;
+    EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_house_settings;
 
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings>> light_materials_settings;
 
@@ -82,6 +84,9 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::CubeCustom> custom_cube;
     EDK3::ref_ptr<EDK3::CubeCustom> custom_cube_8v;
     EDK3::ref_ptr<EDK3::SurfaceCustom> custom_tree;
+    EDK3::ref_ptr<EDK3::SurfaceCustom> custom_island_small;
+    EDK3::ref_ptr<EDK3::SurfaceCustom> custom_island_medium;
+    EDK3::ref_ptr<EDK3::SurfaceCustom> custom_island_big;
     EDK3::ref_ptr<EDK3::SurfaceCustom> custom_torus;
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> house_geometry;
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> boat_geometry;
@@ -105,6 +110,7 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::Texture> texture_grass;
     EDK3::ref_ptr<EDK3::Texture> texture_forest;
     EDK3::ref_ptr<EDK3::Texture> texture_rocks;
+    EDK3::ref_ptr<EDK3::Texture> texture_house;
 
     double dt;
     float time_;

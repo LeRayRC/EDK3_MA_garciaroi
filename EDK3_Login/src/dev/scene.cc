@@ -74,11 +74,118 @@ void UpdateDrawable(EDK3::Drawable* drawable,
   drawable->set_position(pos.x, pos.y, pos.z);
 }
 
+void InitIslandPoints(Vec2 *island_points) {
+    int index = 0;
+    //island_points[0] = Vec2(0.01f, 0.00f);
+    //island_points[1] = Vec2(0.03f, 0.01f);
+    //island_points[2] = Vec2(0.07f, 0.00f);
+    //island_points[3] = Vec2(0.10f, 0.01f);
+    //island_points[4] = Vec2(0.12f, 0.04f);
+    //island_points[5] = Vec2(0.13f, 0.07f);
+    //island_points[6] = Vec2(0.16f, 0.11f);
+    //island_points[7] = Vec2(0.17f, 0.15f);
+    //island_points[8] = Vec2(0.16f, 0.19f);
+    //island_points[9] = Vec2(0.18f, 0.23f);
+    //island_points[10] = Vec2(0.20f, 0.26f);
+    //island_points[11] = Vec2(0.21f, 0.29f);
+    //island_points[12] = Vec2(0.22f, 0.33f);
+    //island_points[13] = Vec2(0.22f, 0.36f);
+    //island_points[14] = Vec2(0.25f, 0.40f);
+    //island_points[15] = Vec2(0.25f, 0.43f);
+    //island_points[16] = Vec2(0.27f, 0.46f);
+    //island_points[17] = Vec2(0.27f, 0.50f);
+    //island_points[18] = Vec2(0.27f, 0.52f);
+    //island_points[19] = Vec2(0.29f, 0.54f);
+    //island_points[20] = Vec2(0.30f, 0.57f);
+    //island_points[21] = Vec2(0.35f, 0.58f);
+    //island_points[22] = Vec2(0.39f, 0.59f);
+    //island_points[23] = Vec2(0.43f, 0.59f);
+    //island_points[24] = Vec2(0.45f, 0.60f);
+    //island_points[25] = Vec2(0.47f, 0.62f);
+    //island_points[26] = Vec2(0.49f, 0.64f);
+    //island_points[27] = Vec2(0.49f, 0.66f);
+    //island_points[28] = Vec2(0.51f, 0.68f);
+    //island_points[29] = Vec2(0.56f, 0.71f);
+    //island_points[30] = Vec2(0.60f, 0.72f);
+    //island_points[31] = Vec2(0.64f, 0.73f);
+    //island_points[32] = Vec2(0.69f, 0.75f);
+    //island_points[33] = Vec2(0.72f, 0.76f);
+    //island_points[34] = Vec2(0.79f, 0.78f);
+    //island_points[35] = Vec2(0.84f, 0.78f);
+    //island_points[36] = Vec2(0.87f, 0.80f);
+    //island_points[37] = Vec2(0.89f, 0.82f);
+    //island_points[38] = Vec2(0.89f, 0.85f);
+    //island_points[39] = Vec2(0.91f, 0.88f);
+    //island_points[40] = Vec2(0.94f, 0.90f);
+    //island_points[41] = Vec2(0.96f, 0.93f);
+    //island_points[42] = Vec2(1.00f, 0.95f);
+    //island_points[43] = Vec2(0.97f, 0.98f);
+    //island_points[44] = Vec2(0.92f, 0.99f);
+    //island_points[45] = Vec2(0.89f, 0.98f);
+    //island_points[46] = Vec2(0.82f, 0.99f);
+    //island_points[47] = Vec2(0.76f, 0.99f);
+    //island_points[48] = Vec2(0.71f, 0.99f);
+    //island_points[49] = Vec2(0.68f, 0.99f);
+    //island_points[50] = Vec2(0.62f, 0.99f);
+    //island_points[51] = Vec2(0.56f, 0.99f);
+    //island_points[52] = Vec2(0.55f, 0.98f);
+    //island_points[53] = Vec2(0.50f, 0.99f);
+    //island_points[54] = Vec2(0.45f, 1.00f);
+    //island_points[55] = Vec2(0.42f, 0.99f);
+    //island_points[56] = Vec2(0.37f, 0.99f);
+    //island_points[57] = Vec2(0.32f, 0.99f);
+    //island_points[58] = Vec2(0.29f, 1.00f);
+    //island_points[59] = Vec2(0.23f, 0.99f);
+    //island_points[60] = Vec2(0.18f, 0.99f);
+    //island_points[61] = Vec2(0.13f, 0.99f);
+    //island_points[62] = Vec2(0.08f, 0.98f);
+    //island_points[63] = Vec2(0.03f, 0.98f);
+    //island_points[64] = Vec2(0.00f, 0.98f);
+    //island_points[65] = Vec2(0.00f, 1.00f);
+
+
+    island_points[index++] = Vec2(0.00f, 0.00f) ;
+    island_points[index++] = Vec2(0.09f, 0.00f);
+    island_points[index++] = Vec2(0.11f, 0.09f);
+    island_points[index++] = Vec2(0.18f, 0.06f);
+    island_points[index++] = Vec2(0.28f, 0.05f);
+    island_points[index++] = Vec2(0.36f, 0.09f);
+    island_points[index++] = Vec2(0.41f, 0.20f);
+    island_points[index++] = Vec2(0.45f, 0.14f);
+    island_points[index++] = Vec2(0.55f, 0.16f);
+    island_points[index++] = Vec2(0.55f, 0.25f);
+    island_points[index++] = Vec2(0.64f, 0.23f);
+    island_points[index++] = Vec2(0.73f, 0.28f);
+    island_points[index++] = Vec2(0.78f, 0.35f);
+    island_points[index++] = Vec2(0.82f, 0.43f);
+    island_points[index++] = Vec2(0.86f, 0.50f);
+    island_points[index++] = Vec2(0.91f, 0.57f);
+    island_points[index++] = Vec2(0.94f, 0.66f);
+    island_points[index++] = Vec2(1.00f, 0.76f);
+    island_points[index++] = Vec2(0.99f, 0.82f);
+    island_points[index++] = Vec2(0.92f, 0.85f);
+    island_points[index++] = Vec2(0.82f, 0.89f);
+    island_points[index++] = Vec2(0.73f, 0.94f);
+    island_points[index++] = Vec2(0.63f, 0.95f);
+    island_points[index++] = Vec2(0.56f, 0.96f);
+    island_points[index++] = Vec2(0.49f, 0.96f);
+    island_points[index++] = Vec2(0.45f, 0.94f);
+    island_points[index++] = Vec2(0.39f, 0.89f);
+    island_points[index++] = Vec2(0.34f, 0.88f);
+    island_points[index++] = Vec2(0.26f, 0.90f);
+    island_points[index++] = Vec2(0.20f, 0.97f);
+    island_points[index++] = Vec2(0.10f, 1.00f);
+    island_points[index++] = Vec2(0.03f, 0.95f);
+    island_points[index++] = Vec2(0.00f, 0.87f);
+    island_points[index++] = Vec2(0.00f, 1.00f);
+}                                       
+
 void InitSceneGeometries() {
     DemoManager* manager = DemoManager::getInstance();
 
     Vec2 tree_points[kNTreePoints + 1];
     Vec2 points[kNTorusPoints + 1];
+    Vec2 island_points[kNIslandPoints + 1];
 
     //Init Tree points
     tree_points[0] = Vec2(0.00f, 0.01f);
@@ -98,6 +205,9 @@ void InitSceneGeometries() {
     tree_points[14] = Vec2(0.47f, 0.91f);
     tree_points[15] = Vec2(0.31f, 0.95f);
     tree_points[16] = Vec2(0.001f, 1.0f);
+
+    InitIslandPoints(island_points);
+    
 
     //Init Torus points
     float alpha = 6.28f / kNTorusPoints;
@@ -140,8 +250,16 @@ void InitSceneGeometries() {
 
     manager->custom_tree.alloc();
     manager->custom_torus.alloc();
+    manager->custom_island_small.alloc();
+    manager->custom_island_medium.alloc();
+    manager->custom_island_big.alloc();
+
     manager->custom_torus->init(points, kNTorusPoints, 40, 2.0f, 2.0f);
     manager->custom_tree->init(tree_points, kNTreePoints, 40, 6.0f, 4.0f);
+
+    manager->custom_island_small->init(island_points, kNIslandPoints, 40, 8.0f, 0.5f, true, 0.01f, {5.0f,5.0f});
+    manager->custom_island_medium->init(island_points, kNIslandPoints, 40, 20.0f, 0.8f, true, 0.03f, {8.0f,8.0f});
+    manager->custom_island_big->init(island_points, kNIslandPoints, 40, 30.0f, 1.2f, true, 0.02f, {10.f,10.0f});
 
     manager->terrain_custom.alloc();
     manager->terrain_custom->init(256, 256, // cols , rows
@@ -219,6 +337,7 @@ void InitSceneMaterials() {
     manager->mat_heightlayer_settings->set_texture(manager->texture_grass.get(),2);
     manager->mat_light_water_settings->set_texture(manager->texture_water.get());
     manager->mat_panoramic_settings->set_texture(manager->texture_skybox.get());
+    manager->mat_house_settings->set_texture(manager->texture_house.get());
     
     if (manager->show_normals) {
         manager->mat_selected = manager->mat_normals;
@@ -279,6 +398,111 @@ void InitSceneEntities() {
     }
     obj_entity = nullptr;
 
+    obj_entity = new Entity(true, "IslandSmall");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 94.0f, 19.0f, -28.0f });
+        obj_entity->attachDrawable(DrawableAttached_IslandSmall, manager->root.get());
+        obj_entity->drawable_->set_material(manager->mat_heightlayer.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    obj_entity = new Entity(true, "IslandMedium");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ -71.0f, 18.0f, -24.0f });
+        obj_entity->attachDrawable(DrawableAttached_IslandMedium, manager->root.get());
+        obj_entity->drawable_->set_material(manager->mat_heightlayer.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    obj_entity = new Entity(true, "IslandBig");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 6.0f, 46.0f, 58.0f });
+        obj_entity->attachDrawable(DrawableAttached_IslandBig, manager->root.get());
+        obj_entity->drawable_->set_material(manager->mat_heightlayer.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    ///////////////////////////////////////////
+    //Island Tower 
+    obj_entity = new Entity(true, "IslandTower1");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 321.0f, -27.0f, 76.0f });
+        obj_entity->attachDrawable(DrawableAttached_IslandMedium, manager->root.get());
+        obj_entity->drawable_->set_material(manager->mat_heightlayer.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    obj_entity = new Entity(true, "IslandTower2");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 321.0f, 0.0f, 127.0f });
+        obj_entity->attachDrawable(DrawableAttached_IslandMedium, manager->root.get());
+        obj_entity->drawable_->set_material(manager->mat_heightlayer.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    obj_entity = new Entity(true, "IslandTower3");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 363.0f, -36.0f, 54.0f });
+        obj_entity->attachDrawable(DrawableAttached_IslandSmall, manager->root.get());
+        obj_entity->drawable_->set_material(manager->mat_heightlayer.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+
+    obj_entity = new Entity(true, "IslandTower4");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 361.0f, 24.0f, 161.0f });
+        obj_entity->attachDrawable(DrawableAttached_IslandBig, manager->root.get());
+        obj_entity->drawable_->set_material(manager->mat_heightlayer.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    obj_entity = new Entity(true, "IslandTower5");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 416.0f, -74.0f, 102.0f });
+        obj_entity->attachDrawable(DrawableAttached_IslandSmall, manager->root.get());
+        obj_entity->drawable_->set_material(manager->mat_heightlayer.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    obj_entity = new Entity(true, "IslandTower6");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 400.0f, 46.0f, 92.0f });
+        obj_entity->attachDrawable(DrawableAttached_IslandBig, manager->root.get());
+        obj_entity->drawable_->set_material(manager->mat_heightlayer.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    ////////////////////////////////////////////////////////
+
+
     obj_entity = new Entity(true, "Quad");
     if (obj_entity != nullptr) {
         obj_entity->init();
@@ -294,6 +518,7 @@ void InitSceneEntities() {
         obj_entity->set_position({ 18.0f, -85.0f, -9.0f });
         obj_entity->set_scale({ 0.5f, 0.5f, 0.5f });
         obj_entity->attachDrawable(DrawableAttached_House, manager->root.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_house_settings.get());
         manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
@@ -369,5 +594,9 @@ void InitSceneTextures() {
         exit(-2);
     }
 
-
+    EDK3::Texture::Load("./textures/house_d.png", &manager->texture_house);
+    if (!manager->texture_house) {
+        printf("Error loading house texture\n");
+        exit(-2);
+    }
 }

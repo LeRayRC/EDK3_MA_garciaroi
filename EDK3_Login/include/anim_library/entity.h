@@ -30,6 +30,9 @@ enum DrawableAttached {
     DrawableAttached_Boat,
     DrawableAttached_Water,
     DrawableAttached_Cube8v,
+    DrawableAttached_IslandSmall,
+    DrawableAttached_IslandMedium,
+    DrawableAttached_IslandBig,
 };
 
 /**
