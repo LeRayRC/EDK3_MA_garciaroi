@@ -18,6 +18,8 @@
 #include "EDK3/dev/buffer.h"
 #include "EDK3/dev/gpumanager.h"
 #include "math_library/vector_2.h"
+#include "tools.h"
+
 
 
 
@@ -29,7 +31,7 @@ class TerrainCustom : public EDK3::Geometry {
 
   void init(const int num_cols = 4, const int num_rows = 4, 
             const float height_mult = 1.0f, const float size = 1.0f, const float smoothness = 0.1f,
-            const float heightmap_mult = 1.0f, const char* heightmap_path=NULL, const bool use_heightmap = false,
+            const HeightmapConf conf = {0.0f,0.0f,0.0f}, const char* heightmap_path = NULL, const bool use_heightmap = false,
             const bool is_centered = true, const Vec2 tilling = { 1.0f,1.0f });
   virtual bool bindAttribute(const Attribute a, 
                              unsigned int where_to_bind_attribute) const override;

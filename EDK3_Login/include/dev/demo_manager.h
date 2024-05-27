@@ -99,6 +99,7 @@ class DemoManager{
     
     EDK3::ref_ptr<EDK3::TerrainCustom> terrain_custom;
     EDK3::ref_ptr<EDK3::TerrainCustom> water_terrain;
+    EDK3::ref_ptr<EDK3::TerrainCustom> terrain_cliff;
 
     EDK3::ref_ptr<EDK3::RenderTarget> render_target;
     EDK3::ref_ptr<EDK3::PostprocessBasic> mat_postprocess;
@@ -129,6 +130,10 @@ class DemoManager{
 
     float kMaxAnimationDuration = 60.0f;
     int animation_configs_counter = 0;
+
+    Vec2 tree_points[kNTreePoints + 1];
+    Vec2 points[kNTorusPoints + 1];
+    Vec2 island_points[kNIslandPoints + 1];
   //Methods
   private:
     // Constructor

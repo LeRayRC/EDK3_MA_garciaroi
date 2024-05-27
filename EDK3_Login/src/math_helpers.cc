@@ -19,8 +19,8 @@ ESAT::Vec3 Vec3CrossProduct(ESAT::Vec3 u, ESAT::Vec3 v){
 
 
 float GetTexelValue(unsigned char* data, unsigned int nchannels, unsigned int width, unsigned int height, int x, int y, int max_x, int max_y) {
-  if (x == max_x) x--;
-  if (y == max_y) y--;
+    x = ClampInt(x, 1, max_x - 1);
+    y = ClampInt(y, 1, max_y - 1);
     int texture_coord_x = (x * width / max_x);
     int texture_coord_y = (y * height / max_y);
 
@@ -31,6 +31,12 @@ float GetTexelValue(unsigned char* data, unsigned int nchannels, unsigned int wi
 }
 
 float ClampFloat(float value, float min, float max) {
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+}
+
+int ClampInt(int value, int min, int max) {
     if (value < min) return min;
     if (value > max) return max;
     return value;

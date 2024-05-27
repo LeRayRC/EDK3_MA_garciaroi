@@ -5,4 +5,10 @@
 
 void ReadFile(const char* filename, EDK3::scoped_array<char>& output);
 
+struct HeightmapConf {
+	float scale;
+	float coeff;
+	float exp;
+};
+
 #endif // !_CUSTOM_TOOLS_

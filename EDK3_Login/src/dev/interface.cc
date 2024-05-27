@@ -323,7 +323,24 @@ void ControlWindow() {
         }
     }
     ImGui::DragFloat4("Framebuffer color", manager->clear_rgba, 0.01f, 0.0f, 1.0f);
-                
+
+    ImGui::Text("Geometries");
+    if (ImGui::TreeNode("Small Island")) {
+        static float small_island_size = 8.0f;
+        static float small_island_height_multiplier = 0.5f;
+
+        if (ImGui::DragFloat("Size", &small_island_size, 0.01f, 0.0f, 50.0f)) {
+            manager->custom_island_small->init(manager->island_points, kNIslandPoints, 40, small_island_size, small_island_height_multiplier, true, 0.01f, { 5.0f,5.0f });
+
+        }
+
+        if (ImGui::DragFloat("Height multiplier", &small_island_height_multiplier, 0.01f, 0.0f, 5.0f)) {
+            manager->custom_island_small->init(manager->island_points, kNIslandPoints, 40, small_island_size, small_island_height_multiplier, true, 0.01f, { 5.0f,5.0f });
+
+        }
+        ImGui::TreePop();
+    }
+    
     ImGui::End();
 }
 

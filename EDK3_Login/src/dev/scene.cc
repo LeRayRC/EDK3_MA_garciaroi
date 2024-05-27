@@ -183,30 +183,28 @@ void InitIslandPoints(Vec2 *island_points) {
 void InitSceneGeometries() {
     DemoManager* manager = DemoManager::getInstance();
 
-    Vec2 tree_points[kNTreePoints + 1];
-    Vec2 points[kNTorusPoints + 1];
-    Vec2 island_points[kNIslandPoints + 1];
+    
 
     //Init Tree points
-    tree_points[0] = Vec2(0.00f, 0.01f);
-    tree_points[1] = Vec2(0.30f, 0.00f);
-    tree_points[2] = Vec2(0.22f, 0.41f);
-    tree_points[3] = Vec2(0.38f, 0.44f);
-    tree_points[4] = Vec2(0.67f, 0.47f);
-    tree_points[5] = Vec2(0.81f, 0.51f);
-    tree_points[6] = Vec2(0.81f, 0.57f);
-    tree_points[7] = Vec2(1.00f, 0.63f);
-    tree_points[8] = Vec2(1.00f, 0.72f);
-    tree_points[9] = Vec2(0.84f, 0.79f);
-    tree_points[10] = Vec2(0.72f, 0.80f);
-    tree_points[11] = Vec2(0.78f, 0.86f);
-    tree_points[12] = Vec2(0.75f, 0.90f);
-    tree_points[13] = Vec2(0.62f, 0.92f);
-    tree_points[14] = Vec2(0.47f, 0.91f);
-    tree_points[15] = Vec2(0.31f, 0.95f);
-    tree_points[16] = Vec2(0.001f, 1.0f);
+    manager->tree_points[0] = Vec2(0.00f, 0.01f);
+    manager->tree_points[1] = Vec2(0.30f, 0.00f);
+    manager->tree_points[2] = Vec2(0.22f, 0.41f);
+    manager->tree_points[3] = Vec2(0.38f, 0.44f);
+    manager->tree_points[4] = Vec2(0.67f, 0.47f);
+    manager->tree_points[5] = Vec2(0.81f, 0.51f);
+    manager->tree_points[6] = Vec2(0.81f, 0.57f);
+    manager->tree_points[7] = Vec2(1.00f, 0.63f);
+    manager->tree_points[8] = Vec2(1.00f, 0.72f);
+    manager->tree_points[9] = Vec2(0.84f, 0.79f);
+    manager->tree_points[10] = Vec2(0.72f, 0.80f);
+    manager->tree_points[11] = Vec2(0.78f, 0.86f);
+    manager->tree_points[12] = Vec2(0.75f, 0.90f);
+    manager->tree_points[13] = Vec2(0.62f, 0.92f);
+    manager->tree_points[14] = Vec2(0.47f, 0.91f);
+    manager->tree_points[15] = Vec2(0.31f, 0.95f);
+    manager->tree_points[16] = Vec2(0.001f, 1.0f);
 
-    InitIslandPoints(island_points);
+    InitIslandPoints(manager->island_points);
     
 
     //Init Torus points
@@ -214,10 +212,10 @@ void InitSceneGeometries() {
     float offset = 3.0f;
     for (int i = 0; i <= kNTorusPoints; i++) {
         if (i == kNTorusPoints) {
-            points[i] = points[0];
+            manager->points[i] = manager->points[0];
         }
         else {
-            points[i] = Vec2(cosf(alpha * i - 1.57f) + offset,
+            manager->points[i] = Vec2(cosf(alpha * i - 1.57f) + offset,
                 sinf(alpha * i - 1.57f));
         }
     }
@@ -254,19 +252,19 @@ void InitSceneGeometries() {
     manager->custom_island_medium.alloc();
     manager->custom_island_big.alloc();
 
-    manager->custom_torus->init(points, kNTorusPoints, 40, 2.0f, 2.0f);
-    manager->custom_tree->init(tree_points, kNTreePoints, 40, 6.0f, 4.0f);
+    manager->custom_torus->init(manager->points, kNTorusPoints, 40, 2.0f, 2.0f);
+    manager->custom_tree->init(manager->tree_points, kNTreePoints, 40, 6.0f, 4.0f);
 
-    manager->custom_island_small->init(island_points, kNIslandPoints, 40, 8.0f, 0.5f, true, 0.01f, {5.0f,5.0f});
-    manager->custom_island_medium->init(island_points, kNIslandPoints, 40, 20.0f, 0.8f, true, 0.03f, {8.0f,8.0f});
-    manager->custom_island_big->init(island_points, kNIslandPoints, 40, 30.0f, 1.2f, true, 0.02f, {10.f,10.0f});
+    manager->custom_island_small->init(manager->island_points, kNIslandPoints, 40, 8.0f, 0.5f, true, 0.01f, {5.0f,5.0f});
+    manager->custom_island_medium->init(manager->island_points, kNIslandPoints, 40, 20.0f, 0.8f, true, 0.03f, {8.0f,8.0f});
+    manager->custom_island_big->init(manager->island_points, kNIslandPoints, 40, 30.0f, 1.2f, true, 0.02f, {10.f,10.0f});
 
     manager->terrain_custom.alloc();
     manager->terrain_custom->init(256, 256, // cols , rows
         2.0f, // height multiplier
         1.0f, // quad size
         0.05f, // smothness
-        40.0f, // heightmap multiplier
+        { 40.0f,1.0f,1.0f}, // heightmap multiplier
         //"./textures/australia.png",   // heightmap path
         "./textures/island_heightmap.png",   // heightmap path
         true, true, {16.0f,16.0f}); // use heightmap
@@ -276,10 +274,20 @@ void InitSceneGeometries() {
       20.0f, // height multiplier
       24.0f, // quad size
       0.25f, // smothness
-      40.0f, // heightmap multiplier
+        { 40.0f, 1.0f,1.0f }, // heightmap multiplier
       //"./textures/australia.png",   // heightmap path
       "./textures/island_heightmap.png",   // heightmap path
         false, true, { 64.0f, 64.0f }); // use heightmap
+
+    manager->terrain_cliff.alloc();
+    manager->terrain_cliff->init(128, 128, // cols , rows
+        2.0f, // height multiplier
+        12.0f, // quad size
+        0.05f, // smothness
+        {10.0f,2.0f,5.0f}, // heightmap multiplier
+        //"./textures/australia.png",   // heightmap path
+        "./textures/101_dday.jpg",   // heightmap path
+        true, true, { 64.0f, 64.0f }); // use heightmap
 }
 
 void InitSceneMaterials() {
@@ -357,6 +365,18 @@ void InitSceneEntities() {
         obj_entity->attachDrawable(DrawableAttached_Terrain, manager->root.get());
         obj_entity->drawable_->set_material(manager->mat_heightlayer.get());
         obj_entity->drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
+        manager->entities_.push_back(obj_entity);
+    }
+    obj_entity = nullptr;
+
+    obj_entity = new Entity(true, "Cliff");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 610.0f, -120.0f, 0.0f });
+        obj_entity->drawable_->set_geometry(manager->terrain_cliff.get());
+        obj_entity->drawable_->set_material(manager->mat_heightlayer.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
+        manager->root->addChild(obj_entity->drawable_.get());
         manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
