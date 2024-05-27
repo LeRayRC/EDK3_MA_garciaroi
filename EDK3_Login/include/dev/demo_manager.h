@@ -95,6 +95,7 @@ class DemoManager{
 
     Entity* skybox_entity_;
     Entity* water_entity_;
+    std::vector<Entity*> dolphin_entities_;
     std::vector<Entity*> entities_;
     std::vector<AnimationConfig> animation_configs_;
     AnimationConfig dolphin_animation_config_;

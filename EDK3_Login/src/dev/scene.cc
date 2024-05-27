@@ -367,6 +367,7 @@ void InitSceneAnimationConfigs() {
 
     snprintf(manager->dolphin_animation_config_.name, 16, "DolphinAnim");
 
+    //Animation 1
     manager->dolphin_animation_config_.is_moving = true;
     manager->dolphin_animation_config_.move_from = Vec3(-500.0f, -112.0f, -500.0f);
     manager->dolphin_animation_config_.move_to = Vec3(-500.0f, -112.0f, 500.0f);
@@ -376,6 +377,83 @@ void InitSceneAnimationConfigs() {
     manager->dolphin_animation_config_.rotate_from = Vec3(-60.0f, 0.0f, 0.0f);
     manager->dolphin_animation_config_.rotate_to = Vec3(3000.0f, 0.0f, 0.0f);
     manager->dolphin_animation_config_.rotate_duration = 12.0f;
+
+    manager->dolphin_animation_config_.total_delay = 0.2f * (float)(rand()%20);
+
+    manager->animation_configs_.push_back(manager->dolphin_animation_config_);
+
+    //Animation 2
+    manager->dolphin_animation_config_.is_moving = true;
+    manager->dolphin_animation_config_.move_from = Vec3(-450.0f, -112.0f, -500.0f);
+    manager->dolphin_animation_config_.move_to = Vec3(-450.0f, -112.0f, 500.0f);
+    manager->dolphin_animation_config_.move_duration = 12.0f;
+
+    manager->dolphin_animation_config_.is_rotating = true;
+    manager->dolphin_animation_config_.rotate_from = Vec3(-60.0f, 0.0f, 0.0f);
+    manager->dolphin_animation_config_.rotate_to = Vec3(3000.0f, 0.0f, 0.0f);
+    manager->dolphin_animation_config_.rotate_duration = 12.0f;
+
+    manager->dolphin_animation_config_.total_delay = 0.2f* (float)(rand() % 20);
+
+    manager->animation_configs_.push_back(manager->dolphin_animation_config_);
+
+    //Animation 3
+    manager->dolphin_animation_config_.is_moving = true;
+    manager->dolphin_animation_config_.move_from = Vec3(-400.0f, -112.0f, -500.0f);
+    manager->dolphin_animation_config_.move_to = Vec3(-400.0f, -112.0f, 500.0f);
+    manager->dolphin_animation_config_.move_duration = 12.0f;
+
+    manager->dolphin_animation_config_.is_rotating = true;
+    manager->dolphin_animation_config_.rotate_from = Vec3(-60.0f, 0.0f, 0.0f);
+    manager->dolphin_animation_config_.rotate_to = Vec3(3000.0f, 0.0f, 0.0f);
+    manager->dolphin_animation_config_.rotate_duration = 12.0f;
+
+    manager->dolphin_animation_config_.total_delay = 0.2f * (float)(rand() % 20);
+
+    manager->animation_configs_.push_back(manager->dolphin_animation_config_);
+
+    //Animation 4
+    manager->dolphin_animation_config_.is_moving = true;
+    manager->dolphin_animation_config_.move_from = Vec3(-380.0f, -112.0f, -600.0f);
+    manager->dolphin_animation_config_.move_to = Vec3(-380.0f, -112.0f, 600.0f);
+    manager->dolphin_animation_config_.move_duration = 12.0f;
+
+    manager->dolphin_animation_config_.is_rotating = true;
+    manager->dolphin_animation_config_.rotate_from = Vec3(-60.0f, 0.0f, 0.0f);
+    manager->dolphin_animation_config_.rotate_to = Vec3(3000.0f, 0.0f, 0.0f);
+    manager->dolphin_animation_config_.rotate_duration = 12.0f;
+
+    manager->dolphin_animation_config_.total_delay = 0.2f * (float)(rand() % 20);
+
+    manager->animation_configs_.push_back(manager->dolphin_animation_config_);
+
+    //Animation 5
+    manager->dolphin_animation_config_.is_moving = true;
+    manager->dolphin_animation_config_.move_from = Vec3(-530.0f, -112.0f, -600.0f);
+    manager->dolphin_animation_config_.move_to = Vec3(-530.0f, -112.0f, 600.0f);
+    manager->dolphin_animation_config_.move_duration = 12.0f;
+
+    manager->dolphin_animation_config_.is_rotating = true;
+    manager->dolphin_animation_config_.rotate_from = Vec3(-60.0f, 0.0f, 0.0f);
+    manager->dolphin_animation_config_.rotate_to = Vec3(3000.0f, 0.0f, 0.0f);
+    manager->dolphin_animation_config_.rotate_duration = 12.0f;
+
+    manager->dolphin_animation_config_.total_delay = 0.2f * (float)(rand() % 20);
+
+    manager->animation_configs_.push_back(manager->dolphin_animation_config_);
+
+    //Animation 6
+    manager->dolphin_animation_config_.is_moving = true;
+    manager->dolphin_animation_config_.move_from = Vec3(-560.0f, -112.0f, -550.0f);
+    manager->dolphin_animation_config_.move_to = Vec3(-400.0f, -112.0f, 550.0f);
+    manager->dolphin_animation_config_.move_duration = 12.0f;
+
+    manager->dolphin_animation_config_.is_rotating = true;
+    manager->dolphin_animation_config_.rotate_from = Vec3(-60.0f, 0.0f, 0.0f);
+    manager->dolphin_animation_config_.rotate_to = Vec3(3000.0f, 0.0f, 0.0f);
+    manager->dolphin_animation_config_.rotate_duration = 12.0f;
+
+    manager->dolphin_animation_config_.total_delay = 0.2f * (float)(rand() % 20);
 
     manager->animation_configs_.push_back(manager->dolphin_animation_config_);
 
@@ -570,16 +648,20 @@ void InitSceneEntities() {
     }
     obj_entity = nullptr;
 
+    for (int i = 0; i < 6; i++) {
     obj_entity = new Entity(true, "Dolphin");
-    if (obj_entity != nullptr) {
-        obj_entity->init();
-        obj_entity->set_position({ 40.0f, -98.0f, 100.0f });
-        obj_entity->set_scale({ 0.2f, 0.2f, 0.2f });
-        obj_entity->attachDrawable(DrawableAttached_Dolphin, manager->root.get());
-        obj_entity->drawable_->set_material_settings(manager->mat_dolphin_settings.get());
-        manager->entities_.push_back(obj_entity);
+        if (obj_entity != nullptr) {
+            obj_entity->init();
+            obj_entity->set_position({ 40.0f, -200.0f, 100.0f });
+            obj_entity->set_scale({ 0.2f+rand()%3*0.05f, 0.2f + rand()%3 * 0.05f, 0.2f + rand()%3 * 0.05f });
+            obj_entity->animation_config_selected = i;
+            obj_entity->attachDrawable(DrawableAttached_Dolphin, manager->root.get());
+            obj_entity->drawable_->set_material_settings(manager->mat_dolphin_settings.get());
+            manager->entities_.push_back(obj_entity);
+            manager->dolphin_entities_.push_back(obj_entity);
+        }
+        obj_entity = nullptr;
     }
-    obj_entity = nullptr;
 
     /*
     */

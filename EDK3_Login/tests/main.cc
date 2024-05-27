@@ -50,8 +50,8 @@ void InitScene() {
     InitSceneTextures();
     InitSceneGeometries();
     InitSceneMaterials();
-    InitSceneEntities();
     InitSceneAnimationConfigs();
+    InitSceneEntities();
 
     //Allocating and initializing the camera:
     manager->camera.alloc();
@@ -106,6 +106,20 @@ void UpdateFn() {
             manager->mat_light_settings_general->use_texture_;
         manager->light_materials_settings[i]->show_normal_ =
             manager->mat_light_settings_general->show_normal_;
+    }
+
+    for (unsigned int i = 0; i < manager->dolphin_entities_.size(); i++) {
+        if (manager->dolphin_entities_[i] != nullptr) {
+            if(manager->dolphin_entities_[i]->anim_instance_ == nullptr){
+                manager->dolphin_entities_[i]->playAnimation(manager->animation_configs_[manager->dolphin_entities_[i]->animation_config_selected]);
+            }
+            else {
+                if (manager->dolphin_entities_[i]->anim_instance_->config_.current_delay <
+                    manager->dolphin_entities_[i]->anim_instance_->config_.total_delay) {
+                    manager->dolphin_entities_[i]->drawable_->set_position(0.0f, -500.0, 0.0f);
+                }
+            }
+        }
     }
 
     manager->mat_light_water_settings->time_ = manager->time_;

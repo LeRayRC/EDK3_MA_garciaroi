@@ -10,11 +10,13 @@ layout(location = 3) in float a_height;
 out vec2 uv;
 out vec3 normal;
 out vec3 position;
+out float height;
 
 void main() {
     gl_Position = u_vp_matrix * u_m_matrix * vec4(a_position, 1.0);
     uv = a_uv;
     normal = (u_m_matrix * vec4(a_normal,0.0)).xyz;
     position = (u_m_matrix * vec4(a_position,1.0)).xyz;
+    height = a_height;
     // normal = a_normal;
 }
