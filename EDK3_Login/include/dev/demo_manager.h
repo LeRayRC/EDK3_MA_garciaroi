@@ -74,6 +74,7 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_panoramic_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_heightlayer_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_house_settings;
+    EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_dolphin_settings;
 
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings>> light_materials_settings;
 
@@ -90,11 +91,13 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::SurfaceCustom> custom_torus;
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> house_geometry;
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> boat_geometry;
+    EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> dolphin_geometry;
 
     Entity* skybox_entity_;
     Entity* water_entity_;
     std::vector<Entity*> entities_;
     std::vector<AnimationConfig> animation_configs_;
+    AnimationConfig dolphin_animation_config_;
     EDK3::scoped_array<char> animation_configs_names_;
     
     EDK3::ref_ptr<EDK3::TerrainCustom> terrain_custom;
@@ -112,6 +115,7 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::Texture> texture_forest;
     EDK3::ref_ptr<EDK3::Texture> texture_rocks;
     EDK3::ref_ptr<EDK3::Texture> texture_house;
+    EDK3::ref_ptr<EDK3::Texture> texture_dolphin;
 
     double dt;
     float time_;

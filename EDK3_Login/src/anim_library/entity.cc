@@ -186,8 +186,8 @@ void Entity::attachDrawable(DrawableAttached drawableAttached, EDK3::Node* root)
     case DrawableAttached_House:
         drawable_->set_geometry(manager->house_geometry[4].get());
         break;
-    case DrawableAttached_Boat:
-        drawable_->set_geometry(manager->boat_geometry[0].get());
+    case DrawableAttached_Dolphin:
+        drawable_->set_geometry(manager->dolphin_geometry[0].get());
         break;
     case DrawableAttached_Water:
         drawable_->set_geometry(manager->water_terrain.get());

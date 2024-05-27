@@ -345,7 +345,7 @@ void ControlWindow() {
 }
 
 void EntitiesManagerWindow() {
-  static const char drawable_types[200] = { "Cube\0Quad\0Sphere\0Terrain\0Donut\0Tree\0House\0Boat\0Water\0Cube8v\0Island Small\0Island Medium\0Island Big\0"};
+  static const char drawable_types[200] = { "Cube\0Quad\0Sphere\0Terrain\0Donut\0Tree\0House\0Dolphin\0Water\0Cube8v\0Island Small\0Island Medium\0Island Big\0"};
   DemoManager* manager = DemoManager::getInstance();
   SetFlags(&manager->entities_window);
   ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
@@ -542,6 +542,7 @@ void AnimationConfigsManagerWindow() {
 
       if (ImGui::Button("Update name")) {
           snprintf(manager->animation_configs_[i].name,16, "%s", manager->animation_configs_[i].temp_name);
+          UpdateAnimationConfigsString();
       }
 
       for(unsigned int j=0;j<manager->entities_.size() && deletable;j++){

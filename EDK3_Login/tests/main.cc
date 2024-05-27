@@ -51,6 +51,7 @@ void InitScene() {
     InitSceneGeometries();
     InitSceneMaterials();
     InitSceneEntities();
+    InitSceneAnimationConfigs();
 
     //Allocating and initializing the camera:
     manager->camera.alloc();

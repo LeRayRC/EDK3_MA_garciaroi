@@ -233,6 +233,12 @@ void InitSceneGeometries() {
         nullptr
     );
 
+    EDK3::LoadObj(
+        "./obj/dolphin.obj",
+        &manager->dolphin_geometry,
+        nullptr
+    );
+
 
     manager->custom_quad.alloc();
     manager->custom_quad->init(20.0f);
@@ -346,6 +352,7 @@ void InitSceneMaterials() {
     manager->mat_light_water_settings->set_texture(manager->texture_water.get());
     manager->mat_panoramic_settings->set_texture(manager->texture_skybox.get());
     manager->mat_house_settings->set_texture(manager->texture_house.get());
+    manager->mat_dolphin_settings->set_texture(manager->texture_dolphin.get());
     
     if (manager->show_normals) {
         manager->mat_selected = manager->mat_normals;
@@ -353,6 +360,26 @@ void InitSceneMaterials() {
     else {
         manager->mat_selected = manager->mat_basic;
     }
+}
+
+void InitSceneAnimationConfigs() {
+    DemoManager* manager = DemoManager::getInstance();
+
+    snprintf(manager->dolphin_animation_config_.name, 16, "DolphinAnim");
+
+    manager->dolphin_animation_config_.is_moving = true;
+    manager->dolphin_animation_config_.move_from = Vec3(-500.0f, -112.0f, -500.0f);
+    manager->dolphin_animation_config_.move_to = Vec3(-500.0f, -112.0f, 500.0f);
+    manager->dolphin_animation_config_.move_duration = 12.0f;
+
+    manager->dolphin_animation_config_.is_rotating = true;
+    manager->dolphin_animation_config_.rotate_from = Vec3(-60.0f, 0.0f, 0.0f);
+    manager->dolphin_animation_config_.rotate_to = Vec3(3000.0f, 0.0f, 0.0f);
+    manager->dolphin_animation_config_.rotate_duration = 12.0f;
+
+    manager->animation_configs_.push_back(manager->dolphin_animation_config_);
+
+    UpdateAnimationConfigsString();
 }
 
 void InitSceneEntities() {
@@ -543,12 +570,13 @@ void InitSceneEntities() {
     }
     obj_entity = nullptr;
 
-    obj_entity = new Entity(true, "Boat");
+    obj_entity = new Entity(true, "Dolphin");
     if (obj_entity != nullptr) {
         obj_entity->init();
         obj_entity->set_position({ 40.0f, -98.0f, 100.0f });
-        obj_entity->set_scale({ 4.5f, 4.5f, 4.5f });
-        obj_entity->attachDrawable(DrawableAttached_Boat, manager->root.get());
+        obj_entity->set_scale({ 0.2f, 0.2f, 0.2f });
+        obj_entity->attachDrawable(DrawableAttached_Dolphin, manager->root.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_dolphin_settings.get());
         manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
@@ -617,6 +645,12 @@ void InitSceneTextures() {
     EDK3::Texture::Load("./textures/house_d.png", &manager->texture_house);
     if (!manager->texture_house) {
         printf("Error loading house texture\n");
+        exit(-2);
+    }
+
+    EDK3::Texture::Load("./textures/dolphin.jpg", &manager->texture_dolphin);
+    if (!manager->texture_dolphin) {
+        printf("Error loading dolphin texture\n");
         exit(-2);
     }
 }

@@ -27,7 +27,7 @@ enum DrawableAttached {
     DrawableAttached_Donut,
     DrawableAttached_Tree,
     DrawableAttached_House,
-    DrawableAttached_Boat,
+    DrawableAttached_Dolphin,
     DrawableAttached_Water,
     DrawableAttached_Cube8v,
     DrawableAttached_IslandSmall,
