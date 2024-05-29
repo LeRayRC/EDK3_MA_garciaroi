@@ -22,6 +22,7 @@
 #include "postprocess_basic.h"
 #include "anim_library/animationinstance.h"
 #include "anim_library/entity.h"
+#include "geometry_custom_particle.h"
 
 #include "geometry_custom_sphere.h"
 #include "geometry_custom_cube.h"
@@ -68,6 +69,7 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_panoramic;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_water;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_heightlayer;
+    EDK3::ref_ptr<EDK3::MaterialCustom> mat_particles;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings_general;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_water_settings;
@@ -75,6 +77,7 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_heightlayer_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_house_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_dolphin_settings;
+    EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_particles_settings;
 
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings>> light_materials_settings;
 
@@ -92,9 +95,11 @@ class DemoManager{
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> house_geometry;
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> boat_geometry;
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::Geometry>> dolphin_geometry;
+    EDK3::ref_ptr<EDK3::ParticleSystem> custom_particles_;
 
     Entity* skybox_entity_;
     Entity* water_entity_;
+    Entity* particle_entity_;
     std::vector<Entity*> dolphin_entities_;
     std::vector<Entity*> entities_;
     std::vector<AnimationConfig> animation_configs_;
@@ -123,6 +128,8 @@ class DemoManager{
     bool enable_postprocess;
     bool enable_wireframe;
 
+    EDK3::ParticleSystem::ParticleSystemConfig particles_waterfall_config;
+
     bool show_normals;
 
     ImGuiWindow settings_window;
@@ -132,6 +139,7 @@ class DemoManager{
     ImGuiWindow control_window;
     ImGuiWindow entities_window;
     ImGuiWindow animationconfigs_window;
+    ImGuiWindow particles_window;
 
     float kMaxAnimationDuration = 60.0f;
     int animation_configs_counter = 0;

@@ -33,6 +33,7 @@ enum DrawableAttached {
     DrawableAttached_IslandSmall,
     DrawableAttached_IslandMedium,
     DrawableAttached_IslandBig,
+    DrawableAttached_Particle,
 };
 
 /**

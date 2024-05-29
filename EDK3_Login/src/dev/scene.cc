@@ -25,6 +25,7 @@
 #include "math_library/vector_2.h"
 #include "demo_manager.h"
 #include "interface.h"
+#include "geometry_custom_particle.h"
 
 void InitDemoGeometries(){
 
@@ -206,6 +207,7 @@ void InitSceneGeometries() {
 
     InitIslandPoints(manager->island_points);
     
+    
 
     //Init Torus points
     float alpha = 6.28f / kNTorusPoints;
@@ -240,6 +242,9 @@ void InitSceneGeometries() {
     );
 
 
+    manager->custom_particles_.alloc();
+    manager->custom_particles_->init();
+
     manager->custom_quad.alloc();
     manager->custom_quad->init(20.0f);
 
@@ -254,11 +259,11 @@ void InitSceneGeometries() {
 
     manager->custom_tree.alloc();
     manager->custom_torus.alloc();
-    manager->custom_island_small.alloc();
+    manager->custom_island_small.alloc();s
     manager->custom_island_medium.alloc();
     manager->custom_island_big.alloc();
 
-    manager->custom_torus->init(manager->points, kNTorusPoints, 40, 2.0f, 2.0f);
+    manager->custom_torus->init(manager->points, kNTorusPoints, 40, 8.0f, 0.5f);
     manager->custom_tree->init(manager->tree_points, kNTreePoints, 40, 6.0f, 4.0f);
 
     manager->custom_island_small->init(manager->island_points, kNIslandPoints, 40, 8.0f, 0.5f, true, 0.01f, {5.0f,5.0f});
@@ -276,7 +281,7 @@ void InitSceneGeometries() {
         true, true, {16.0f,16.0f}); // use heightmap
 
     manager->water_terrain.alloc();
-    manager->water_terrain->init(64, 64, // cols , rows
+    manager->water_terrain->init(32, 64, // cols , rows
       20.0f, // height multiplier
       24.0f, // quad size
       0.25f, // smothness
@@ -307,6 +312,7 @@ void InitSceneMaterials() {
     manager->mat_panoramic->init(error_log, "./shaders/panoramicVertex.vs", "./shaders/panoramicFragment.fs");
     manager->mat_water->init(error_log, "./shaders/waterVertex.vs", "./shaders/water_light_shader.fs");
     manager->mat_heightlayer->init(error_log, "./shaders/heightLayerVertex.vs", "./shaders/heightLayerFragment.fs",4);
+    manager->mat_particles->init(error_log, "./shaders/basicVertex.vs", "./shaders/particlesFragment.fs");
 
 
     manager->mat_postprocess->init("./shaders/postprocessVertex.vs", "./shaders/postprocessFragment.fs");
@@ -353,6 +359,7 @@ void InitSceneMaterials() {
     manager->mat_panoramic_settings->set_texture(manager->texture_skybox.get());
     manager->mat_house_settings->set_texture(manager->texture_house.get());
     manager->mat_dolphin_settings->set_texture(manager->texture_dolphin.get());
+    manager->mat_particles_settings->set_texture(manager->texture_water.get());
     
     if (manager->show_normals) {
         manager->mat_selected = manager->mat_normals;
@@ -362,6 +369,16 @@ void InitSceneMaterials() {
     }
 }
 
+void InitParticleSystemConfigs() {
+    DemoManager* manager = DemoManager::getInstance();
+    manager->particles_waterfall_config.spawn_ratio_ = 0.05f;
+    manager->particles_waterfall_config.spawn_rate_ = 5;
+    manager->particles_waterfall_config.spawn_radius_ = 37.0f;
+    manager->particles_waterfall_config.init_lifetime_ = 3.0f;
+    manager->particles_waterfall_config.init_size_ = 1.0f;
+    manager->particles_waterfall_config.spawn_position_ = { 0.9f,89.0f,-14.0f };
+}
+
 void InitSceneAnimationConfigs() {
     DemoManager* manager = DemoManager::getInstance();
 
@@ -369,8 +386,8 @@ void InitSceneAnimationConfigs() {
 
     //Animation 1
     manager->dolphin_animation_config_.is_moving = true;
-    manager->dolphin_animation_config_.move_from = Vec3(-500.0f, -112.0f, -500.0f);
-    manager->dolphin_animation_config_.move_to = Vec3(-500.0f, -112.0f, 500.0f);
+    manager->dolphin_animation_config_.move_from = Vec3(150.0f, -112.0f, -500.0f);
+    manager->dolphin_animation_config_.move_to = Vec3(150.0f, -112.0f, 500.0f);
     manager->dolphin_animation_config_.move_duration = 12.0f;
 
     manager->dolphin_animation_config_.is_rotating = true;
@@ -384,8 +401,8 @@ void InitSceneAnimationConfigs() {
 
     //Animation 2
     manager->dolphin_animation_config_.is_moving = true;
-    manager->dolphin_animation_config_.move_from = Vec3(-450.0f, -112.0f, -500.0f);
-    manager->dolphin_animation_config_.move_to = Vec3(-450.0f, -112.0f, 500.0f);
+    manager->dolphin_animation_config_.move_from = Vec3(170.0f, -112.0f, -500.0f);
+    manager->dolphin_animation_config_.move_to = Vec3(170.0f, -112.0f, 500.0f);
     manager->dolphin_animation_config_.move_duration = 12.0f;
 
     manager->dolphin_animation_config_.is_rotating = true;
@@ -399,8 +416,8 @@ void InitSceneAnimationConfigs() {
 
     //Animation 3
     manager->dolphin_animation_config_.is_moving = true;
-    manager->dolphin_animation_config_.move_from = Vec3(-400.0f, -112.0f, -500.0f);
-    manager->dolphin_animation_config_.move_to = Vec3(-400.0f, -112.0f, 500.0f);
+    manager->dolphin_animation_config_.move_from = Vec3(190.0f, -112.0f, -500.0f);
+    manager->dolphin_animation_config_.move_to = Vec3(190.0f, -112.0f, 500.0f);
     manager->dolphin_animation_config_.move_duration = 12.0f;
 
     manager->dolphin_animation_config_.is_rotating = true;
@@ -414,8 +431,8 @@ void InitSceneAnimationConfigs() {
 
     //Animation 4
     manager->dolphin_animation_config_.is_moving = true;
-    manager->dolphin_animation_config_.move_from = Vec3(-380.0f, -112.0f, -600.0f);
-    manager->dolphin_animation_config_.move_to = Vec3(-380.0f, -112.0f, 600.0f);
+    manager->dolphin_animation_config_.move_from = Vec3(230.0f, -112.0f, -600.0f);
+    manager->dolphin_animation_config_.move_to = Vec3(180.0f, -112.0f, 600.0f);
     manager->dolphin_animation_config_.move_duration = 12.0f;
 
     manager->dolphin_animation_config_.is_rotating = true;
@@ -429,8 +446,8 @@ void InitSceneAnimationConfigs() {
 
     //Animation 5
     manager->dolphin_animation_config_.is_moving = true;
-    manager->dolphin_animation_config_.move_from = Vec3(-530.0f, -112.0f, -600.0f);
-    manager->dolphin_animation_config_.move_to = Vec3(-530.0f, -112.0f, 600.0f);
+    manager->dolphin_animation_config_.move_from = Vec3(220.0f, -112.0f, -600.0f);
+    manager->dolphin_animation_config_.move_to = Vec3(160.0f, -112.0f, 600.0f);
     manager->dolphin_animation_config_.move_duration = 12.0f;
 
     manager->dolphin_animation_config_.is_rotating = true;
@@ -444,8 +461,8 @@ void InitSceneAnimationConfigs() {
 
     //Animation 6
     manager->dolphin_animation_config_.is_moving = true;
-    manager->dolphin_animation_config_.move_from = Vec3(-560.0f, -112.0f, -550.0f);
-    manager->dolphin_animation_config_.move_to = Vec3(-400.0f, -112.0f, 550.0f);
+    manager->dolphin_animation_config_.move_from = Vec3(150.0f, -112.0f, -550.0f);
+    manager->dolphin_animation_config_.move_to = Vec3(250.0f, -112.0f, 550.0f);
     manager->dolphin_animation_config_.move_duration = 12.0f;
 
     manager->dolphin_animation_config_.is_rotating = true;
@@ -517,7 +534,7 @@ void InitSceneEntities() {
     obj_entity = new Entity(true, "Donut");
     if (obj_entity != nullptr) {
         obj_entity->init();
-        obj_entity->set_position({ 26.0f, -30.0f, -28.0f });
+        obj_entity->set_position({ 5.7f, 194.0f, -30.0f });
         obj_entity->attachDrawable(DrawableAttached_Donut, manager->root.get());
         manager->entities_.push_back(obj_entity);
     }
@@ -637,6 +654,20 @@ void InitSceneEntities() {
     }
     obj_entity = nullptr;
 
+    obj_entity = new Entity(true, "ParticleSystem");
+    if (obj_entity != nullptr) {
+        obj_entity->init();
+        obj_entity->set_position({ 0.9f,89.0f,-14.0f });
+        obj_entity->attachDrawable(DrawableAttached_Particle, manager->root.get());
+        obj_entity->drawable_->set_material(manager->mat_particles.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_particles_settings.get());
+        manager->particle_entity_ = obj_entity;
+        manager->custom_particles_->set_config(&manager->particles_waterfall_config);
+        manager->entities_.push_back(obj_entity);
+
+    }
+    obj_entity = nullptr;
+
     obj_entity = new Entity(true, "House");
     if (obj_entity != nullptr) {
         obj_entity->init();
@@ -663,8 +694,7 @@ void InitSceneEntities() {
         obj_entity = nullptr;
     }
 
-    /*
-    */
+    
     obj_entity = new Entity(true, "Skybox");
     if (obj_entity != nullptr) {
         obj_entity->init();
@@ -680,7 +710,7 @@ void InitSceneEntities() {
     obj_entity = new Entity(true, "Water");
     if (obj_entity != nullptr) {
       obj_entity->init();
-      obj_entity->set_position({ 0.0f, -98.0f, 0.0f });
+      obj_entity->set_position({ 227.0f, -98.0f, 0.0f });
       obj_entity->attachDrawable(DrawableAttached_Water, manager->root.get());
       obj_entity->drawable_->set_material_settings(manager->mat_light_water_settings.get());
       obj_entity->drawable_->set_material(manager->mat_water.get());

@@ -265,8 +265,8 @@ inline Mat4 Mat4::RotateX(float radians){
   Mat4 aux = Identity();
 
   aux.m[5]  = (float)cos(radians);
-  aux.m[6]  = (float)sin(radians);
-  aux.m[9]  = (float)sin(radians) * -1.0f;
+  aux.m[6]  = (float)sin(radians) * -1.0f;
+  aux.m[9]  = (float)sin(radians);
   aux.m[10] = (float)cos(radians);
 
   return aux;

@@ -96,4 +96,5 @@ void CameraWindow();
 void EntitiesManagerWindow();
 void ControlWindow();
 void AnimationConfigsManagerWindow();
+void ParticlesWindow();
 #endif

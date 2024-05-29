@@ -92,6 +92,14 @@ void WindowSettings() {
           ImGui::EndMenu();
       }
 
+      if (ImGui::BeginMenu("Particles")) {
+          ImGui::Checkbox("Opened", &manager->particles_window.popen);
+          ImGui::Checkbox("No Titlebar", &manager->particles_window.flags.no_titlebar);
+          ImGui::Checkbox("No Resize", &manager->particles_window.flags.no_resize);
+          ImGui::Checkbox("No Move", &manager->particles_window.flags.no_move);
+          ImGui::EndMenu();
+      }
+
       ImGui::EndMenu();
     }
     /*if (ImGui::BeginMenu("Demo")) {
@@ -181,6 +189,10 @@ void WindowsController() {
   if (manager->animationconfigs_window.popen) {
       AnimationConfigsManagerWindow();
   }
+
+  if (manager->particles_window.popen) {
+      ParticlesWindow();
+  }
   
 }
 
@@ -248,6 +260,28 @@ void PerformanceWindow(double dt) {
 
     ImGui::Text("FPS: %0.1f", 1000.0 / dt);
     ImGui::Text("Delta time: %0.3f ms", dt);
+    ImGui::End();
+
+}
+
+void ParticlesWindow() {
+    DemoManager* manager = DemoManager::getInstance();
+    manager->particles_window.flags.no_resize = false;
+    SetFlags(&manager->particles_window);
+    ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
+    ImGui::Begin("Particles", &manager->particles_window.popen, manager->particles_window.window_flags);
+    WindowMenu(&manager->particles_window);
+
+    ImGui::Text("Waterfall particles");
+    ImGui::Text("Active particles: %d / %d", manager->custom_particles_->particles_alive_, EDK3::ParticleSystem::kNumParticles);
+
+    //ImGui::DragFloat3("Position", &manager->particles_waterfall_config.spawn_position_.x, 0.1f, -500.0f, 500.0f);
+    ImGui::DragInt("Spawn Radius", &manager->particles_waterfall_config.spawn_radius_, 0.1, 0.0f, 1000.0f);
+    ImGui::DragInt("Spawn Rate", &manager->particles_waterfall_config.spawn_rate_, 0.1, 0.0f, 1000.0f);
+    ImGui::DragFloat("Spawn Ratio", &manager->particles_waterfall_config.spawn_ratio_, 0.1, 0.0f, 1000.0f);
+    ImGui::DragFloat("Init Lifetime", &manager->particles_waterfall_config.init_lifetime_, 0.1, 0.0f, 1000.0f);
+    ImGui::DragFloat("Init Size", &manager->particles_waterfall_config.init_size_, 0.1, 0.0f, 1000.0f);
+
     ImGui::End();
 
 }

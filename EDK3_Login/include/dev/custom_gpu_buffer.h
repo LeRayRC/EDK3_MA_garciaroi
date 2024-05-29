@@ -40,6 +40,7 @@ class CustomGPUBuffer : public EDK3::dev::Buffer {
 
   GLuint internal_id_;
   GLuint size_;
+ public:
   EDK3::dev::Buffer::Target target_;
 
 

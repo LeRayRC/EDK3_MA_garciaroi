@@ -37,6 +37,7 @@
 #include "scene.h"
 #include "anim_library/entity.h"
 #include "dev/custom_gpu_manager.h"
+#include "geometry_custom_particle.h"
 
 Vec3 EDK3::MaterialCustom::LightSettings::ambient_color_ = Vec3(0.0f, 0.0f, 0.0f);
 
@@ -50,8 +51,10 @@ void InitScene() {
     InitSceneTextures();
     InitSceneGeometries();
     InitSceneMaterials();
+    InitParticleSystemConfigs();
     InitSceneAnimationConfigs();
     InitSceneEntities();
+
 
     //Allocating and initializing the camera:
     manager->camera.alloc();
@@ -81,14 +84,10 @@ void UpdateFn() {
         manager->camera->window_size().y);
     EDK3::Node* root = manager->root.get();
 
-    //const float* camera_pos = manager->camera->position();
-    //manager->skybox_entity_->set_position({ camera_pos[0], camera_pos[1], camera_pos[2] });
-    //manager->skybox_entity_->drawable_->set_position(camera_pos);
-    //manager->skybox_entity_->set_position({ 0.0f,0.0f,0.0f });
-    //manager->skybox_entity_->drawable_->set_position(0.0f, 0.0f, 0.0f);
-    //manager->skybox_entity_->drawable_->set_rotation_xyz(0.0f, 0.0f, 0.0f);
-    //manager->skybox_entity_->update();
-    //manager->skybox_entity_->drawable_->set_position(camera_pos);
+
+    manager->custom_particles_->config_->spawn_position_= manager->particle_entity_->position_;
+    manager->custom_particles_->update(manager->dt / 1000.0f, manager->camera->position(),
+        manager->camera->view_matrix());
 
     for (unsigned int i = 0; i < manager->entities_.size(); i++) {
         manager->entities_[i]->update();
@@ -116,12 +115,16 @@ void UpdateFn() {
             else {
                 if (manager->dolphin_entities_[i]->anim_instance_->config_.current_delay <
                     manager->dolphin_entities_[i]->anim_instance_->config_.total_delay) {
-                    manager->dolphin_entities_[i]->drawable_->set_position(0.0f, -500.0, 0.0f);
+                    manager->dolphin_entities_[i]->drawable_->set_position(0.0f, -500.0,  0.0f);
                 }
             }
         }
     }
 
+    
+    
+    /*manager->particle_entity_->drawable_->set_rotation_y(manager->angle_billboard * 180.0f / 3.14f);
+    manager->particle_entity_->drawable_->set_rotation_x(manager->angle_2_billboard * 180.0f / 3.14f);*/
     manager->mat_light_water_settings->time_ = manager->time_;
 }
 
@@ -129,7 +132,6 @@ void RenderFn() {
     DemoManager* manager = DemoManager::getInstance();
     
     manager->GPU.enableCullFaces(EDK3::dev::GPUManager::FaceType::kFace_Back);
-    //manager->GPU.disableCullFaces();
     manager->GPU.enableDepthTest(EDK3::dev::GPUManager::CompareFunc::kCompareFunc_Less);
 
     //For every frame... determine what's visible:
@@ -181,7 +183,7 @@ int ESAT::main(int argc, char** argv) {
             manager->GPU.clearFrameBuffer(manager->clear_rgba);
         }
 
-        RenderSkybox();
+        //RenderSkybox();
         RenderFn();
 
         if (manager->enable_postprocess) {

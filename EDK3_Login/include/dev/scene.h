@@ -29,5 +29,6 @@ void InitSceneEntities();
 void InitSceneTextures();
 void InitIslandPoints(Vec2* island_points);
 void InitSceneAnimationConfigs();
+void InitParticleSystemConfigs();
 
 #endif

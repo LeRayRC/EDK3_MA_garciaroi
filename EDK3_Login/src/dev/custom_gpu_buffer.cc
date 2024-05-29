@@ -44,9 +44,11 @@ namespace EDK3 {
       GLenum error;
       switch (t)
       {
+        //Order
         case EDK3::dev::Buffer::Target::kTarget_Elements: {
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, internal_id_);
         }
+        //Vertices
         case EDK3::dev::Buffer::Target::kTarget_Vertex_Data: {
           glBindBuffer(GL_ARRAY_BUFFER, internal_id_);
         }

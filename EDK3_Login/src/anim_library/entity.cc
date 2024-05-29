@@ -204,6 +204,9 @@ void Entity::attachDrawable(DrawableAttached drawableAttached, EDK3::Node* root)
     case DrawableAttached_IslandBig:
         drawable_->set_geometry(manager->custom_island_big.get());
       break;
+    case DrawableAttached_Particle:
+        drawable_->set_geometry(manager->custom_particles_.get());
+        break;
     }
     drawable_->set_material(manager->mat_selected.get());
     drawable_->set_material_settings(manager->mat_light_settings.get());
