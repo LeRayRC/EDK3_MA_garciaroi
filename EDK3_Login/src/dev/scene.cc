@@ -259,7 +259,7 @@ void InitSceneGeometries() {
 
     manager->custom_tree.alloc();
     manager->custom_torus.alloc();
-    manager->custom_island_small.alloc();s
+    manager->custom_island_small.alloc();
     manager->custom_island_medium.alloc();
     manager->custom_island_big.alloc();
 
@@ -313,6 +313,7 @@ void InitSceneMaterials() {
     manager->mat_water->init(error_log, "./shaders/waterVertex.vs", "./shaders/water_light_shader.fs");
     manager->mat_heightlayer->init(error_log, "./shaders/heightLayerVertex.vs", "./shaders/heightLayerFragment.fs",4);
     manager->mat_particles->init(error_log, "./shaders/basicVertex.vs", "./shaders/particlesFragment.fs");
+    manager->mat_tree->init(error_log, "./shaders/heightLayerVertex.vs", "./shaders/treeFragment.fs", 4);
 
 
     manager->mat_postprocess->init("./shaders/postprocessVertex.vs", "./shaders/postprocessFragment.fs");
@@ -360,6 +361,10 @@ void InitSceneMaterials() {
     manager->mat_house_settings->set_texture(manager->texture_house.get());
     manager->mat_dolphin_settings->set_texture(manager->texture_dolphin.get());
     manager->mat_particles_settings->set_texture(manager->texture_water.get());
+    manager->mat_tree_settings->set_texture(manager->texture_blossom_tree_wood.get());
+    manager->mat_tree_settings->set_texture(manager->texture_blossom_tree_flower.get(), 1);
+    manager->mat_tree_settings->set_texture(manager->texture_blossom_tree_flower.get(), 2);
+
     
     if (manager->show_normals) {
         manager->mat_selected = manager->mat_normals;
@@ -477,6 +482,40 @@ void InitSceneAnimationConfigs() {
     UpdateAnimationConfigsString();
 }
 
+void InitTreeCircle(float radius, int num_trees, Vec3 pos) {
+    DemoManager* manager = DemoManager::getInstance();
+    Entity* tree_group_entity = new Entity(true, "TreeGroup");
+    tree_group_entity->init();
+    tree_group_entity->set_position(pos);
+    tree_group_entity->drawable_->set_geometry(manager->house_geometry[4].get());
+    tree_group_entity->drawable_->set_material(manager->mat_selected.get());
+    tree_group_entity->drawable_->set_material_settings(manager->mat_house_settings.get());
+    manager->entities_.push_back(tree_group_entity);
+    manager->root->addChild(tree_group_entity->drawable_.get());
+
+    Entity* obj_entity;
+    float step = 6.28f / num_trees;
+    Vec3 pos_tree;
+    for (int i = 0; i < num_trees; i++) {
+        obj_entity = new Entity(true, "Tree");
+        if (obj_entity != nullptr) {
+            obj_entity->init();
+            pos_tree.x = cosf(step * i) * (20.0f + (rand()%((int)radius)));
+            pos_tree.y = 0.0f;
+            pos_tree.z = sinf(step * i) * (20.0f + (rand()%((int)radius)));
+            //obj_entity->set_position({ pos_tree.x, pos_tree.y, pos_tree.z });
+            obj_entity->attachDrawable(DrawableAttached_Tree, manager->root.get());
+            obj_entity->drawable_->set_material(manager->mat_tree.get());
+            obj_entity->drawable_->set_material_settings(manager->mat_tree_settings.get());
+            obj_entity->drawable_->set_position(pos_tree.x, pos_tree.y, pos_tree.z);
+            //manager->entities_.push_back(obj_entity);
+            //manager->root->addChild(obj_entity->drawable_.get());
+            tree_group_entity->drawable_->addChild(obj_entity->drawable_.get());
+        }
+        //obj_entity = nullptr;
+    }
+}
+
 void InitSceneEntities() {
     DemoManager* manager = DemoManager::getInstance();
     Entity* obj_entity;
@@ -508,9 +547,15 @@ void InitSceneEntities() {
         obj_entity->init();
         obj_entity->set_position({ 0.97f, -90.0f, -5.0f });
         obj_entity->attachDrawable(DrawableAttached_Tree, manager->root.get());
+        obj_entity->drawable_->set_material(manager->mat_tree.get());
+        obj_entity->drawable_->set_material_settings(manager->mat_tree_settings.get());
         manager->entities_.push_back(obj_entity);
     }
     obj_entity = nullptr;
+
+    InitTreeCircle(30.0f, 6, {951.0, 85.0f, 16.0f});
+    InitTreeCircle(80.0f, 20, { 776.0f, 4.2f, -481.0f });
+
 
     obj_entity = new Entity(true, "Sphere");
     if (obj_entity != nullptr) {
@@ -762,6 +807,18 @@ void InitSceneTextures() {
 
     EDK3::Texture::Load("./textures/dolphin.jpg", &manager->texture_dolphin);
     if (!manager->texture_dolphin) {
+        printf("Error loading dolphin texture\n");
+        exit(-2);
+    }
+
+    EDK3::Texture::Load("./textures/blossomtree_flower.jpg", &manager->texture_blossom_tree_flower);
+    if (!manager->texture_blossom_tree_flower) {
+        printf("Error loading dolphin texture\n");
+        exit(-2);
+    }
+
+    EDK3::Texture::Load("./textures/blossomtree_wood.jpg", &manager->texture_blossom_tree_wood);
+    if (!manager->texture_blossom_tree_wood) {
         printf("Error loading dolphin texture\n");
         exit(-2);
     }

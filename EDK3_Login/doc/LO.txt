@@ -1,0 +1,32 @@
+P1 - Entrega de marzo
+P2 - Entrega de marzo
+P3 - Se ha incluido la libreria matematica desarrollada en la asignatura de programacion avanzada. 
+     Se ha incluido la libreria de animaciones procedurales desarrollada en la asignatura de programación avanzada.
+     Dentro de la dema se dispone de un panel de ImGui para crear las configuraciones de animacion y otra para 
+     controlar las entidades de la escena y pausar, ejecutar, parar la animacion asociada a cada una
+P4 - Se ha creado un video donde se muestran todos los elementos implementados a lo largo de la asignatura.
+     Se puede encontrar en este enlace: https://www.youtube.com/watch?v=_g1jnkfcNpU
+P5 - Se han realizado pruebas BlackBox contra el EDK
+     	-Creacion de materiales custom que permiten manejar varias texturas asi como el uso de luces. 
+	 Tambien permiten mostrar solo las normales asociadas a cada vertice.
+	-Se ha creado un proceso que pixela la imagen y se puede activar y desactivar desde el panel de ImGui de control.
+	-Se ha implementado un modo wireframe que se puede activar y desactivar desde el panel de ImGui correspondiente.
+     Se han realizado pruebas WhiteBox mediante la reimplementacion de las funciones del gpu manager.
+
+M1 - Entrega de marzo 
+M2 - Se ha generado multiples superficies de revolucion.
+	- Donut
+	- Arbol
+	- Islas -> Se ha aplicado tambien ruido para añadir mas variedad
+	- Implementacion de un sistema de particulas que se puede configurar desde el correspondiente panel de ImGui
+	- Implementacion de un skybox que se puede activar y desactivar desde el panel de ImGui
+M3 - Se han implementado las siguientes herramientas
+	-Carga mediante STD de un heightmap para modificar los vertices del terreno.
+	-Uso de Perlin(ruido) en la generacion del terreno y el agua para darle un poco mas de variedad
+	
+M4 - Se ha implementado una camara custom al mas puro estilo Unity para navegar por la escena
+
+D1 - Entrega de marzo
+D2 - Documentacion en el repositorio.
+D3 - Documentacion en el repositorio.
+     

@@ -30,5 +30,6 @@ void InitSceneTextures();
 void InitIslandPoints(Vec2* island_points);
 void InitSceneAnimationConfigs();
 void InitParticleSystemConfigs();
+void InitTreeCircle(float radius, int num_trees, Vec3 pos);
 
 #endif

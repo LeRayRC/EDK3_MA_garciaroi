@@ -167,49 +167,77 @@ void Entity::attachDrawable(DrawableAttached drawableAttached, EDK3::Node* root)
     {
     case DrawableAttached_Cube:
         drawable_->set_geometry(manager->custom_cube.get());
+        drawable_->set_material(manager->mat_selected.get());
+        drawable_->set_material_settings(manager->mat_light_settings.get());
         break;
     case DrawableAttached_Quad:
         drawable_->set_geometry(manager->custom_quad.get());
+        drawable_->set_material(manager->mat_selected.get());
+        drawable_->set_material_settings(manager->mat_light_settings.get());
         break;
     case DrawableAttached_Sphere:
         drawable_->set_geometry(manager->custom_sphere.get());
+        drawable_->set_material(manager->mat_selected.get());
+        drawable_->set_material_settings(manager->mat_light_settings.get());
+
         break;
     case DrawableAttached_Terrain:
         drawable_->set_geometry(manager->terrain_custom.get());
+        drawable_->set_material(manager->mat_selected.get());
+        drawable_->set_material_settings(manager->mat_light_settings.get());
         break;
     case DrawableAttached_Donut:
         drawable_->set_geometry(manager->custom_torus.get());
+        drawable_->set_material(manager->mat_selected.get());
+        drawable_->set_material_settings(manager->mat_light_settings.get());
         break;
     case DrawableAttached_Tree:
         drawable_->set_geometry(manager->custom_tree.get());
+        drawable_->set_material(manager->mat_tree.get());
+        drawable_->set_material_settings(manager->mat_tree_settings.get());
         break;
     case DrawableAttached_House:
         drawable_->set_geometry(manager->house_geometry[4].get());
+        drawable_->set_material(manager->mat_selected.get());
+        drawable_->set_material_settings(manager->mat_house_settings.get());
         break;
     case DrawableAttached_Dolphin:
         drawable_->set_geometry(manager->dolphin_geometry[0].get());
+        drawable_->set_material(manager->mat_selected.get());
+        drawable_->set_material_settings(manager->mat_dolphin_settings.get());
         break;
     case DrawableAttached_Water:
         drawable_->set_geometry(manager->water_terrain.get());
+        drawable_->set_material_settings(manager->mat_light_water_settings.get());
+        drawable_->set_material(manager->mat_water.get());
         break;
     case DrawableAttached_Cube8v:
-        drawable_->set_geometry(manager->water_terrain.get());
+        drawable_->set_geometry(manager->custom_cube_8v.get());
+        drawable_->set_material(manager->mat_selected.get());
+        drawable_->set_material_settings(manager->mat_light_settings.get());
         break;
     case DrawableAttached_IslandSmall:
         drawable_->set_geometry(manager->custom_island_small.get());
+        drawable_->set_material(manager->mat_heightlayer.get());
+        drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
         break;
     case DrawableAttached_IslandMedium:
         drawable_->set_geometry(manager->custom_island_medium.get());
+        drawable_->set_material(manager->mat_heightlayer.get());
+        drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
         break;
     case DrawableAttached_IslandBig:
         drawable_->set_geometry(manager->custom_island_big.get());
+        drawable_->set_material(manager->mat_heightlayer.get());
+        drawable_->set_material_settings(manager->mat_heightlayer_settings.get());
       break;
     case DrawableAttached_Particle:
         drawable_->set_geometry(manager->custom_particles_.get());
+        drawable_->set_material(manager->mat_particles.get());
+        drawable_->set_material_settings(manager->mat_particles_settings.get());
         break;
     }
-    drawable_->set_material(manager->mat_selected.get());
-    drawable_->set_material_settings(manager->mat_light_settings.get());
+    
     if (!attached_) {
         root->addChild(drawable_.get());
         attached_ = true;

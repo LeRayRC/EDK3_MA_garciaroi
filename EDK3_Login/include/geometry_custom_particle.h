@@ -20,7 +20,7 @@ namespace EDK3 {
 
 class ParticleSystem : public EDK3::Geometry {
 public:
-    static const int kNumParticles = 300;
+    static const int kNumParticles = 500;
 
     struct Particle {
         bool alive;

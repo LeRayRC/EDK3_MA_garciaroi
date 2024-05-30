@@ -27,9 +27,10 @@ void DemoManager::init() {
   manager->mat_water.alloc();
   manager->mat_heightlayer.alloc();
   manager->mat_particles.alloc();
+  manager->mat_tree.alloc();    
   
 
-  manager->light_materials_settings.alloc(6);
+  manager->light_materials_settings.alloc(7);
   manager->mat_light_settings_general.alloc();
   manager->mat_light_settings_general->use_texture_ = true;
   manager->mat_light_settings = manager->light_materials_settings[0].alloc();
@@ -38,6 +39,7 @@ void DemoManager::init() {
   manager->mat_house_settings = manager->light_materials_settings[3].alloc();
   manager->mat_dolphin_settings = manager->light_materials_settings[4].alloc();
   manager->mat_particles_settings = manager->light_materials_settings[5].alloc();
+  manager->mat_tree_settings = manager->light_materials_settings[6].alloc();
   manager->mat_panoramic_settings.alloc();
 
   //Postprocess
@@ -50,6 +52,7 @@ void DemoManager::init() {
   manager->show_normals = false;
   manager->enable_postprocess = false;
   manager->enable_wireframe = false;
+  manager->enable_skybox = true;
 
 
 

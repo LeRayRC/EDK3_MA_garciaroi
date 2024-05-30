@@ -32,7 +32,7 @@ namespace EDK3 {
 			return *this;
 		}
 
-		void CustomGPUCamera::doCullRecursively(const Node* node, ESAT::Mat4 parent) {
+		void CustomGPUCamera::doCullRecursively(const Node* node, ESAT::Mat4 parent, bool is_visible) {
 			//float model[16] 
 			ESAT::Mat4 model;
 			ESAT::Mat4 local_transform_matrix;
@@ -44,7 +44,7 @@ namespace EDK3 {
 			
 			EDK3::Node* n = const_cast<EDK3::Node*>(node);
 			EDK3::Drawable* d = dynamic_cast<EDK3::Drawable*>(n);
-			if (d && d->visible()) {
+			if (d && d->visible() && is_visible) {
 				NodeData node_data;
 				node_data.geometry = d->geometry();
 				node_data.material = d->material();
@@ -53,7 +53,12 @@ namespace EDK3 {
 				data_->data.push_back(node_data);
 			}
 			for (unsigned int i = 0; i < node->num_children(); i++) {
-				doCullRecursively(node->child(i), model);
+				if (d) {
+					doCullRecursively(node->child(i), model, d->visible());
+				}
+				else {
+					doCullRecursively(node->child(i), model);
+				}
 			}
 		}
 

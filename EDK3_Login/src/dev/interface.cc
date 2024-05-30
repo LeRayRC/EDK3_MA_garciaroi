@@ -92,6 +92,14 @@ void WindowSettings() {
           ImGui::EndMenu();
       }
 
+      if (ImGui::BeginMenu("Animations")) {
+          ImGui::Checkbox("Opened", &manager->animationconfigs_window.popen);
+          ImGui::Checkbox("No Titlebar", &manager->animationconfigs_window.flags.no_titlebar);
+          ImGui::Checkbox("No Resize", &manager->animationconfigs_window.flags.no_resize);
+          ImGui::Checkbox("No Move", &manager->animationconfigs_window.flags.no_move);
+          ImGui::EndMenu();
+      }
+
       if (ImGui::BeginMenu("Particles")) {
           ImGui::Checkbox("Opened", &manager->particles_window.popen);
           ImGui::Checkbox("No Titlebar", &manager->particles_window.flags.no_titlebar);
@@ -322,40 +330,15 @@ void ControlWindow() {
     }
     if (ImGui::Checkbox("Show normals", &manager->show_normals)) {
         EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> selected_light_settings = manager->mat_light_settings_general;
-        //EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
-        /*if (manager->show_normals) {
-            mat_selected = manager->mat_normals;
-        }
-        else {
-            mat_selected = manager->mat_basic;
-        }
-        for (unsigned int i = 0; i < manager->root->num_children(); i++) {
-            EDK3::Drawable* drawable = dynamic_cast<EDK3::Drawable*>(manager->root->child(i));
-            drawable->set_material(mat_selected.get());
-        }
-        if (!manager->show_normals) {
-          manager->water_entity_->drawable_->set_material(manager->mat_water.get());
-        }*/
         selected_light_settings->show_normal_ = !selected_light_settings->show_normal_;
         
     }
     if (!manager->enable_postprocess) {
         if(ImGui::Checkbox("Wireframe mode", &manager->enable_wireframe)){
-            /*EDK3::ref_ptr<EDK3::MaterialCustom> mat_selected;
-            if (manager->enable_wireframe) {
-                mat_selected = manager->mat_wireframe;
-            }
-            else {
-                mat_selected = manager->mat_basic;
-                
-            }
-            for (unsigned int i = 0; i < manager->root->num_children(); i++) {
-                EDK3::Drawable* drawable = dynamic_cast<EDK3::Drawable*>(manager->root->child(i));
-                drawable->set_material(mat_selected.get());
-            }
-            manager->water_entity_->drawable_->set_material(manager->mat_water.get());*/
         }
     }
+
+    if (ImGui::Checkbox("Enable Skybox", &manager->enable_skybox));
     ImGui::DragFloat4("Framebuffer color", manager->clear_rgba, 0.01f, 0.0f, 1.0f);
 
     ImGui::Text("Geometries");
@@ -392,6 +375,10 @@ void EntitiesManagerWindow() {
     if (ImGui::TreeNode(manager->entities_[i]->name_)) {
        if(ImGui::Checkbox("Enable", &manager->entities_[i]->enabled_)){
            manager->entities_[i]->drawable_->set_visible(manager->entities_[i]->enabled_);
+           /*EDK3::Drawable
+           for (int i = 0; i < manager->entities_[i]->drawable_->num_children(); i++) {
+               manager->entities_[i]->drawable_->child(i)->
+           }*/
        }
       ImGui::InputText(" ", manager->entities_[i]->temp_name_,15);
       ImGui::SameLine();
@@ -406,8 +393,8 @@ void EntitiesManagerWindow() {
           manager->entities_[i]->attachDrawable((DrawableAttached)manager->entities_[i]->drawableAttached_, manager->root.get());
       }
       
-      ImGui::DragFloat3("Position", &manager->entities_[i]->position_.x, 0.1f, -500.0f, 500.0f);
-      ImGui::DragFloat3("Rotation", &manager->entities_[i]->rotation_.x, 0.1f, 0.0f, 360.0f);
+      ImGui::DragFloat3("Position", &manager->entities_[i]->position_.x, 0.1f, -5000.0f, 5000.0f);
+      ImGui::DragFloat3("Rotation", &manager->entities_[i]->rotation_.x, 0.1f, -180.0f, 180.0f);
       ImGui::DragFloat3("Scale", &manager->entities_[i]->scale_.x, 0.1f, 0.0f, 500.0f);
       
       

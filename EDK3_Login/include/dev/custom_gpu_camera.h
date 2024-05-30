@@ -45,7 +45,7 @@ namespace EDK3 {
             /** Determine which objects are visible */
             virtual void doCull(const Node* root_node) override;
 
-            void doCullRecursively(const Node* node, ESAT::Mat4 parent);
+            void doCullRecursively(const Node* node, ESAT::Mat4 parent, bool is_visible=true);
 
             /** Renders all visible (not culled) objects */
             virtual void doRender() const override;

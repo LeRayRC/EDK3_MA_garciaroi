@@ -183,7 +183,9 @@ int ESAT::main(int argc, char** argv) {
             manager->GPU.clearFrameBuffer(manager->clear_rgba);
         }
 
-        //RenderSkybox();
+        if (manager->enable_skybox) {
+            RenderSkybox();
+        }
         RenderFn();
 
         if (manager->enable_postprocess) {

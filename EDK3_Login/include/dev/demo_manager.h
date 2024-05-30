@@ -70,6 +70,7 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_water;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_heightlayer;
     EDK3::ref_ptr<EDK3::MaterialCustom> mat_particles;
+    EDK3::ref_ptr<EDK3::MaterialCustom> mat_tree;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings_general;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_light_water_settings;
@@ -78,6 +79,7 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_house_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_dolphin_settings;
     EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_particles_settings;
+    EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings> mat_tree_settings;
 
     EDK3::scoped_array<EDK3::ref_ptr<EDK3::MaterialCustom::LightSettings>> light_materials_settings;
 
@@ -122,14 +124,18 @@ class DemoManager{
     EDK3::ref_ptr<EDK3::Texture> texture_rocks;
     EDK3::ref_ptr<EDK3::Texture> texture_house;
     EDK3::ref_ptr<EDK3::Texture> texture_dolphin;
+    EDK3::ref_ptr<EDK3::Texture> texture_blossom_tree_wood;
+    EDK3::ref_ptr<EDK3::Texture> texture_blossom_tree_flower;
+
 
     double dt;
     float time_;
     bool enable_postprocess;
     bool enable_wireframe;
+    bool enable_skybox;
 
     EDK3::ParticleSystem::ParticleSystemConfig particles_waterfall_config;
-
+    
     bool show_normals;
 
     ImGuiWindow settings_window;
