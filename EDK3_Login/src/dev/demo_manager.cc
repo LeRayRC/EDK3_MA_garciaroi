@@ -68,6 +68,7 @@ void DemoManager::init() {
 
   performance_window.popen = false;
   camera_window.popen = false;
+  animationconfigs_window.popen = false;
 
   animation_configs_counter = 0;
   srand((unsigned int)time(NULL));
